@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+
+  accessibility_audit:
+    build: .
+    environment:
+      DB_URL: mongodb://mongodb:27017/accessibility_audit
+      TZ: America/Detroit
+      API_PORT: 3143
+      CHOKIDAR_USEPOLLING: 'true'
+      NODE_TLS_REJECT_UNAUTHORIZED: '0'
+    volumes:
+      - ./backend:/app/backend
+      - ./client:/app/client
+      - /dev/shm:/dev/shm
+    depends_on:
+      - mongodb
+    ports:
+      - "127.0.0.1:3142:3142"
+      - "127.0.0.1:3143:3143"
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:4.0
+    environment:
+      TZ: America/Detroit
+      LANG: C.UTF-8
+    volumes:
+      - vol_accessibility_audit_db:/data/db
+    restart: unless-stopped
+
+volumes:
+  vol_accessibility_audit_db:
