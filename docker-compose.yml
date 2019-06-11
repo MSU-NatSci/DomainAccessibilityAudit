@@ -10,6 +10,7 @@ services:
       API_PORT: 3143
       CHOKIDAR_USEPOLLING: 'true'
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
+      NODE_OPTIONS: '--http-parser=legacy'
     volumes:
       - ./backend:/app/backend
       - ./client:/app/client
