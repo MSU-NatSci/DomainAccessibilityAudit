@@ -44,6 +44,7 @@ Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.
 - Ability to limit the number of URLs checked by domain.
 - Option to only start subdomain audits at the root.
 - Reporting more than accessibility violations.
+- Ability to pause an audit.
 
 ## Licence
 GPL 3.0.
