@@ -93,7 +93,8 @@ exports.start = (req, res) => {
   currentAudit = new Audit();
   currentAudit.start(firstURL, standard, checkSubdomains, maxDepth, browser)
     .then((audit) => res.json({ success: true, data: audit }))
-    .catch((err) => res.json({ success: false, error: err }));
+    .catch((err) => res.json({ success: false,
+      error: typeof err == 'string' ? err : err.toString()}));
 };
 
 exports.stop = (req, res) => {
