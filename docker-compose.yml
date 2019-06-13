@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
 
   mongodb:
-    image: mongo:4.0
+    image: mongo:4.1
     environment:
       TZ: America/Detroit
       LANG: C.UTF-8
