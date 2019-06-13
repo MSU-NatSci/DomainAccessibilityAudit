@@ -1,11 +1,15 @@
-FROM node:12
+FROM debian:sid
+# We are using sid instead of stretch to use a recent version of Firefox
 
 ENV NODE_ENV development
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -yq \
-  firefox-esr chromium=73.0.3683.75-1~deb9u1 xvfb xsel unzip
+# Get Chromium, Firefox and Node
+RUN apt-get update && apt-get install -y curl gnupg
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -yq \
+  chromium=75.0.3770.80-1 firefox xvfb xsel unzip nodejs wget
 
 # geckodriver
 # see latest at https://github.com/mozilla/geckodriver/releases/
@@ -16,7 +20,7 @@ RUN wget -q "https://github.com/mozilla/geckodriver/releases/download/v0.24.0/ge
 
 # chromedriver
 # see latest at http://chromedriver.storage.googleapis.com/index.html
-RUN wget -q "http://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip" \
+RUN wget -q "http://chromedriver.storage.googleapis.com/75.0.3770.8/chromedriver_linux64.zip" \
   -O /tmp/chromedriver.zip \
   && unzip /tmp/chromedriver.zip -d /usr/bin/ \
   && rm /tmp/chromedriver.zip
