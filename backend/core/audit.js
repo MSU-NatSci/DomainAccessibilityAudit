@@ -53,6 +53,30 @@ export default class Audit {
     /** @member {boolean} - true when there are HEAD tests being performed
       (there is an async queue for that) */
     this.headTestsRunning = false;
+    this.firefoxPreferences = {
+      'datareporting.healthreport.uploadEnabled': false,
+      'browser.contentblocking.category': 'strict',
+      'browser.contentblocking.enabled': true,
+      'browser.newtabpage.activity-stream.feeds.telemetry': false,
+      'browser.newtabpage.activity-stream.telemetry': false,
+      'browser.ping-centre.telemetry': false,
+      'browser.pocket.enabled': false,
+      'browser.startup.homepage': 'about:blank',
+      'media.autoplay.enabled': false,
+      'media.autoplay.allow-muted': false,
+      'network.prefetch-next': false,
+      'reader.parse-on-load.enabled': false,
+      'toolkit.telemetry.archive.enabled': false,
+      'toolkit.telemetry.bhrPing.enabled': false,
+      'toolkit.telemetry.enabled': false,
+      'toolkit.telemetry.firstShutdownPing.enabled': false,
+      'toolkit.telemetry.hybridContent.enabled': false,
+      'toolkit.telemetry.newProfilePing.enabled': false,
+      'toolkit.telemetry.reportingpolicy.firstRun': false,
+      'toolkit.telemetry.shutdownPingSender.enabled': false,
+      'toolkit.telemetry.unified': false,
+      'toolkit.telemetry.updatePing.enabled': false,
+    };
   }
   
   /**
@@ -96,7 +120,13 @@ export default class Audit {
       console.log(error);
       throw error;
     }
-    await this.createNewDriver();
+    try {
+      await this.createNewDriver();
+    } catch (error) {
+      console.log("Error in createNewDriver:");
+      console.log(error);
+      throw error;
+    }
     const initialDomain = await this.findDomain(this.initialDomainName);
     this.pagesToCheck = [
       this.newPage(null, initialDomain, firstURL, null)
@@ -111,13 +141,27 @@ export default class Audit {
    */
   async createNewDriver() {
     console.log('createNewDriver');
-    if (this.driver != null)
-      await this.driver.close();
+    if (this.driver != null) {
+      try {
+        await this.driver.close();
+      } catch (error) {
+        // ignore error, the connection might be closed already
+        console.log("driver.close(): " + error);
+      }
+    }
     this.driver = new WebDriver.Builder()
-      .forBrowser(this.browser)
-      .setFirefoxOptions(new firefox.Options().headless())
-      .setChromeOptions(new chrome.Options().headless().addArguments(['--no-sandbox']))
-      .build();
+      .forBrowser(this.browser);
+    if (this.browser == 'firefox') {
+      let profile = new firefox.Profile();
+      for (let key of Object.keys(this.firefoxPreferences))
+        profile.setPreference(key, this.firefoxPreferences[key]);
+      let options = new firefox.Options().setProfile(profile).headless();
+      this.driver = this.driver.setFirefoxOptions(options);
+    } else {
+      this.driver = this.driver.setChromeOptions(
+        new chrome.Options().headless().addArguments(['--no-sandbox']));
+    }
+    this.driver = this.driver.build();
     this.driver.manage().setTimeouts( { implicit: 10000 } );
     let tags;
     if (this.standard == 'wcag2a')
