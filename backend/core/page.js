@@ -106,7 +106,8 @@ export default class Page {
     this.errorMessage = error.message;
     // name = NoSuchSessionError, message = Tried to run command without establishing a connection
     if (error.name.indexOf('NoSuchSessionError') == 0 ||
-        error.name.indexOf('TimeoutError') == 0) // maybe also: WebDriverError
+        error.name.indexOf('TimeoutError') == 0 ||
+        error.name.indexOf('WebDriverError') == 0)
       await this.audit.createNewDriver();
     this.saveAndContinue();
   }
