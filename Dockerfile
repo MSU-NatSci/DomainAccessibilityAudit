@@ -31,7 +31,11 @@ RUN ln -s /usr/bin/geckodriver /usr/bin/chromium-browser \
   && chmod 777 /usr/bin/chromium-browser
 
 COPY package.json ./
-
 RUN npm install
+
+COPY client/package.json ./client/
+WORKDIR /app/client
+RUN npm install
+WORKDIR /app
 
 CMD ["npm", "run", "start:dev"]

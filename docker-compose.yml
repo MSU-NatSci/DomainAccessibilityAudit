@@ -13,7 +13,9 @@ services:
       NODE_OPTIONS: '--http-parser=legacy'
     volumes:
       - ./backend:/app/backend
-      - ./client:/app/client
+      - ./client/public:/app/client/public
+      - ./client/src:/app/client/src
+      - ./client/.env:/app/client/.env
       - /dev/shm:/dev/shm
     depends_on:
       - mongodb
