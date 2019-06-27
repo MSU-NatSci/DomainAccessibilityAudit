@@ -9,7 +9,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -yq \
-  chromium=75.0.3770.80-1 firefox xvfb xsel unzip nodejs wget
+  chromium=75.0.3770\* firefox xvfb xsel unzip nodejs wget
 
 # geckodriver
 # see latest at https://github.com/mozilla/geckodriver/releases/
