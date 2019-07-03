@@ -11,7 +11,7 @@ However it already gives useful results.
 ## To start it
 - Install Docker and docker-compose if needed.
 - Edit a `.env` file at the root of this folder (next to the README),
-  with the following line ending with your admin password.
+  with the following line ending with your admin password:
   ```
   ADMIN_PASSWORD=
   ```
@@ -46,7 +46,7 @@ Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.
 - Possibility to access non-public websites.
 - Possibility to run more than one audit at a time.
 - Smart use of `sitemap.xml` files.
-- Taking robots.txt into account.
+- Taking `robots.txt` into account.
 - Ability to limit the number of URLs checked by domain.
 - Option to only start subdomain audits at the root.
 - Reporting more than accessibility violations.
