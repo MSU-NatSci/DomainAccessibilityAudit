@@ -10,6 +10,12 @@ However it already gives useful results.
 
 ## To start it
 - Install Docker and docker-compose if needed.
+- Edit a `.env` file at the root of this folder (next to the README),
+  with the following line ending with your admin password.
+  ```
+  ADMIN_PASSWORD=
+  ```
+  (this password is needed to create and remove audits)
 - `docker-compose up -d`
 - Direct a browser to `http://localhost:3142/`.
 
@@ -31,20 +37,21 @@ However it already gives useful results.
 
 ## FAQ
 - How do I let other people see the results?  
-Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.1:`. Be aware that it will let anybody access your application and remove audits (there is no user management yet).
+Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.1:`.
 
 ## Current issues
 - Sometimes the audit will start failing after a while. It will try to restart WebDriver automatically to continue. A large number of scan errors will be reported if the audit keeps failing.
 
 ## Current non-features that would be nice to have in the future
-- User management.
 - Possibility to access non-public websites.
 - Possibility to run more than one audit at a time.
 - Smart use of `sitemap.xml` files.
+- Taking robots.txt into account.
 - Ability to limit the number of URLs checked by domain.
 - Option to only start subdomain audits at the root.
 - Reporting more than accessibility violations.
 - Ability to pause an audit.
+- User management beyond a simple admin password.
 
 ## Licence
 GPL 3.0.

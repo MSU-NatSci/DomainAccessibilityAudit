@@ -36,6 +36,14 @@ class ServerAPI {
     });
   }
   
+  // App
+  login(password) {
+    return this.request('POST', '/api/app/login', {password});
+  }
+  admin() {
+    return this.request('GET', '/api/app/admin');
+  }
+  
   // Audit
   getAuditStatus() {
     return this.request('GET', '/api/audits/status');

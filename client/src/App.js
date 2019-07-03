@@ -13,6 +13,34 @@ class App extends Component {
   constructor() {
     super();
     this.server = new ServerAPI();
+    this.state = {
+      admin: null,
+    };
+    this.checkIfAdmin();
+  }
+  
+  login(password) {
+    this.server.login(password)
+      .then((admin) => {
+        this.setState({ admin });
+      })
+      .catch((err) => {
+        console.log("Login:");
+        console.log(err);
+        this.setState({ admin: false });
+      });
+  }
+  
+  checkIfAdmin() {
+    return this.server.admin()
+      .then((admin) => {
+        this.setState({ admin });
+      })
+      .catch((err) => {
+        console.log("checkIfAdmin:");
+        console.log(err);
+        this.setState({ admin: false });
+      });
   }
   
   render() {
@@ -22,16 +50,23 @@ class App extends Component {
           <h1>Domain Accessibility Audit</h1>
           <Switch>
             <Route exact path='/audits/create'
-              render={(routerProps) => <AuditForm server={this.server} {...routerProps} />} />
+              render={(routerProps) => <AuditForm admin={this.state.admin}
+                server={this.server} {...routerProps} />} />
             <Route path='/audits/:auditId'
               render={(routerProps) => <Audit server={this.server} {...routerProps} />} />
             <Route path='/audits/'
-              render={(routerProps) => <AuditList server={this.server} {...routerProps} />} />
+              render={(routerProps) => <AuditList server={this.server}
+                admin={this.state.admin}
+                login={(password) => this.login(password)}
+                {...routerProps} />} />
             <Route path='/domains/:domainId'
               render={(routerProps) => <Domain server={this.server} {...routerProps} />} />
             <Route path='/pages/:pageId'
               render={(routerProps) => <Page server={this.server} {...routerProps} />} />
-            <Route render={(routerProps) => <AuditList server={this.server} {...routerProps} />}/>
+            <Route render={(routerProps) => <AuditList server={this.server}
+              admin={this.state.admin}
+              login={(password) => this.login(password)}
+              {...routerProps} />}/>
           </Switch>
         </main>
       </BrowserRouter>

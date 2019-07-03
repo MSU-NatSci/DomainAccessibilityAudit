@@ -10,12 +10,22 @@ class AuditList extends Component {
     super(props);
     this.state = {
       audits: null,
+      password: null,
     };
     this.props.server.getAudits()
       .then((audits) => {
         this.setState({ audits });
       })
       .catch((err) => console.log(err));
+  }
+  
+  handleChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
   }
   
   openAudit(auditId) {
@@ -48,14 +58,23 @@ class AuditList extends Component {
           <td>{audit.nbViolations}</td>
           <td>
             <button onClick={(e) => this.openAudit(audit._id)}>Open</button>{' '}
-            <button onClick={(e) => this.removeAudit(audit._id)}>Remove</button>
+            {this.props.admin &&
+              <button onClick={(e) => this.removeAudit(audit._id)}>Remove</button>
+            }
           </td>
         </tr>
       ));
     }
     return (
       <>
-        <p><Link to="/audits/create" className="nav-link">Start a new audit</Link></p>
+        {this.props.admin ?
+          <p><Link to="/audits/create" className="nav-link">Start a new audit</Link></p>
+        :
+          <p>Admin login:{' '}
+            <input name="password" type="password" onChange={e => this.handleChange(e)}/>{' '}
+            <button onClick={(e) => this.props.login(this.state.password)}>Log in</button>
+          </p>
+        }
         {auditsHTML &&
           <table>
             <caption>Saved Audits</caption>
@@ -81,6 +100,8 @@ class AuditList extends Component {
 }
 
 AuditList.propTypes = {
+  admin: PropTypes.bool,
+  login: PropTypes.func.isRequired,
   server: PropTypes.instanceOf(ServerAPI).isRequired,
 };
 

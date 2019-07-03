@@ -11,6 +11,7 @@ services:
       CHOKIDAR_USEPOLLING: 'true'
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
       NODE_OPTIONS: '--http-parser=legacy'
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     volumes:
       - ./backend:/app/backend
       - ./client/public:/app/client/public

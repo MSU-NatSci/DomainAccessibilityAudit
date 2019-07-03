@@ -79,66 +79,72 @@ class AuditForm extends React.Component {
   render() {
     return (
       <section>
-        <h1>Start A New Audit</h1>
-        {this.state.error && <p className="error">{this.state.error}</p>}
-        <section>
-          <label>Initial URL:{' '}
-            <input name="url" size="30" value={this.state.url}
-              onChange={e => this.handleChange(e)}/>
-          </label>{' '}
-          <button onClick={e => this.startAudit()} disabled={this.state.running}>Start Audit</button>{' '}
-          <button onClick={e => this.stopAudit()} disabled={!this.state.running}>Stop</button>
-        </section>
-        <section>
-          <h1>Options</h1>
-          <p>
-            <label>Standard:{' '}
-              <select name="standard" value={this.state.standard}
-                  onChange={e => this.handleChange(e)}>
-                <option value="wcag2a">WCAG 2.0 Level A</option>
-                <option value="wcag2aa">WCAG 2.0 Level AA</option>
-                <option value="wcag21aa">WCAG 2.1 Level AA</option>
-                <option value="section508">Section 508</option>
-              </select>
-            </label>
-          </p>
-          <p>
-            <label>Check subdomains:{' '}
-              <input type="checkbox" name="checkSubdomains"
-                checked={this.state.checkSubdomains} onChange={e => this.handleChange(e)}/>
-            </label>
-          </p>
-          <p>
-            <label>Maximum crawling depth:{' '}
-              <input name="maxDepth" size="10" value={this.state.maxDepth}
+        {this.props.admin ?
+          <>
+          <h1>Start A New Audit</h1>
+          {this.state.error && <p className="error">{this.state.error}</p>}
+          <section>
+            <label>Initial URL:{' '}
+              <input name="url" size="30" value={this.state.url}
                 onChange={e => this.handleChange(e)}/>
-            </label>
-          </p>
-          <p>
-            <label>Browser:{' '}
-              <select name="browser" value={this.state.browser}
-                  onChange={e => this.handleChange(e)}>
-                <option value="firefox">Firefox</option>
-                <option value="chrome">Chromium</option>
-              </select>
-            </label>
-          </p>
-        </section>
-        {this.state.status && this.state.status.running !== undefined &&
-          <section>
-            <h1>Status</h1>
-            <ul>
-              <li>Running: {this.state.status.running ? "Yes" : "No"}</li>
-              <li>Checked URLs: {this.state.status.nbCheckedURLs}</li>
-              <li>Violations found: {this.state.status.nbViolations}</li>
-            </ul>
+            </label>{' '}
+            <button onClick={e => this.startAudit()} disabled={this.state.running}>Start Audit</button>{' '}
+            <button onClick={e => this.stopAudit()} disabled={!this.state.running}>Stop</button>
           </section>
-        }
-        {this.state.auditId &&
           <section>
-            <h1>Results</h1>
-            <Link to={'/audits/'+this.state.auditId} className="nav-link">Audit results</Link>
+            <h1>Options</h1>
+            <p>
+              <label>Standard:{' '}
+                <select name="standard" value={this.state.standard}
+                    onChange={e => this.handleChange(e)}>
+                  <option value="wcag2a">WCAG 2.0 Level A</option>
+                  <option value="wcag2aa">WCAG 2.0 Level AA</option>
+                  <option value="wcag21aa">WCAG 2.1 Level AA</option>
+                  <option value="section508">Section 508</option>
+                </select>
+              </label>
+            </p>
+            <p>
+              <label>Check subdomains:{' '}
+                <input type="checkbox" name="checkSubdomains"
+                  checked={this.state.checkSubdomains} onChange={e => this.handleChange(e)}/>
+              </label>
+            </p>
+            <p>
+              <label>Maximum crawling depth:{' '}
+                <input name="maxDepth" size="10" value={this.state.maxDepth}
+                  onChange={e => this.handleChange(e)}/>
+              </label>
+            </p>
+            <p>
+              <label>Browser:{' '}
+                <select name="browser" value={this.state.browser}
+                    onChange={e => this.handleChange(e)}>
+                  <option value="firefox">Firefox</option>
+                  <option value="chrome">Chromium</option>
+                </select>
+              </label>
+            </p>
           </section>
+          {this.state.status && this.state.status.running !== undefined &&
+            <section>
+              <h1>Status</h1>
+              <ul>
+                <li>Running: {this.state.status.running ? "Yes" : "No"}</li>
+                <li>Checked URLs: {this.state.status.nbCheckedURLs}</li>
+                <li>Violations found: {this.state.status.nbViolations}</li>
+              </ul>
+            </section>
+          }
+          {this.state.auditId &&
+            <section>
+              <h1>Results</h1>
+              <Link to={'/audits/'+this.state.auditId} className="nav-link">Audit results</Link>
+            </section>
+          }
+          </>
+        :
+          <p>You need admin priviledges to create a new audit.</p>
         }
       </section>
     );
@@ -147,6 +153,7 @@ class AuditForm extends React.Component {
 }
 
 AuditForm.propTypes = {
+  admin: PropTypes.bool.isRequired,
   server: PropTypes.instanceOf(ServerAPI).isRequired,
 };
 

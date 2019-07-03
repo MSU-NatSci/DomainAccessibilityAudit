@@ -37,6 +37,10 @@ exports.remove_audit = (req, res) => {
     res.json({ success: false, error: "No audit id provided" });
     return;
   }
+  if (!req.session.admin) {
+    res.json({ success: false, error: "Admin priviledge is needed to remove audits." });
+    return;
+  }
   if (currentAudit != null && currentAudit.dbObject != null &&
       currentAudit.dbObject._id == auditId && currentAudit.running) {
     res.json({ success: false, error: "Can't remove a running audit." });
@@ -86,6 +90,10 @@ exports.start = (req, res) => {
     res.json({ success: false, error: "Missing parameter: browser" });
     return;
   }
+  if (!req.session.admin) {
+    res.json({ success: false, error: "Admin priviledge is needed to create audits." });
+    return;
+  }
   if (currentAudit != null && currentAudit.running) {
     res.json({ success: false, error: "Another audit is running. Stop it first." });
     return;
@@ -98,6 +106,10 @@ exports.start = (req, res) => {
 };
 
 exports.stop = (req, res) => {
+  if (!req.session.admin) {
+    res.json({ success: false, error: "Admin priviledge is needed to stop audits." });
+    return;
+  }
   if (currentAudit != null && currentAudit.running)
     currentAudit.stop();
   res.json({ success: true, data: {} });
