@@ -484,7 +484,8 @@ export default class Audit {
             console.log("redirected to the same URL ?!? " + url);
         } else {
           this.findDomain(domainName).then((domain) => {
-            if (domain.pageCount < this.maxPagesPerDomain) {
+            if (this.maxPagesPerDomain == 0 ||
+                domain.pageCount < this.maxPagesPerDomain) {
               const page = this.newPage(originPage, domain, url, res.status);
               this.pagesToCheck.push(page);
               domain.pageCount++;
@@ -501,7 +502,8 @@ export default class Audit {
           error.message.indexOf('ssl_choose_client_version:unsupported protocol') > 0) {
         // Debian does not support TLS<1.2, but some sites are still using it...
         this.findDomain(domainName).then((domain) => {
-          if (domain.pageCount < this.maxPagesPerDomain) {
+          if (this.maxPagesPerDomain == 0 ||
+              domain.pageCount < this.maxPagesPerDomain) {
             const page = this.newPage(originPage, domain, url, null);
             page.errorMessage = "Insecure version of SSL !";
             this.pagesToCheck.push(page);
