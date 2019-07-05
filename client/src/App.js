@@ -23,6 +23,8 @@ class App extends Component {
     this.server.login(password)
       .then((admin) => {
         this.setState({ admin });
+        if (!admin)
+          alert("Incorrect password.");
       })
       .catch((err) => {
         console.log("Login:");
