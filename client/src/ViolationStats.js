@@ -62,12 +62,16 @@ class ViolationStats extends Component {
           {this.props.items && v[this.itemPlural] &&
               v[this.itemPlural].length > 0 &&
             <>
-              {' '}
-              <button onClick={e => this.seeItems(id)}>
-                {this.state.seeItemsViolationId === id ?
-                  "Hide "+this.itemPlural :
-                  "See "+this.itemPlural}
-              </button>
+              {this.props.items.length > 1 &&
+                <>
+                  {' '}
+                  <button onClick={e => this.seeItems(id)}>
+                    {this.state.seeItemsViolationId === id ?
+                      "Hide "+this.itemPlural :
+                      "See "+this.itemPlural}
+                  </button>
+                </>
+              }
               {this.violationItems(id)}
             </>
           }

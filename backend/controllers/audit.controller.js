@@ -77,7 +77,8 @@ exports.status = (req, res) => {
 };
 
 exports.start = (req, res) => {
-  const { firstURL, standard, checkSubdomains, maxDepth, browser } = req.body;
+  const { firstURL, standard, checkSubdomains, maxDepth,
+    maxPagesPerDomain, sitemaps, browser } = req.body;
   if (!firstURL) {
     res.json({ success: false, error: "Missing parameter: firstURL" });
     return;
@@ -99,7 +100,8 @@ exports.start = (req, res) => {
     return;
   }
   currentAudit = new Audit();
-  currentAudit.start(firstURL, standard, checkSubdomains, maxDepth, browser)
+  currentAudit.start(firstURL, standard, checkSubdomains, maxDepth,
+      maxPagesPerDomain, sitemaps, browser)
     .then((audit) => res.json({ success: true, data: audit }))
     .catch((err) => res.json({ success: false,
       error: typeof err == 'string' ? err : err.toString()}));

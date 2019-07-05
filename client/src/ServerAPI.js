@@ -49,9 +49,11 @@ class ServerAPI {
     return this.request('GET', '/api/audits/status');
   }
   
-  startAudit(firstURL, standard, checkSubdomains, maxDepth, browser) {
+  startAudit(firstURL, standard, checkSubdomains, maxDepth,
+      maxPagesPerDomain, sitemaps, browser) {
     return this.request('POST', '/api/audits/start',
-      {firstURL, standard, checkSubdomains, maxDepth, browser});
+      {firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
+        sitemaps, browser});
   }
   
   stopAudit() {

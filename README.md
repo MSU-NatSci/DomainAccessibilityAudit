@@ -37,7 +37,14 @@ However it already gives useful results.
 
 ## FAQ
 - How do I let other people see the results?  
-Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.1:`.
+  Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.1:`.
+- Why would I ever want to not use site maps when they're available?
+  Site maps are great to check entire sites. A crawling depth of 0 can even
+  be used when they are complete.
+  However one might want to focus on the most visible pages
+  (based on the number of clicks used to reach them).
+  Ignoring site maps and crawling the sites with a maximum depth is
+  a better option in this case.
 
 ## Current issues
 - Sometimes the audit will start failing after a while. It will try to restart WebDriver automatically to continue. A large number of scan errors will be reported if the audit keeps failing.
@@ -45,13 +52,12 @@ Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.
 ## Current non-features that would be nice to have in the future
 - Possibility to access non-public websites.
 - Possibility to run more than one audit at a time.
-- Smart use of `sitemap.xml` files.
 - Taking `robots.txt` into account.
-- Ability to limit the number of URLs checked by domain.
 - Option to only start subdomain audits at the root.
 - Reporting more than accessibility violations.
 - Ability to pause an audit.
 - User management beyond a simple admin password.
+- Option to ignore pages returning a 404 status code.
 
 ## Licence
 GPL 3.0.

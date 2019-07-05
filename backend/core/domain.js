@@ -1,4 +1,6 @@
 import DomainModel from '../models/domain.model';
+import fetch from 'node-fetch';
+const parseString = require('xml2js').parseString;
 
 export default class Domain {
   
@@ -14,6 +16,8 @@ export default class Domain {
     this.name = name;
     /** @member {DomainModel} - database object for this domain */
     this.dbObject = null;
+    /** @member {Number} */
+    this.pageCount = 0;
   }
   
   /**
@@ -33,4 +37,37 @@ export default class Domain {
       .catch((err) => console.error("Error saving new domain:", err));
   }
   
+  /**
+   * this is just a version of xml2js' parseString using Promises
+   * @param {string} text
+   * @returns {Promise<Object>}
+   */
+  parseXML(text) {
+    return new Promise((resolve, reject) => {
+      parseString(text, (err, result) => {
+        if (result) {
+          resolve(result);
+        }
+        reject(err);
+      });
+    });
+  }
+  
+  /**
+   * @returns {string}
+   */
+  sitemapURL() {
+    return 'http://' + this.name + '/sitemap.xml';
+  }
+  
+  /**
+   * Try to read the sitemap.xml file for the domain.
+   * @returns {Promise<Object>}
+   */
+  readSitemap() {
+    return fetch(this.sitemapURL(), {
+      method: 'GET', redirect: 'follow'
+    }).then(res => res.text())
+    .then((text) => this.parseXML(text));
+  }
 }

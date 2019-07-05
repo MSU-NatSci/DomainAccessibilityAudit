@@ -13,6 +13,8 @@ class AuditForm extends React.Component {
       standard: 'wcag2aa',
       checkSubdomains: true,
       maxDepth: 1,
+      maxPagesPerDomain: 0,
+      sitemaps: false,
       status: {},
       running: false,
       browser: 'firefox',
@@ -33,7 +35,8 @@ class AuditForm extends React.Component {
   
   startAudit() {
     this.props.server.startAudit(this.state.url, this.state.standard,
-        this.state.checkSubdomains, this.state.maxDepth, this.state.browser)
+        this.state.checkSubdomains, this.state.maxDepth, this.state.maxPagesPerDomain,
+        this.state.sitemaps, this.state.browser)
       .then((data) => {
         this.setState({
           running: true,
@@ -117,6 +120,18 @@ class AuditForm extends React.Component {
               </label>
             </p>
             <p>
+              <label>Maximum number of pages checked per domain:{' '}
+                <input name="maxPagesPerDomain" size="10" value={this.state.maxPagesPerDomain}
+                  onChange={e => this.handleChange(e)}/>
+              </label>
+            </p>
+            <p>
+              <label>Use <a href="https://www.sitemaps.org/" target="_blank" rel="noopener noreferrer">site maps</a> to discover pages:{' '}
+                <input type="checkbox" name="sitemaps"
+                  checked={this.state.sitemaps} onChange={e => this.handleChange(e)}/>
+              </label>
+            </p>
+            <p>
               <label>Browser:{' '}
                 <select name="browser" value={this.state.browser}
                     onChange={e => this.handleChange(e)}>
@@ -153,7 +168,7 @@ class AuditForm extends React.Component {
 }
 
 AuditForm.propTypes = {
-  admin: PropTypes.bool.isRequired,
+  admin: PropTypes.bool,
   server: PropTypes.instanceOf(ServerAPI).isRequired,
 };
 

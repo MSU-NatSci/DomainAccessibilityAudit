@@ -44,10 +44,6 @@ export default class Audit {
     this.pagesToCheck = [];
     /** @member {Array.<string>} - URLs that have been analyzed with aXe */
     this.checkedURLs = [];
-    /** @member {number} - maximum crawling depth */
-    this.maxDepth = 0;
-    /** @member {string} - web browser name (firefox|chrome) */
-    this.browser = 'firefox';
     /** @member {AuditModel} - database object for this audit */
     this.dbObject = null;
     /** @member {boolean} - true when there are HEAD tests being performed
@@ -77,6 +73,20 @@ export default class Audit {
       'toolkit.telemetry.unified': false,
       'toolkit.telemetry.updatePing.enabled': false,
     };
+    // form parameters
+    /** @member {string} - accessibility standard to use with aXe
+       (wcag2a|wcag2aa|wcag21aa|section508) */
+    this.standard = 'wcag2aa';
+    /** @member {boolean} - true if subdomains are to be checked */
+    this.checkSubdomains = false;
+    /** @member {number} - maximum crawling depth */
+    this.maxDepth = 0;
+    /** @member {number} - maximum number of pages checked per domain (0 = no max) */
+    this.maxPagesPerDomain = 0;
+    /** @member {boolean} - sitemaps - true if sitemap files should be used */
+    this.sitemaps = false;
+    /** @member {string} - web browser name (firefox|chrome) */
+    this.browser = 'firefox';
   }
   
   /**
@@ -86,14 +96,19 @@ export default class Audit {
       (wcag2a|wcag2aa|wcag21aa|section508)
    * @param {boolean} checkSubdomains - true if subdomains are to be checked
    * @param {number} maxDepth - maximum crawling depth
+   * @param {number} maxPagesPerDomain - maximum number of pages checked per domain (0 = no max)
+   * @param {boolean} sitemaps - true if sitemap files should be used
    * @param {string} browser - web browser name (firefox|chrome)
    * @returns {Promise<Object>} - this.dbObject (database object for this audit)
    */
-  async start(firstURL, standard, checkSubdomains, maxDepth, browser) {
+  async start(firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
+      sitemaps, browser) {
     //mongoose.connection.db.dropDatabase(); // DROP THE DB !!!
     this.standard = standard;
     this.checkSubdomains = checkSubdomains;
     this.maxDepth = maxDepth;
+    this.maxPagesPerDomain = maxPagesPerDomain;
+    this.sitemaps = sitemaps;
     this.browser = browser;
     this.running = true;
     this.initialDomainName = this.extractDomainNameFromURL(firstURL);
@@ -105,6 +120,8 @@ export default class Audit {
       standard: standard,
       checkSubdomains: checkSubdomains,
       maxDepth: maxDepth,
+      maxPagesPerDomain: maxPagesPerDomain,
+      sitemaps: sitemaps,
       browser: browser,
       dateStarted: new Date(),
       nbCheckedURLs: 0,
@@ -131,6 +148,7 @@ export default class Audit {
     this.pagesToCheck = [
       this.newPage(null, initialDomain, firstURL, null)
     ];
+    initialDomain.pageCount++;
     this.nextURL();
     return this.dbObject;
   }
@@ -359,6 +377,17 @@ export default class Audit {
         return domain;
     const domain = new Domain(this, domainName);
     await domain.saveNew();
+    if (this.sitemaps) {
+      await domain.readSitemap().then((sitemap) => {
+        if (!sitemap.urlset)
+          return;
+        for (let url of sitemap.urlset.url) {
+          if (!url.loc || !url.loc.length)
+            continue;
+          this.testToAddPage(domain.sitemapURL(), url.loc[0]);
+        }
+      });
+    }
     this.domains.push(domain);
     return domain;
   }
@@ -423,7 +452,7 @@ export default class Audit {
     }
     // check the MIME type and status before adding
     this.headToDo.push({originPage, url, domainName});
-    if (!this.headTestsRunning)
+    if (!this.headTestsRunning && this.running && !this.stopRequested)
       this.nextHEAD();
   }
 
@@ -455,27 +484,35 @@ export default class Audit {
             console.log("redirected to the same URL ?!? " + url);
         } else {
           this.findDomain(domainName).then((domain) => {
-            const page = this.newPage(originPage, domain, url, res.status);
-            this.pagesToCheck.push(page);
+            if (domain.pageCount < this.maxPagesPerDomain) {
+              const page = this.newPage(originPage, domain, url, res.status);
+              this.pagesToCheck.push(page);
+              domain.pageCount++;
+            }
           });
         }
       } else {
         console.log("ignored MIME: " + mime);
       }
-      this.nextHEAD();
+      if (this.running && !this.stopRequested)
+        this.nextHEAD();
     }).catch(error => {
       if (error.message != null &&
           error.message.indexOf('ssl_choose_client_version:unsupported protocol') > 0) {
         // Debian does not support TLS<1.2, but some sites are still using it...
         this.findDomain(domainName).then((domain) => {
-          const page = this.newPage(originPage, domain, url, null);
-          page.errorMessage = "Insecure version of SSL !";
-          this.pagesToCheck.push(page);
+          if (domain.pageCount < this.maxPagesPerDomain) {
+            const page = this.newPage(originPage, domain, url, null);
+            page.errorMessage = "Insecure version of SSL !";
+            this.pagesToCheck.push(page);
+            domain.pageCount++;
+          }
         });
       } else {
         console.error('error HEAD ' + url + ': ', error);
       }
-      this.nextHEAD();
+      if (this.running && !this.stopRequested)
+        this.nextHEAD();
     });
   }
   

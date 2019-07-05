@@ -41,6 +41,7 @@ class AuditList extends Component {
       .catch((err) => {
         console.log("Remove audit:");
         console.log(err);
+        alert("Remove audit: " + err);
       });
   }
   
@@ -70,10 +71,16 @@ class AuditList extends Component {
         {this.props.admin ?
           <p><Link to="/audits/create" className="nav-link">Start a new audit</Link></p>
         :
-          <p>Admin login:{' '}
-            <input name="password" type="password" onChange={e => this.handleChange(e)}/>{' '}
-            <button onClick={(e) => this.props.login(this.state.password)}>Log in</button>
-          </p>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            this.props.login(this.state.password);
+          }}>
+            <label>
+              Admin login:{' '}
+              <input name="password" type="password" onChange={e => this.handleChange(e)}/>
+            </label>{' '}
+            <button type="submit">Log in</button>
+          </form>
         }
         {auditsHTML &&
           <table>

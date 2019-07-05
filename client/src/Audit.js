@@ -43,6 +43,14 @@ class Audit extends Component {
                   <td>{this.state.audit.maxDepth}</td>
                 </tr>
                 <tr>
+                  <th>Maximum number of pages checked per domain</th>
+                  <td>{this.state.audit.maxPagesPerDomain}</td>
+                </tr>
+                <tr>
+                  <th>Use site maps</th>
+                  <td className="code">{this.state.audit.sitemaps ? "Yes" : "No"}</td>
+                </tr>
+                <tr>
                   <th>Web browser</th>
                   <td>{this.state.audit.browser}</td>
                 </tr>

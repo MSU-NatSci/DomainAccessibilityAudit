@@ -6,6 +6,8 @@ const AuditsSchema = new Schema({
   standard: String,
   checkSubdomains: Boolean,
   maxDepth: Number,
+  maxPagesPerDomain: Number,
+  sitemaps: Boolean,
   browser: String,
   dateStarted: Date,
   dateEnded: Date,
