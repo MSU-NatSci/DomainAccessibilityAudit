@@ -38,7 +38,7 @@ However it already gives useful results.
 ## FAQ
 - How do I let other people see the results?  
   Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.1:`.
-- Why would I ever want to not use site maps when they're available?
+- Why would I ever want to not use site maps when they're available?  
   Site maps are great to check entire sites. A crawling depth of 0 can even
   be used when they are complete.
   However one might want to focus on the most visible pages
