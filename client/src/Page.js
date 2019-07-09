@@ -43,7 +43,7 @@ class Page extends Component {
         <h1>
           {this.state.page ? <span className="code">{this.state.page.url}</span> : 'Page'}
         </h1>
-        {this.state.page.status && this.state.page.status != '200' &&
+        {this.state.page && this.state.page.status && this.state.page.status !== '200' &&
           <p>Status: {this.state.page.status}</p>
         }
         {this.state.page &&
