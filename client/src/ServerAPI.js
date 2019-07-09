@@ -50,10 +50,10 @@ class ServerAPI {
   }
   
   startAudit(firstURL, standard, checkSubdomains, maxDepth,
-      maxPagesPerDomain, sitemaps, browser) {
+      maxPagesPerDomain, sitemaps, includeMatch, browser) {
     return this.request('POST', '/api/audits/start',
       {firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
-        sitemaps, browser});
+        sitemaps, includeMatch, browser});
   }
   
   stopAudit() {

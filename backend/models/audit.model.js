@@ -8,6 +8,7 @@ const AuditsSchema = new Schema({
   maxDepth: Number,
   maxPagesPerDomain: Number,
   sitemaps: Boolean,
+  includeMatch: String,
   browser: String,
   dateStarted: Date,
   dateEnded: Date,

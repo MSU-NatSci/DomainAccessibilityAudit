@@ -51,6 +51,10 @@ class Audit extends Component {
                   <td className="code">{this.state.audit.sitemaps ? "Yes" : "No"}</td>
                 </tr>
                 <tr>
+                  <th>Include only paths matching the regular expression</th>
+                  <td className="code">{this.state.audit.includeMatch}</td>
+                </tr>
+                <tr>
                   <th>Web browser</th>
                   <td>{this.state.audit.browser}</td>
                 </tr>

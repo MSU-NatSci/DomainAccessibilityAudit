@@ -85,6 +85,8 @@ export default class Audit {
     this.maxPagesPerDomain = 0;
     /** @member {boolean} - sitemaps - true if sitemap files should be used */
     this.sitemaps = false;
+    /** @member {string} - regular expression to include only matching paths */
+    this.includeMatch = '';
     /** @member {string} - web browser name (firefox|chrome) */
     this.browser = 'firefox';
   }
@@ -98,17 +100,19 @@ export default class Audit {
    * @param {number} maxDepth - maximum crawling depth
    * @param {number} maxPagesPerDomain - maximum number of pages checked per domain (0 = no max)
    * @param {boolean} sitemaps - true if sitemap files should be used
+   * @param {string} includeMatch - regular expression to include only matching paths
    * @param {string} browser - web browser name (firefox|chrome)
    * @returns {Promise<Object>} - this.dbObject (database object for this audit)
    */
   async start(firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
-      sitemaps, browser) {
+      sitemaps, includeMatch, browser) {
     //mongoose.connection.db.dropDatabase(); // DROP THE DB !!!
     this.standard = standard;
     this.checkSubdomains = checkSubdomains;
     this.maxDepth = maxDepth;
     this.maxPagesPerDomain = maxPagesPerDomain;
     this.sitemaps = sitemaps;
+    this.includeMatch = includeMatch;
     this.browser = browser;
     this.running = true;
     this.initialDomainName = this.extractDomainNameFromURL(firstURL);
@@ -122,6 +126,7 @@ export default class Audit {
       maxDepth: maxDepth,
       maxPagesPerDomain: maxPagesPerDomain,
       sitemaps: sitemaps,
+      includeMatch: includeMatch,
       browser: browser,
       dateStarted: new Date(),
       nbCheckedURLs: 0,
@@ -433,6 +438,11 @@ export default class Audit {
   testToAddPage(originPage, url) {
     if (!/^https?:\/\//i.test(url))
       return;
+    if (this.includeMatch != null && this.includeMatch != '') {
+      let path = url.replace(/^https?:\/\/[^/]+/i, '');
+      if (!path.match(this.includeMatch))
+        return;
+    }
     let ind = url.indexOf('#');
     if (ind > -1)
       url = url.substring(0, ind);

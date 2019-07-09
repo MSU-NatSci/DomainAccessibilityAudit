@@ -15,6 +15,7 @@ class AuditForm extends React.Component {
       maxDepth: 1,
       maxPagesPerDomain: 0,
       sitemaps: false,
+      includeMatch: '',
       status: {},
       running: false,
       browser: 'firefox',
@@ -36,7 +37,7 @@ class AuditForm extends React.Component {
   startAudit() {
     this.props.server.startAudit(this.state.url, this.state.standard,
         this.state.checkSubdomains, this.state.maxDepth, this.state.maxPagesPerDomain,
-        this.state.sitemaps, this.state.browser)
+        this.state.sitemaps, this.state.includeMatch, this.state.browser)
       .then((data) => {
         this.setState({
           running: true,
@@ -129,6 +130,12 @@ class AuditForm extends React.Component {
               <label>Use <a href="https://www.sitemaps.org/" target="_blank" rel="noopener noreferrer">site maps</a> to discover pages:{' '}
                 <input type="checkbox" name="sitemaps"
                   checked={this.state.sitemaps} onChange={e => this.handleChange(e)}/>
+              </label>
+            </p>
+            <p>
+              <label>Include only paths matching the regular expression:{' '}
+                <input name="includeMatch" size="20" value={this.state.includeMatch}
+                  onChange={e => this.handleChange(e)}/>
               </label>
             </p>
             <p>

@@ -42,6 +42,7 @@ However it already gives useful results.
 - Option to check subdomains automatically.
 - Options to use site maps and/or crawling to discover pages to test.
 - Option to limit the number of pages checked per domain.
+- Option to include only pages matching a regular expression.
 - Results can be browsed on a dynamic website. Access to create new audits or remove them is protected by password.
 - Results include violation statistics with links to Deque documentation given for the whole audit (including subdomains), for each domain and for each page.
 - Easy way to see which domains or pages are most impacted by specific violations.
@@ -56,6 +57,11 @@ However it already gives useful results.
   (based on the number of clicks used to reach them).
   Ignoring site maps and crawling the sites with a maximum depth is
   a better option in this case.
+- How could I check only a part of a site ?  
+  With the "Include only paths matching the regular expression" option,
+  for instance `^/section1` would only match paths starting with `/section1`
+  (the paths the expression is checked against start with a slash,
+  but do not include the protocol or domain parts of the URL).
 
 ## Current issues
 - Sometimes the audit will start failing after a while. It will try to restart WebDriver automatically to continue. A large number of scan errors will be reported if the audit keeps failing.
