@@ -395,6 +395,10 @@ export default class Audit {
             continue;
           this.testToAddPage(domain.sitemapURL(), url.loc[0]);
         }
+      })
+      .catch(err => {
+        console.log("Error reading the site map:");
+        console.log(err);
       });
     }
     return domain;

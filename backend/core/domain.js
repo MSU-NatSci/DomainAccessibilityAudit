@@ -65,9 +65,17 @@ export default class Domain {
    * @returns {Promise<Object>}
    */
   readSitemap() {
-    return fetch(this.sitemapURL(), {
+    let url = this.sitemapURL();
+    return fetch(url, {
       method: 'GET', redirect: 'follow'
-    }).then(res => res.text())
+    }).then(res => {
+      if (res.status == 404)
+        throw new Error("sitemap.xml was not found at " + url);
+      const mime = res.headers.get('content-type');
+      if (mime !== 'text/xml' && mime !== 'application/xml')
+        throw new Error("sitemap.xml has a wrong MIME type at " + url);
+      return res.text();
+    })
     .then((text) => this.parseXML(text));
   }
 }

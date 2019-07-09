@@ -103,8 +103,11 @@ exports.start = (req, res) => {
   currentAudit.start(firstURL, standard, checkSubdomains, maxDepth,
       maxPagesPerDomain, sitemaps, includeMatch, browser)
     .then((audit) => res.json({ success: true, data: audit }))
-    .catch((err) => res.json({ success: false,
-      error: typeof err == 'string' ? err : err.toString()}));
+    .catch((err) => {
+      console.log(err);
+      res.json({ success: false,
+        error: typeof err == 'string' ? err : err.toString()});
+    });
 };
 
 exports.stop = (req, res) => {
