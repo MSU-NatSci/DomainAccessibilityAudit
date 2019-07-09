@@ -35,6 +35,17 @@ However it already gives useful results.
 - `docker-compose down -v --rmi all --remove-orphans`
 - Remove the files.
 
+## Features
+- Accessibility testing based on [axe](https://github.com/dequelabs/axe-core), which does not return false positives.
+- Choice of accessibility standard to use: WCAG 2.0 Level A or AA, WCAG 2.1 Level AA or Section 508.
+- Choice of web browser for testing: Firefox or Chromium.
+- Option to check subdomains automatically.
+- Options to use site maps and/or crawling to discover pages to test.
+- Option to limit the number of pages checked per domain.
+- Results can be browsed on a dynamic website. Access to create new audits or remove them is protected by password.
+- Results include violation statistics with links to Deque documentation given for the whole audit (including subdomains), for each domain and for each page.
+- Easy way to see which domains or pages are most impacted by specific violations.
+
 ## FAQ
 - How do I let other people see the results?  
   Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.1:`.
@@ -58,6 +69,7 @@ However it already gives useful results.
 - Ability to pause an audit.
 - User management beyond a simple admin password.
 - Option to ignore pages returning a 404 status code.
+- Regular expression to ignore some URLs.
 
 ## Licence
 GPL 3.0.
