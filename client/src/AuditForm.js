@@ -147,6 +147,7 @@ class AuditForm extends React.Component {
               <ul>
                 <li>Running: {this.state.status.running ? "Yes" : "No"}</li>
                 <li>Checked URLs: {this.state.status.nbCheckedURLs}</li>
+                <li>URLs to check: {this.state.status.nbURLsToCheck} (more might be added later)</li>
                 <li>Violations found: {this.state.status.nbViolations}</li>
               </ul>
             </section>

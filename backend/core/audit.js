@@ -161,10 +161,10 @@ export default class Audit {
     console.log('createNewDriver');
     if (this.driver != null) {
       try {
-        await this.driver.close();
+        await this.driver.quit();
       } catch (error) {
         // ignore error, the connection might be closed already
-        console.log("driver.close(): " + error);
+        console.log("driver.quit(): " + error);
       }
     }
     this.driver = new WebDriver.Builder()
@@ -180,7 +180,10 @@ export default class Audit {
         new chrome.Options().headless().addArguments(['--no-sandbox']));
     }
     this.driver = this.driver.build();
-    this.driver.manage().setTimeouts( { implicit: 10000 } );
+    this.driver.manage().setTimeouts({
+      implicit: 10000,
+      pageLoad: 60000,
+    });
     let tags;
     if (this.standard == 'wcag2a')
       tags = ['wcag2a'];
@@ -376,6 +379,7 @@ export default class Audit {
       if (domain.name == domainName)
         return domain;
     const domain = new Domain(this, domainName);
+    this.domains.push(domain);
     await domain.saveNew();
     if (this.sitemaps) {
       await domain.readSitemap().then((sitemap) => {
@@ -388,7 +392,6 @@ export default class Audit {
         }
       });
     }
-    this.domains.push(domain);
     return domain;
   }
   
@@ -483,14 +486,7 @@ export default class Audit {
           else
             console.log("redirected to the same URL ?!? " + url);
         } else {
-          this.findDomain(domainName).then((domain) => {
-            if (this.maxPagesPerDomain == 0 ||
-                domain.pageCount < this.maxPagesPerDomain) {
-              const page = this.newPage(originPage, domain, url, res.status);
-              this.pagesToCheck.push(page);
-              domain.pageCount++;
-            }
-          });
+          this.continueWithHead(originPage, url, domainName, res, false);
         }
       } else {
         console.log("ignored MIME: " + mime);
@@ -501,21 +497,38 @@ export default class Audit {
       if (error.message != null &&
           error.message.indexOf('ssl_choose_client_version:unsupported protocol') > 0) {
         // Debian does not support TLS<1.2, but some sites are still using it...
-        this.findDomain(domainName).then((domain) => {
-          if (this.maxPagesPerDomain == 0 ||
-              domain.pageCount < this.maxPagesPerDomain) {
-            const page = this.newPage(originPage, domain, url, null);
-            page.errorMessage = "Insecure version of SSL !";
-            this.pagesToCheck.push(page);
-            domain.pageCount++;
-          }
-        });
+        this.continueWithHead(originPage, url, domainName, null, true);
       } else {
         console.error('error HEAD ' + url + ': ', error);
       }
       if (this.running && !this.stopRequested)
         this.nextHEAD();
     });
+  }
+  
+  /**
+   * This is called by nextHEAD() if the url is worth processing further.
+   * @param {Page} originPage
+   * @param {string} url
+   * @param {string} domainName
+   * @param {Object} res
+   * @param {boolean} sslError
+   */
+  continueWithHead(originPage, url, domainName, res, sslError) {
+    // ignore bad looking URLs that result in a 404 (probably a bad link)
+    if (sslError || res.status != 404 || !url.match(/.https?:\/\/|\s/)) {
+      this.findDomain(domainName).then((domain) => {
+        if (this.maxPagesPerDomain == 0 ||
+            domain.pageCount < this.maxPagesPerDomain) {
+          const page = this.newPage(originPage, domain, url,
+            sslError ? null : res.status);
+          if (sslError)
+            page.errorMessage = "Insecure version of SSL !";
+          this.pagesToCheck.push(page);
+          domain.pageCount++;
+        }
+      });
+    }
   }
   
   /**
@@ -527,6 +540,7 @@ export default class Audit {
       running: this.running,
       nbViolations: this.nbViolations,
       nbCheckedURLs: this.checkedURLs.length,
+      nbURLsToCheck: this.pagesToCheck.length,
     };
   }
   
