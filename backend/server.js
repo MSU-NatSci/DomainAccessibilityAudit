@@ -1,4 +1,4 @@
-import "@babel/polyfill";
+import 'regenerator-runtime/runtime'; // for babel
 import path from 'path';
 import express from 'express';
 import session from 'express-session';
