@@ -17,7 +17,7 @@ However it already gives useful results.
   ```
   (this password is needed to create and remove audits)
 - `docker-compose up -d`
-- Direct a browser to `http://localhost:3142/`.
+- Direct a browser to `http://localhost/`.
 
 ## To stop it
 - A running audit can be stopped with the Stop button in the form to start a new audit.
@@ -47,9 +47,17 @@ However it already gives useful results.
 - Results include violation statistics with links to Deque documentation given for the whole audit (including subdomains), for each domain and for each page.
 - Easy way to see which domains or pages are most impacted by specific violations.
 
+## Other environment variables
+Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `.env`:
+- `MODE`: running environment, `development` or `production` (`production` by default)
+- `RESTRICTED_IP`: an IP address which will be the only one able to access the app
+  (`127.0.0.1` by default for development, `0.0.0.0` by default for production,
+    set to `0.0.0.0` to allow connections from everywhere even in development)
+- `DEVELOPMENT_PORT`: the port used for development (3142 by default)
+- `DEVELOPMENT_API_PORT`: the port used for API calls in development (3143 by default)
+- `PRODUCTION_PORT`: the port used for production (80 by default)
+
 ## FAQ
-- How do I let other people see the results?  
-  Edit the first line after `ports:` in `docker-compose.yml`, and remove `127.0.0.1:`.
 - Why would I ever want to not use site maps when they're available?  
   Site maps are great to check entire sites. A crawling depth of 0 can even
   be used when they are complete.

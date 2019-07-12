@@ -1,8 +1,6 @@
 FROM debian:sid
 # We are using sid instead of stretch to use a recent version of Firefox
 
-ENV NODE_ENV development
-
 WORKDIR /app
 
 # Get Chromium, Firefox and Node
@@ -38,4 +36,4 @@ WORKDIR /app/client
 RUN npm install
 WORKDIR /app
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start"]

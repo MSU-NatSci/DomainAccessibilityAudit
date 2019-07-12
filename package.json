@@ -4,9 +4,15 @@
   "description": "Scan a domain and subdomains for accessibility violations and report them with a web interface.",
   "main": "index.js",
   "scripts": {
-    "start:server": "cd backend && nodemon server.js --exec babel-node --presets @babel/preset-env",
-    "start:client": "cd client && npm start",
-    "start:dev": "concurrently \"npm run start:server\" \"npm run start:client\""
+    "start:server:dev": "cd backend && nodemon server.js --exec babel-node --presets @babel/preset-env",
+    "start:client:dev": "cd client && npm start",
+    "start:development": "concurrently \"npm run start:server:dev\" \"npm run start:client:dev\"",
+    "clean:server": "rm -rf build",
+    "build:server": "babel --presets @babel/preset-env -d build backend",
+    "start:server:prod": "npm run clean:server && npm run build:server && node build/server.js",
+    "build:client": "cd client && rm -rf build && npm run build",
+    "start:production": "concurrently \"npm run start:server:prod\" \"npm run build:client\"",
+    "start": "npm run start:$NODE_ENV"
   },
   "author": "Damien Guillaume",
   "license": "GPL-3.0",

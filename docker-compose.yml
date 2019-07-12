@@ -7,11 +7,11 @@ services:
     environment:
       DB_URL: mongodb://mongodb:27017/accessibility_audit
       TZ: America/Detroit
-      API_PORT: 3143
       CHOKIDAR_USEPOLLING: 'true'
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
       NODE_OPTIONS: '--http-parser=legacy'
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      NODE_ENV: ${MODE-production}
     volumes:
       - ./backend:/app/backend
       - ./client/public:/app/client/public
@@ -21,8 +21,9 @@ services:
     depends_on:
       - mongodb
     ports:
-      - "127.0.0.1:3142:3142"
-      - "127.0.0.1:3143:3143"
+      - "${RESTRICTED_IP-127.0.0.1}:${DEVELOPMENT_PORT-3142}:3142"
+      - "${RESTRICTED_IP-127.0.0.1}:${DEVELOPMENT_API_PORT-3143}:3143"
+      - "${RESTRICTED_IP-0.0.0.0}:${PRODUCTION_PORT-80}:80"
     restart: unless-stopped
 
   mongodb:
