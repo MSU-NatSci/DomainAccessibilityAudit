@@ -56,7 +56,7 @@ export default class Page {
       this.audit.aXeB
         .analyze((err, results) => {
           if (err) {
-            console.log("aXe analyze error:");
+            console.log("aXe analyze error for " + this.url + ":");
             console.log(err);
             if (this.errorMessage == null)
               this.errorMessage = err;
@@ -101,7 +101,7 @@ export default class Page {
    * @param {Error} error
    */
   async handleError(error) {
-    console.log("Error in driver.get (" + error.name + "): ");
+    console.log("Error in driver.get (" + error.name + ") for " + this.url + ": ");
     console.log(error);
     this.errorMessage = error.message;
     // name = NoSuchSessionError, message = Tried to run command without establishing a connection

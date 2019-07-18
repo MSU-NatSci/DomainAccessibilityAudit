@@ -4,7 +4,7 @@ class ServerAPI {
   request(method, path, parameters) {
     return new Promise((resolve, reject) => {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 1000);
+      const timeout = setTimeout(() => controller.abort(), 2000);
       let fetchParams = {
         method: method,
         signal: controller.signal
@@ -28,7 +28,8 @@ class ServerAPI {
         })
         .catch(error => {
           if (error.name === 'AbortError')
-            reject("Timeout when connecting to Site Checker server");
+            reject("Timeout when connecting to Site Checker server (" +
+              error.message + ")");
           else
             reject("Error retrieving data: " + error.message);
         })
