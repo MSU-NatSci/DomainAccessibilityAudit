@@ -114,10 +114,10 @@ export default class Audit {
     this.sitemaps = sitemaps;
     this.includeMatch = includeMatch;
     this.browser = browser;
-    this.running = true;
     this.initialDomainName = this.extractDomainNameFromURL(firstURL);
     if (this.initialDomainName == null)
       throw new Error("No initial domain name");
+    this.running = true;
     this.testedURLs = [firstURL];
     const audit = new AuditModel({
       firstURL: firstURL,
@@ -140,6 +140,7 @@ export default class Audit {
     } catch (error) {
       console.log("Error saving the audit:");
       console.log(error);
+      this.running = false;
       throw error;
     }
     try {
@@ -147,6 +148,7 @@ export default class Audit {
     } catch (error) {
       console.log("Error in createNewDriver:");
       console.log(error);
+      this.running = false;
       throw error;
     }
     const initialDomain = await this.findDomain(this.initialDomainName);
@@ -185,8 +187,8 @@ export default class Audit {
         new chrome.Options().headless().addArguments(['--no-sandbox']));
     }
     this.driver = this.driver.build();
+    // about implicit: see https://stackoverflow.com/a/16079053/438970
     this.driver.manage().setTimeouts({
-      implicit: 10000,
       pageLoad: 60000,
     });
     let tags;
@@ -203,8 +205,11 @@ export default class Audit {
         branding: {
           application: "Domain Accessibility Audit"
         },
+        resultTypes: ["violations"],
       })
       .withTags(tags);
+      // NOTE: resultTypes is used for performance, it reduces
+      // processing related to non-violations
   }
   
   /**
@@ -233,9 +238,11 @@ export default class Audit {
    * Continue the audit with the new URL to check.
    */
   nextURL() {
-    if (this.pagesToCheck.length > 0) {
+    if (this.pagesToCheck.length > 0 && !this.stopRequested) {
       const page = this.pagesToCheck.shift();
       page.startChecking();
+    } else if (this.headTestsRunning && !this.stopRequested) {
+      setTimeout(() => this.nextURL(), 1000);
     } else {
       this.endAudit();
     }

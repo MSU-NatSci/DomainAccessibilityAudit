@@ -35,6 +35,7 @@ class AuditForm extends React.Component {
   }
   
   startAudit() {
+    this.setState({ error: null });
     this.props.server.startAudit(this.state.url, this.state.standard,
         this.state.checkSubdomains, this.state.maxDepth, this.state.maxPagesPerDomain,
         this.state.sitemaps, this.state.includeMatch, this.state.browser)

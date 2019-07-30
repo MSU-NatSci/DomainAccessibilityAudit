@@ -1,6 +1,6 @@
 {
   "name": "domain-accessibility-audit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scan a domain and subdomains for accessibility violations and report them with a web interface.",
   "main": "index.js",
   "scripts": {
