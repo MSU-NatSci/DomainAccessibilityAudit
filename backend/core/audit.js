@@ -5,6 +5,7 @@ const chrome = require('selenium-webdriver/chrome');
 
 import fetch from 'node-fetch';
 import mongoose from 'mongoose';
+import AbortController from 'abort-controller';
 
 import Page from './page';
 import Domain from './domain';
@@ -493,8 +494,12 @@ export default class Audit {
     this.headTestsRunning = true;
     let {originPage, url, domainName} = this.headToDo.shift();
     console.log("HEAD " + url);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 1000);
     fetch(url, {
-      method: 'HEAD', redirect: 'follow'
+      method: 'HEAD',
+      redirect: 'follow',
+      signal: controller.signal,
     }).then((res) => {
       const mime = res.headers.get('content-type');
       if (mime != null && mime.indexOf('text/html') == 0) {
@@ -515,7 +520,9 @@ export default class Audit {
       if (this.running && !this.stopRequested)
         this.nextHEAD();
     }).catch(error => {
-      if (error.message != null &&
+      if (error.name === 'AbortError') {
+        console.log("timeout for HEAD " + url);
+      } else if (error.message != null &&
           error.message.indexOf('ssl_choose_client_version:unsupported protocol') > 0) {
         // Debian does not support TLS<1.2, but some sites are still using it...
         this.continueWithHead(originPage, url, domainName, null, true);
@@ -524,7 +531,8 @@ export default class Audit {
       }
       if (this.running && !this.stopRequested)
         this.nextHEAD();
-    });
+    })
+    .finally(() => clearTimeout(timeout));
   }
   
   /**
@@ -553,11 +561,12 @@ export default class Audit {
   }
   
   /**
-   * Return the current status of the audit (running, nbViolations, nbCheckedURLs)
+   * Return the current status of the audit
    * @returns {Object}
    */
   status() {
     return {
+      initialDomainName: this.initialDomainName,
       running: this.running,
       nbViolations: this.nbViolations,
       nbCheckedURLs: this.checkedURLs.length,
