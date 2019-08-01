@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap'
 
 import ServerAPI from './ServerAPI';
 import ViolationStats from './ViolationStats';
+
 
 class Domain extends Component {
   
@@ -33,41 +37,47 @@ class Domain extends Component {
         <tr key={page._id}><td className="code">
             <Link to={'/pages/'+page._id} className="nav-link">{page.url}</Link>
           </td>
-          <td>{page.nbViolations}</td>
+          <td className="text-right">{page.nbViolations}</td>
         </tr>
       ));
     }
     return (
-      <section>
-        <p className="path">
-          <Link to="/audits/" className="nav-link">Audits</Link>{' '}/{' '}
+      <section className="pageContent">
+        <Breadcrumb>
+          <LinkContainer to="/audits/">
+            <Breadcrumb.Item>Audits</Breadcrumb.Item>
+          </LinkContainer>
           {this.state.domain &&
-            <Link to={'/audits/'+this.state.domain.auditId}
-              className="nav-link">Audit</Link>
+            <>
+              <LinkContainer to={'/audits/'+this.state.domain.auditId}>
+                <Breadcrumb.Item>Audit</Breadcrumb.Item>
+              </LinkContainer>
+              <Breadcrumb.Item active>Domain</Breadcrumb.Item>
+            </>
           }
-        </p>
-        <h1>{this.state.domain ? <span className="code">{this.state.domain.name}</span> : 'Domain'}</h1>
+        </Breadcrumb>
+        <h2>{this.state.domain ? <span className="code">{this.state.domain.name}</span> : ''}</h2>
         {this.state.domain &&
           <>
-            <table>
+            <Table bordered size="sm" className="data">
               <caption>STATISTICS</caption>
               <tbody>
                 <tr><th>Number of checked URLs</th><td>{this.state.domain.nbCheckedURLs}</td></tr>
                 <tr><th>Number of accessibility violations</th><td>{this.state.domain.nbViolations}</td></tr>
               </tbody>
-            </table>
+            </Table>
             <ViolationStats stats={this.state.domain.violationStats}
               items={this.state.domain.pages} itemType="page"/>
-            <table>
+            <Table bordered size="sm" className="data">
               <caption>SCANNED PAGES<br/>
               Click on a URL to get a full report for that page.</caption>
               <thead>
-                <tr><th>URL</th><th>Violations</th></tr>
+                <tr><th>URL</th><th className="text-right">Violations</th></tr>
               </thead>
               <tbody>
                 {pagesHTML}
               </tbody>
-            </table>
+            </Table>
           </>
         }
       </section>

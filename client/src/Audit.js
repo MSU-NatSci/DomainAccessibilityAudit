@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap'
+import PropTypes from 'prop-types';
 
 import ServerAPI from './ServerAPI';
 import ViolationStats from './ViolationStats';
@@ -21,14 +24,20 @@ class Audit extends Component {
   
   render() {
     return (
-      <section>
-        <p className="path"><Link to="/audits/" className="nav-link">Audits</Link></p>
-        <h1>{this.state.audit ?
+      <section className="pageContent">
+        <Breadcrumb>
+          <LinkContainer to="/audits/">
+            <Breadcrumb.Item>Audits</Breadcrumb.Item>
+          </LinkContainer>
+          <Breadcrumb.Item active>Audit</Breadcrumb.Item>
+        </Breadcrumb>
+        <h2>{this.state.audit ?
           <span className="code">{this.state.audit.initialDomainName}</span>
-          : 'Audit'}</h1>
+          : ''}</h2>
         {this.state.audit &&
           <>
-            <table>
+            <Table bordered size="sm" className="data">
+              <caption>AUDIT PARAMETERS</caption>
               <tbody>
                 <tr>
                   <th>First URL</th>
@@ -84,13 +93,17 @@ class Audit extends Component {
                   <td>{this.state.audit.nbScanErrors}</td>
                 </tr>
               </tbody>
-            </table>
+            </Table>
             <ViolationStats stats={this.state.audit.violationStats}
               items={this.state.audit.domains} itemType="domain"/>
-            <table>
+            <Table bordered size="sm" className="data">
               <caption>DOMAINS</caption>
               <thead>
-                <tr><th>Name</th><th>Checked URLs</th><th>Violations</th></tr>
+                <tr>
+                  <th>Name</th>
+                  <th className="text-right">Checked URLs</th>
+                  <th className="text-right">Violations</th>
+                </tr>
               </thead>
               <tbody>
                 {this.state.audit.domains
@@ -101,12 +114,12 @@ class Audit extends Component {
                       <Link to={'/domains/'+domain._id}
                         className="nav-link">{domain.name}</Link>
                     </td>
-                    <td>{domain.nbCheckedURLs}</td>
-                    <td>{domain.nbViolations}</td>
+                    <td className="text-right">{domain.nbCheckedURLs}</td>
+                    <td className="text-right">{domain.nbViolations}</td>
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </Table>
           </>
         }
       </section>

@@ -76,7 +76,6 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
 
 ## Current non-features that would be nice to have in the future
 - Possibility to access non-public websites.
-- Possibility to run more than one audit at a time.
 - Taking `robots.txt` into account.
 - Option to only start subdomain audits at the root.
 - Reporting more than accessibility violations.

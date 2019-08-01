@@ -46,8 +46,8 @@ class ServerAPI {
   }
   
   // Audit
-  getAuditStatus() {
-    return this.request('GET', '/api/audits/status');
+  getAuditStatus(auditId) {
+    return this.request('GET', `/api/audits/${auditId}/status`);
   }
   
   startAudit(firstURL, standard, checkSubdomains, maxDepth,
@@ -57,8 +57,8 @@ class ServerAPI {
         sitemaps, includeMatch, browser});
   }
   
-  stopAudit() {
-    return this.request('POST', '/api/audits/stop');
+  stopAudit(auditId) {
+    return this.request('POST', `/api/audits/${auditId}/stop`);
   }
   
   // Results

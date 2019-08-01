@@ -1,0 +1,17 @@
+.critical {
+  color: #C00;
+}
+.serious {
+  color: #A30;
+}
+.moderate {
+  color: #940;
+}
+.minor {
+  color: #740;
+}
+.violationItems {
+  margin-left: 1em;
+  padding-left: 0.5em;
+  border-left: 1px solid gray;
+}

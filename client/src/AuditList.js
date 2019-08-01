@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
+
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap'
 
 import ServerAPI from './ServerAPI';
+
 
 class AuditList extends Component {
   
@@ -28,10 +38,6 @@ class AuditList extends Component {
     });
   }
   
-  openAudit(auditId) {
-    this.props.history.push('/audits/' + auditId);
-  }
-  
   removeAudit(auditId) {
     this.props.server.removeAudit(auditId)
       .then(() => this.props.server.getAudits())
@@ -52,55 +58,58 @@ class AuditList extends Component {
         .sort((a,b) => b.dateStarted - a.dateStarted);
       auditsHTML = sortedAudits.map(audit => (
         <tr key={audit._id}>
-          <td className="code">{audit.initialDomainName}</td>
-          <td>{audit.maxDepth}</td>
-          <td>{(new Date(audit.dateStarted)).toLocaleString()}</td>
-          <td>{audit.nbCheckedURLs}</td>
-          <td>{audit.nbViolations}</td>
-          <td>
-            <button onClick={(e) => this.openAudit(audit._id)}>Open</button>{' '}
-            {this.props.admin &&
-              <button onClick={(e) => this.removeAudit(audit._id)}>Remove</button>
-            }
-          </td>
+          <td className="code"><Link to={'/audits/'+audit._id} className="nav-link">{audit.initialDomainName}</Link></td>
+          <td className="text-right">{audit.maxDepth}</td>
+          <td className="text-right">{(new Date(audit.dateStarted)).toLocaleDateString()}</td>
+          <td className="text-right">{audit.nbCheckedURLs}</td>
+          <td className="text-right">{audit.nbViolations}</td>
+          {this.props.admin &&
+            <td className="text-right">
+                <Button title="Remove" variant="danger" size="xs" onClick={(e) => this.removeAudit(audit._id)}><FontAwesomeIcon icon={faTrashAlt} title="Remove" /></Button>
+            </td>
+          }
         </tr>
       ));
     }
     return (
-      <>
+      <section className="pageContent">
         {this.props.admin ?
-          <p><Link to="/audits/create" className="nav-link">Start a new audit</Link></p>
+          <LinkContainer to="/audits/create">
+            <Button>Start a new audit</Button>
+          </LinkContainer>
         :
-          <form onSubmit={(e) => {
+          <Form inline onSubmit={(e) => {
             e.preventDefault();
             this.props.login(this.state.password);
           }}>
-            <label>
-              Admin login:{' '}
-              <input name="password" type="password" onChange={e => this.handleChange(e)}/>
-            </label>{' '}
-            <button type="submit">Log in</button>
-          </form>
+            <Form.Group controlId="password">
+              <Form.Label className="mx-2">Admin login</Form.Label>
+              <Form.Control className="mx-2" name="password" type="password" onChange={e => this.handleChange(e)}/>
+            </Form.Group>
+            <Button className="mx-2" size="sm" type="submit">Log in</Button>
+          </Form>
         }
         {auditsHTML &&
-          <table>
+          <Table bordered size="sm" className="data">
             <caption>Saved Audits</caption>
             <thead>
               <tr>
                 <th>Domain</th>
-                <th>Max Depth</th>
-                <th>Date</th>
-                <th>Checked URLs</th>
-                <th>Violations</th>
-                <th>Actions</th>
+                <th className="text-right">Max Depth</th>
+                <th className="text-right">Date</th>
+                <th className="text-right">Checked URLs</th>
+                <th className="text-right">Violations</th>
+                {this.props.admin &&
+                  <th className="text-right"></th>
+                }
               </tr>
             </thead>
             <tbody>
               {auditsHTML}
             </tbody>
-          </table>
+          </Table>
         }
-      </>
+      </section>
     );
   }
   

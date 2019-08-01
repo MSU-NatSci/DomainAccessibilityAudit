@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Table from 'react-bootstrap/Table';
+import { LinkContainer } from 'react-router-bootstrap'
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import ServerAPI from './ServerAPI';
+
 
 class Page extends Component {
   
@@ -26,28 +29,31 @@ class Page extends Component {
       ['critical', 3],
     ]);
     return (
-      <section>
-        <p className="path">
-          <Link to="/audits/" className="nav-link">Audits</Link>
+      <section className="pageContent">
+        <Breadcrumb>
+          <LinkContainer to="/audits/">
+            <Breadcrumb.Item>Audits</Breadcrumb.Item>
+          </LinkContainer>
           {this.state.page &&
             <>
-              {' '}/{' '}
-              <Link to={'/audits/'+this.state.page.auditId}
-                className="nav-link">Audit</Link>
-              {' '}/{' '}
-              <Link to={'/domains/'+this.state.page.domainId}
-                className="nav-link">Domain</Link>
+              <LinkContainer to={'/audits/'+this.state.page.auditId}>
+                <Breadcrumb.Item>Audit</Breadcrumb.Item>
+              </LinkContainer>
+              <LinkContainer to={'/domains/'+this.state.page.domainId}>
+                <Breadcrumb.Item>Domain</Breadcrumb.Item>
+              </LinkContainer>
+              <Breadcrumb.Item active>Page</Breadcrumb.Item>
             </>
           }
-        </p>
-        <h1>
-          {this.state.page ? <span className="code">{this.state.page.url}</span> : 'Page'}
-        </h1>
+        </Breadcrumb>
+        <h2>
+          {this.state.page ? <span className="code">{this.state.page.url}</span> : ''}
+        </h2>
         {this.state.page && this.state.page.status && this.state.page.status !== '200' &&
           <p>Status: {this.state.page.status}</p>
         }
         {this.state.page &&
-          <p><a href={this.state.page.url} target="_blank"
+          <p className="text-center"><a href={this.state.page.url} target="_blank"
             rel="noopener noreferrer">Visit the page</a></p>
         }
         {this.state.page &&
@@ -56,7 +62,7 @@ class Page extends Component {
             {this.state.page.violations
               .sort((v1, v2) => impacts.get(v2.impact) - impacts.get(v1.impact))
               .map(violation => (
-              <table key={violation.id}>
+              <Table bordered size="sm" key={violation.id} className="data">
                 <tbody>
                   {/*<tr><th>Id</th><td className="code">{violation.id}</td></tr>*/}
                   <tr><th>Description</th><td>
@@ -64,7 +70,7 @@ class Page extends Component {
                   </td></tr>
                   <tr><th>Impact</th><td className={violation.impact}>{violation.impact}</td></tr>
                   <tr><th>Nodes</th><td>
-                    <table>
+                    <Table bordered size="sm" className="data">
                       <thead>
                         <tr><th>Target</th><th>HTHML</th></tr>
                       </thead>
@@ -76,10 +82,10 @@ class Page extends Component {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                    </Table>
                   </td></tr>
                 </tbody>
-              </table>
+              </Table>
             ))}
             {this.state.page.errorMessage &&
               <p>Error: {this.state.page.errorMessage}</p>

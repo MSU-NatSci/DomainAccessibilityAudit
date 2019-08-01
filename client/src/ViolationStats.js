@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+
+import './ViolationStats.css';
+
 
 class ViolationStats extends Component {
   
@@ -62,22 +67,18 @@ class ViolationStats extends Component {
           {this.props.items && v[this.itemPlural] &&
               v[this.itemPlural].length > 0 &&
             <>
-              {this.props.items.length > 1 &&
-                <>
-                  {' '}
-                  <button onClick={e => this.seeItems(id)}>
-                    {this.state.seeItemsViolationId === id ?
-                      "Hide "+this.itemPlural :
-                      "See "+this.itemPlural}
-                  </button>
-                </>
-              }
+              {' '}
+              <Button variant="info" size="xs" onClick={e => this.seeItems(id)}>
+                {this.state.seeItemsViolationId === id ?
+                  "Hide "+this.itemPlural :
+                  "See "+this.itemPlural}
+              </Button>
               {this.violationItems(id)}
             </>
           }
         </td>
         <td className={v.impact}>{v.impact}</td>
-        <td>{v.total}</td>
+        <td className="text-right">{v.total}</td>
       </tr>
     );
   }
@@ -91,18 +92,18 @@ class ViolationStats extends Component {
       ['critical', 3],
     ]);
     return (
-      <table>
+      <Table bordered size="sm" className="data">
         <caption>VIOLATIONS</caption>
         <thead>
           <tr>
             <th>description</th>
             <th>impact</th>
-            <th>total</th>
+            <th className="text-right">total</th>
           </tr>
         </thead>
         <tbody>
           {Object.keys(stats).length === 0 ?
-            <tr><td colSpan="3" style={{textAlign:'center'}}>None</td></tr> :
+            <tr><td colSpan="3" className="text-center">None</td></tr> :
             <>
               {Object.keys(stats)
                 .sort((id1,id2) => {
@@ -117,7 +118,7 @@ class ViolationStats extends Component {
             </>
           }
         </tbody>
-      </table>
+      </Table>
     );
   }
   

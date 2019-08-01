@@ -1,0 +1,121 @@
+/* this is to fix some of bootstrap color accessibility issues */
+#root {
+  a:not(.btn) {
+    color: #15D;
+  }
+  ol.breadcrumb {
+    background-color: white;
+  }
+  .btn-primary {
+    background-color: #006BF0;
+    border-color: #006BF0;
+  }
+  .btn-primary:hover {
+    background-color: #005BDA;
+  }
+  .btn-info {
+    background-color: #008298;
+    border-color: #008298;
+  }
+  .btn-info:hover {
+    background-color: #007087;
+  }
+}
+
+/* More bootstrap changes */
+#root {
+  font-size: 90%;
+  
+  .btn-danger {
+    background-color: #C04550;
+    border-color: #C04550;
+  }
+  .btn-danger:hover {
+    background-color: #AA3540;
+  }
+  .btn-group-xs > .btn, .btn.btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+  }
+  h1 {
+    font-size: 2.0rem;
+  }
+  h2 {
+    font-size: 1.8rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+  table td {
+    vertical-align: middle;
+  }
+  .nav-link {
+    display: inline-block;
+    padding: 0;
+  }
+  caption {
+    padding-bottom: 0.50rem;
+  }
+}
+
+/* Common application styles */
+body {
+  background-color: #F0F0F0 !important;
+}
+h1 {
+  text-align: center;
+  font-family: sans-serif;
+  margin-top: 0.3em;
+}
+h2 {
+  text-align: center;
+}
+.pageContent {
+  margin: 0 1em 0 1em;
+}
+section section {
+  margin: 0.7em;
+  padding: 0.7em;
+}
+.code {
+  font-family: monospace;
+}
+
+table.data {
+  width: auto !important;
+  background-color: white;
+  margin: 0px auto;
+  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  box-shadow: 3px 3px 4px #AAA;
+  margin: 1em 0 1em 0;
+  
+  caption {
+    font-size: 120%;
+    color: #040505;
+    caption-side: top;
+  }
+  thead>tr:first-child>th:first-child, tbody>tr:first-child>th:first-child {
+    border-top-left-radius: 10px;
+  }
+  thead>tr:first-child>th:last-child, tbody>tr:first-child>td:last-child {
+    border-top-right-radius: 10px;
+  }
+  thead~tbody>tr:first-child>td:last-child {
+    border-top-right-radius: 0;
+  }
+  td.code {
+    white-space: pre-wrap;
+    font-size: 90%;
+  }
+  >tbody>tr:nth-of-type(2n+1) {
+    background-color: #EDF9FF;
+  }
+  >tbody>tr:hover {
+    background-color: #F0FFFA;
+  }
+}

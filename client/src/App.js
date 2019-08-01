@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import './App.css';
+
+import './App.scss';
 import ServerAPI from './ServerAPI';
 import AuditForm from './AuditForm';
 import AuditList from './AuditList';
+import AuditStatus from './AuditStatus';
 import Audit from './Audit';
 import Domain from './Domain';
 import Page from './Page';
@@ -54,6 +56,8 @@ class App extends Component {
             <Route exact path='/audits/create'
               render={(routerProps) => <AuditForm admin={this.state.admin}
                 server={this.server} {...routerProps} />} />
+            <Route path='/audits/:auditId/status'
+              render={(routerProps) => <AuditStatus server={this.server} {...routerProps} />} />
             <Route path='/audits/:auditId'
               render={(routerProps) => <Audit server={this.server} {...routerProps} />} />
             <Route path='/audits/'
