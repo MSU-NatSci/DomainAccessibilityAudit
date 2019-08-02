@@ -20,7 +20,18 @@ class AuditStatus extends React.Component {
       requestedStop: false,
     };
     this.checkDelay = 1000;
+    this.checkInterval = null;
+  }
+  
+  componentDidMount() {
     this.checkInterval = setInterval(() => this.checkStatus(), this.checkDelay);
+  }
+  
+  componentWillUnmount() {
+    if (this.checkInterval != null) {
+      clearInterval(this.checkInterval);
+      this.checkInterval = null;
+    }
   }
   
   checkStatus() {
@@ -40,8 +51,6 @@ class AuditStatus extends React.Component {
           error: error,
           status: null,
         });
-        clearInterval(this.checkInterval);
-        this.checkInterval = null;
       });
   }
   
