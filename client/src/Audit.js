@@ -111,8 +111,7 @@ class Audit extends Component {
                   .map(domain => (
                   <tr key={domain._id}>
                     <td className="code">
-                      <Link to={'/domains/'+domain._id}
-                        className="nav-link">{domain.name}</Link>
+                      <Link to={'/domains/'+domain._id}>{domain.name}</Link>
                     </td>
                     <td className="text-right">{domain.nbCheckedURLs}</td>
                     <td className="text-right">{domain.nbViolations}</td>

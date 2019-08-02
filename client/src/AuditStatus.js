@@ -100,7 +100,7 @@ class AuditStatus extends React.Component {
         }
         <section>
           <h3>Results</h3>
-          <Link to={'/audits/'+this.props.match.params.auditId} className="nav-link">Audit results</Link>
+          <Link to={'/audits/'+this.props.match.params.auditId}>Audit results</Link>
         </section>
       </section>
     );

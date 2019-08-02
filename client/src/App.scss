@@ -51,10 +51,6 @@
   table td {
     vertical-align: middle;
   }
-  .nav-link {
-    display: inline-block;
-    padding: 0;
-  }
   caption {
     padding-bottom: 0.50rem;
   }
@@ -64,12 +60,7 @@
 body {
   background-color: #F0F0F0 !important;
 }
-h1 {
-  text-align: center;
-  font-family: sans-serif;
-  margin-top: 0.3em;
-}
-h2 {
+h1, h2 {
   text-align: center;
 }
 .pageContent {

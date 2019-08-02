@@ -35,7 +35,7 @@ class Domain extends Component {
         });
       pagesHTML = sortedPages.map(page => (
         <tr key={page._id}><td className="code">
-            <Link to={'/pages/'+page._id} className="nav-link">{page.url}</Link>
+            <Link to={'/pages/'+page._id}>{page.url}</Link>
           </td>
           <td className="text-right">{page.nbViolations}</td>
         </tr>

@@ -58,7 +58,7 @@ class AuditList extends Component {
         .sort((a,b) => b.dateStarted - a.dateStarted);
       auditsHTML = sortedAudits.map(audit => (
         <tr key={audit._id}>
-          <td className="code"><Link to={'/audits/'+audit._id} className="nav-link">{audit.initialDomainName}</Link></td>
+          <td className="code"><Link to={'/audits/'+audit._id}>{audit.initialDomainName}</Link></td>
           <td className="text-right">{audit.maxDepth}</td>
           <td className="text-right">{(new Date(audit.dateStarted)).toLocaleDateString()}</td>
           <td className="text-right">{audit.nbCheckedURLs}</td>

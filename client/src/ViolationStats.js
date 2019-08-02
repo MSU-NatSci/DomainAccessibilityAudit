@@ -48,7 +48,7 @@ class ViolationStats extends Component {
               })
               .map(item => 
               <div key={item.id}>
-                <Link to={'/' + this.itemPlural + '/' + item.id} className="nav-link">{this.itemTitle(item.id)}</Link>
+                <Link to={'/' + this.itemPlural + '/' + item.id}>{this.itemTitle(item.id)}</Link>
                 {' '}{item.count}
               </div>
             )}
