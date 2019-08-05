@@ -15,7 +15,7 @@ let getRunningAudit = (auditId) => {
 
 exports.get_audits = (req, res) => {
   AuditModel.find().collation({locale:'en', strength: 2})
-    .sort('dateStarted')
+    .sort({dateStarted: -1})
     .exec((err, audits) => {
       if (err)
         res.json({ success: false, error: err.message });
