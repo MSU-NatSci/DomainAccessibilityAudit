@@ -17,6 +17,7 @@ services:
       - ./client/public:/app/client/public
       - ./client/src:/app/client/src
       - ./client/.env:/app/client/.env
+      - ./certs:/app/certs
       - /dev/shm:/dev/shm
     depends_on:
       - mongodb
@@ -24,6 +25,7 @@ services:
       - "${RESTRICTED_IP-127.0.0.1}:${DEVELOPMENT_PORT-3142}:3142"
       - "${RESTRICTED_IP-127.0.0.1}:${DEVELOPMENT_API_PORT-3143}:3143"
       - "${RESTRICTED_IP-0.0.0.0}:${PRODUCTION_PORT-80}:80"
+      - "${RESTRICTED_IP-0.0.0.0}:443:443"
     restart: unless-stopped
 
   mongodb:

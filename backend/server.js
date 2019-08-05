@@ -6,6 +6,9 @@ import crypto from 'crypto';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
+import fs from 'fs';
+import https from 'https';
+
 import appRoute from './routes/app.route';
 import auditRoute from './routes/audit.route';
 import domainRoute from './routes/domain.route';
@@ -41,7 +44,19 @@ if (process.env.NODE_ENV == 'production') {
   });
 }
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+// setup either HTTP or HTTPS
+const sslKeyPath = '/app/certs/server.key';
+const sslCertPath = '/app/certs/server.crt';
+if (process.env.NODE_ENV == 'production' &&
+    fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
+  const sslKey = fs.readFileSync(sslKeyPath);
+  const sslCert = fs.readFileSync(sslCertPath);
+  const credentials = { key: sslKey, cert: sslCert };
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(443, () => console.log(`HTTPS Listening on port 443`));
+} else {
+  app.listen(PORT, () => console.log(`HTTP Listening on port ${PORT}`));
+}
 
 // Database setup
 mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
