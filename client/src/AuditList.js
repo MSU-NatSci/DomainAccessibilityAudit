@@ -74,9 +74,14 @@ class AuditList extends Component {
     return (
       <section className="pageContent">
         {this.props.admin ?
-          <LinkContainer to="/audits/create">
-            <Button>Start a new audit</Button>
-          </LinkContainer>
+          <>
+          <Button variant="secondary" onClick={e => this.props.logout()} className="float-right">
+            Log out
+          </Button>
+            <LinkContainer to="/audits/create">
+              <Button>Start a new audit</Button>
+            </LinkContainer>
+          </>
         :
           <Form inline onSubmit={(e) => {
             e.preventDefault();
@@ -118,6 +123,7 @@ class AuditList extends Component {
 AuditList.propTypes = {
   admin: PropTypes.bool,
   login: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   server: PropTypes.instanceOf(ServerAPI).isRequired,
 };
 

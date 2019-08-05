@@ -41,6 +41,9 @@ class ServerAPI {
   login(password) {
     return this.request('POST', '/api/app/login', {password});
   }
+  logout() {
+    return this.request('POST', '/api/app/logout');
+  }
   admin() {
     return this.request('GET', '/api/app/admin');
   }

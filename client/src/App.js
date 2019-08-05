@@ -35,6 +35,15 @@ class App extends Component {
       });
   }
   
+  logout() {
+    this.server.logout()
+      .then(() => this.setState({ admin: false }))
+      .catch((err) => {
+        console.log("Logout:");
+        console.log(err);
+      });
+  }
+  
   checkIfAdmin() {
     return this.server.admin()
       .then((admin) => {
@@ -64,6 +73,7 @@ class App extends Component {
               render={(routerProps) => <AuditList server={this.server}
                 admin={this.state.admin}
                 login={(password) => this.login(password)}
+                logout={() => this.logout()}
                 {...routerProps} />} />
             <Route path='/domains/:domainId'
               render={(routerProps) => <Domain server={this.server} {...routerProps} />} />
@@ -72,6 +82,7 @@ class App extends Component {
             <Route render={(routerProps) => <AuditList server={this.server}
               admin={this.state.admin}
               login={(password) => this.login(password)}
+              logout={() => this.logout()}
               {...routerProps} />}/>
           </Switch>
         </main>

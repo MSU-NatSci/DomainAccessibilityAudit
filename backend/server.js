@@ -11,6 +11,9 @@ import auditRoute from './routes/audit.route';
 import domainRoute from './routes/domain.route';
 import pageRoute from './routes/page.route';
 
+if (!process.env.ADMIN_PASSWORD)
+  console.log('WARNING: You need to define a password in .env and restart docker-compose.');
+
 // Web server setup
 const app = express();
 const PORT = process.env.NODE_ENV == 'production' ? 80 : 3143;
