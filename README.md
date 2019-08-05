@@ -45,7 +45,7 @@ However it already gives useful results.
 - Option to include only pages matching a regular expression.
 - Results can be browsed on a dynamic website. Access to create new audits or remove them is protected by password.
 - Results include violation statistics with links to Deque documentation given for the whole audit (including subdomains), for each domain and for each page.
-- Easy way to see which domains or pages are most impacted by specific violations.
+- Easy way to see which domains or pages are most affected by specific violations.
 
 ## Other environment variables
 Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `.env`:
@@ -89,7 +89,7 @@ GPL 3.0.
 
 ## Technologies used
 - [Docker](https://www.docker.com/)
-- [aXe](https://github.com/dequelabs/axe-core)
+- [axe](https://github.com/dequelabs/axe-core)
 - [Selenium WebDriver](https://www.seleniumhq.org/projects/webdriver/)
 - [axe-webdriverjs](https://github.com/dequelabs/axe-webdriverjs)
 - [Node](https://nodejs.org/)
