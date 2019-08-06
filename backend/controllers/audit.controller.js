@@ -30,7 +30,11 @@ exports.get_audit = (req, res) => {
     res.json({ success: false, error: "No audit id provided" });
     return;
   }
-  AuditModel.findById(auditId).populate('domains', '-violationStats').exec((err, audit) => {
+  AuditModel.findById(auditId).populate({
+        path: 'domains',
+        select: '-violationStats',
+        options: { sort: { name: 1 } },
+      }).exec((err, audit) => {
     if (err)
       res.json({ success: false, error: err.message });
     else

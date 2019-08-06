@@ -7,7 +7,11 @@ exports.get_domain = (req, res) => {
     res.json({ success: false, error: 'No domain id provided' });
     return;
   }
-  DomainModel.findById(domainId).populate('pages', '-violations').exec((err, domain) => {
+  DomainModel.findById(domainId).populate({
+      path: 'pages',
+      select: '-violations',
+      options: { sort: { nbViolations: -1, url: 1 } },
+    }).exec((err, domain) => {
     if (err)
       res.json({ success: false, error: err.message });
     else

@@ -26,14 +26,7 @@ class Domain extends Component {
   render() {
     let pagesHTML = null;
     if (this.state.domain != null) {
-      const sortedPages = [...this.state.domain.pages]
-        .sort((p1, p2) => {
-          const dv = p2.nbViolations - p1.nbViolations;
-          if (dv !== 0)
-            return dv;
-          return p1.url.localeCompare(p2.url);
-        });
-      pagesHTML = sortedPages.map(page => (
+      pagesHTML = this.state.domain.pages.map(page => (
         <tr key={page._id}><td className="code">
             <Link to={'/pages/'+page._id}>{page.url}</Link>
           </td>

@@ -107,7 +107,6 @@ class Audit extends Component {
               </thead>
               <tbody>
                 {this.state.audit.domains
-                  .sort((d1,d2) => d1.name.localeCompare(d2.name))
                   .map(domain => (
                   <tr key={domain._id}>
                     <td className="code">
