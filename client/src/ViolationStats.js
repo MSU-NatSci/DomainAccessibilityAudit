@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { faInfoCircle, faPlusSquare, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import './ViolationStats.css';
 
@@ -60,22 +62,28 @@ class ViolationStats extends Component {
   
   violationRow(id) {
     const v = this.props.stats[id];
+    const withItems = this.props.items && v[this.itemPlural] &&
+      v[this.itemPlural].length > 0;
+    const expanded = this.state.seeItemsViolationId === id;
     return (
       <tr key={id}>
         <td className="code">
-          <a href={v.descLink} target="_blank" rel="noopener noreferrer">{v.description}</a>
-          {this.props.items && v[this.itemPlural] &&
-              v[this.itemPlural].length > 0 &&
+          {v.description}
+          {withItems &&
             <>
               {' '}
-              <Button variant="info" size="xs" onClick={e => this.seeItems(id)}>
-                {this.state.seeItemsViolationId === id ?
-                  "Hide "+this.itemPlural :
-                  "See "+this.itemPlural}
+              <Button variant="info" size="xs" onClick={e => this.seeItems(id)}
+                  title={(expanded ? 'Hide' : 'See') + ' affected ' + this.itemPlural}>
+                <FontAwesomeIcon icon={expanded ? faMinusSquare : faPlusSquare}/>
               </Button>
-              {this.violationItems(id)}
             </>
           }
+          {' '}
+          <Button variant="info" size="xs" title="Open rule description on Deque's website"
+              onClick={e => window.open(v.descLink, '_blank')}>
+            <FontAwesomeIcon icon={faInfoCircle}/>
+          </Button>
+          {withItems && this.violationItems(id)}
         </td>
         <td className={v.impact}>{v.impact}</td>
         <td className="text-right">{v.total}</td>

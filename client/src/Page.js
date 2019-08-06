@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import { LinkContainer } from 'react-router-bootstrap'
 import PropTypes from 'prop-types';
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import ServerAPI from './ServerAPI';
 
@@ -70,7 +73,11 @@ class Page extends Component {
                 <tbody>
                   {/*<tr><th>Id</th><td className="code">{violation.id}</td></tr>*/}
                   <tr><th>Description</th><td>
-                    <a href={violation.descLink} target="_blank" rel="noopener noreferrer">{violation.description}</a>
+                    {violation.description + ' '}
+                    <Button variant="info" size="xs" title="Open rule description on Deque's website"
+                        onClick={e => window.open(violation.descLink, '_blank')}>
+                      <FontAwesomeIcon icon={faInfoCircle}/>
+                    </Button>
                   </td></tr>
                   <tr><th>Impact</th><td className={violation.impact}>{violation.impact}</td></tr>
                   <tr><th>Nodes</th><td>
