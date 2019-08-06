@@ -74,17 +74,11 @@ class ServerAPI {
   removeAudit(auditId) {
     return this.request('DELETE', `/api/audits/${auditId}`);
   }
-  /*getDomains() {
-    return this.request('GET', '/api/domains/');
-  }*/
   getDomain(domainId) {
     return this.request('GET', `/api/domains/${domainId}`);
   }
   /*getDomainPages(domainId) {
     return this.request('GET', `/api/domains/${domainId}/pages`);
-  }*/
-  /*getPages() {
-    return this.request('GET', '/api/pages/');
   }*/
   getPage(pageId) {
     return this.request('GET', `/api/pages/${pageId}`);
