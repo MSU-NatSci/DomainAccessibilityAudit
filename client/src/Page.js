@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
 import { LinkContainer } from 'react-router-bootstrap'
@@ -49,16 +50,19 @@ class Page extends Component {
         <h2>
           {this.state.page ? <span className="code">{this.state.page.url}</span> : ''}
         </h2>
-        {this.state.page && this.state.page.status && this.state.page.status !== '200' &&
-          <p>Status: {this.state.page.status}</p>
-        }
-        {this.state.page &&
-          <p className="text-center"><a href={this.state.page.url} target="_blank"
-            rel="noopener noreferrer">Visit the page</a></p>
-        }
         {this.state.page &&
           <>
-            {this.state.page.violations.length === 0 && <span>None</span>}
+            <p className="text-center"><a href={this.state.page.url} target="_blank"
+              rel="noopener noreferrer">Visit the page</a></p>
+            {this.state.page.status && this.state.page.status !== '200' &&
+              <Alert variant="danger">Page status: {this.state.page.status}</Alert>
+            }
+            {this.state.page.errorMessage &&
+              <Alert variant="danger">Page error: {this.state.page.errorMessage}</Alert>
+            }
+            {this.state.page.violations.length === 0 &&
+              <Alert variant="success">No violation</Alert>
+            }
             {this.state.page.violations
               .sort((v1, v2) => impacts.get(v2.impact) - impacts.get(v1.impact))
               .map(violation => (
@@ -87,9 +91,6 @@ class Page extends Component {
                 </tbody>
               </Table>
             ))}
-            {this.state.page.errorMessage &&
-              <p>Error: {this.state.page.errorMessage}</p>
-            }
           </>
         }
       </section>
