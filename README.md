@@ -58,13 +58,13 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
 - `PRODUCTION_PORT`: the port used for production, except with SSL (80 by default)
 
 ## FAQ
-- How to set up SSL?
+- How to set up SSL ?  
   This could be done with a proxy, but if you want to set up SSL directly in node,
   this is possible in production mode on port 443:
   - In the project folder (where this README is), create a `certs` directory.
   - Add `server.key` and `server.crt` inside.
   - Restart with docker-compose: `docker-compose up -d`
-- Why would I ever want to not use site maps when they're available?  
+- Why would I ever want to not use site maps when they're available ?  
   Site maps are great to check entire sites. A crawling depth of 0 can even
   be used when they are complete.
   However one might want to focus on the most visible pages
@@ -76,7 +76,7 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
   for instance `^/section1` would only match paths starting with `/section1`
   (the paths the expression is checked against start with a slash,
   but do not include the protocol or domain parts of the URL).
-- How can I precisely control which ports are exposed by the application?
+- How can I precisely control which ports are exposed by the application ?  
   Edit the `ports` section in `docker-compose.yml`. Development mode needs 2 ports
   (one for the static web files and one for the API), but production mode only needs 1.
 
