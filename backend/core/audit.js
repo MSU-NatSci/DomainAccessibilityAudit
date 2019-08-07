@@ -348,7 +348,7 @@ export default class Audit {
     this.running = false;
     this.driver.quit();
     this.driver = null;
-    this.dbObject.complete = true;
+    this.dbObject.complete = this.pagesToCheck.length == 0 && this.headToDo.length == 0;
     this.dbObject.dateEnded = new Date();
     this.dbObject.save();
   }
