@@ -9,7 +9,7 @@ This is a beta version, and it does crash sometimes.
 However it already gives useful results.
 
 ## To start it
-- Install Docker and docker-compose if needed.
+- Install [Docker](https://docs.docker.com/install/#supported-platforms) and [docker-compose](https://docs.docker.com/compose/install/) if needed.
 - Edit a `.env` file at the root of this folder (next to the README),
   with the following line ending with your admin password:
   ```
@@ -61,8 +61,7 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
 - How to set up SSL ?  
   This could be done with a proxy, but if you want to set up SSL directly in node,
   this is possible in production mode on port 443:
-  - In the project folder (where this README is), create a `certs` directory.
-  - Add `server.key` and `server.crt` inside.
+  - Add `server.key` and `server.crt` inside the `certs` directory.
   - Restart with docker-compose: `docker-compose up -d`
 - Why would I ever want to not use site maps when they're available ?  
   Site maps are great to check entire sites. A crawling depth of 0 can even
