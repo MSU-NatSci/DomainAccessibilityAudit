@@ -12,6 +12,10 @@ let getRunningAudit = (auditId) => {
       return audit;
   return null;
 }
+let cleanupRunningAudits = () => {
+  // release references to audits that are not running anymore
+  runningAudits = runningAudits.filter((a) => a.running);
+}
 
 exports.get_audits = (req, res) => {
   AuditModel.find().collation({locale:'en', strength: 2})
@@ -61,6 +65,7 @@ exports.start = (req, res) => {
     res.json({ success: false, error: "Admin priviledge is needed to create audits." });
     return;
   }
+  cleanupRunningAudits();
   let newAudit = new Audit();
   runningAudits.push(newAudit);
   newAudit.start(firstURL, standard, checkSubdomains, maxDepth,
