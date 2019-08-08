@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
@@ -14,12 +15,13 @@ class Audit extends Component {
     super(props);
     this.state = {
       audit: null,
+      error: null,
     };
     this.props.server.getAudit(this.props.match.params.auditId)
       .then((audit) => {
         this.setState({ audit });
       })
-      .catch((err) => console.log(err));
+      .catch((error) => this.setState({ error }));
   }
   
   render() {
@@ -31,6 +33,11 @@ class Audit extends Component {
           </LinkContainer>
           <Breadcrumb.Item active>Audit</Breadcrumb.Item>
         </Breadcrumb>
+        {this.state.error &&
+          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
+            {this.state.error}
+          </Alert>
+        }
         <h2>{this.state.audit ?
           <span className="code">{this.state.audit.initialDomainName}</span>
           : ''}</h2>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
@@ -21,12 +22,13 @@ class AuditList extends Component {
     this.state = {
       audits: null,
       password: null,
+      error: null,
     };
     this.props.server.getAudits()
       .then((audits) => {
         this.setState({ audits });
       })
-      .catch((err) => console.log(err));
+      .catch((error) => this.setState({ error }));
   }
   
   handleChange(event) {
@@ -44,10 +46,8 @@ class AuditList extends Component {
       .then((audits) => {
         this.setState({ audits });
       })
-      .catch((err) => {
-        console.log("Remove audit:");
-        console.log(err);
-        alert("Remove audit: " + err);
+      .catch((error) => {
+        this.setState({ error: "Remove audit: " + error });
       });
   }
   
@@ -73,11 +73,16 @@ class AuditList extends Component {
     }
     return (
       <section className="pageContent">
+        {this.state.error &&
+          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
+            {this.state.error}
+          </Alert>
+        }
         {this.props.admin ?
           <>
-          <Button variant="secondary" onClick={e => this.props.logout()} className="float-right">
-            Log out
-          </Button>
+            <Button variant="secondary" onClick={e => this.props.logout()} className="float-right">
+              Log out
+            </Button>
             <LinkContainer to="/audits/create">
               <Button>Start a new audit</Button>
             </LinkContainer>

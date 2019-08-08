@@ -17,12 +17,13 @@ class Page extends Component {
     super(props);
     this.state = {
       page: null,
+      error: null,
     };
     this.props.server.getPage(this.props.match.params.pageId)
       .then((page) => {
         this.setState({ page });
       })
-      .catch((err) => console.log(err));
+      .catch((error) => this.setState({ error }));
   }
   
   render() {
@@ -53,6 +54,11 @@ class Page extends Component {
         <h2>
           {this.state.page ? <span className="code">{this.state.page.url}</span> : ''}
         </h2>
+        {this.state.error &&
+          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
+            {this.state.error}
+          </Alert>
+        }
         {this.state.page &&
           <>
             <p className="text-center"><a href={this.state.page.url} target="_blank"

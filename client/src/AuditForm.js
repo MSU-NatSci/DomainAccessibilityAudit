@@ -68,7 +68,9 @@ class AuditForm extends React.Component {
             <Breadcrumb.Item active>Start A New Audit</Breadcrumb.Item>
           </Breadcrumb>
           {this.state.error &&
-            <Alert variant="danger">{this.state.error}</Alert>
+            <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
+              {this.state.error}
+            </Alert>
           }
           <Form onSubmit={e => {e.preventDefault(); this.startAudit();}} className="form mt-3">
             <Form.Group as={Row} controlId="url">

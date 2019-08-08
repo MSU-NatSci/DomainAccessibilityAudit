@@ -79,7 +79,9 @@ class AuditStatus extends React.Component {
         <h2>{this.state.status && this.state.status.initialDomainName ?
           this.state.status.initialDomainName : 'Audit Status'}</h2>
         {this.state.error &&
-          <Alert variant="danger">{this.state.error}</Alert>
+          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
+            {this.state.error}
+          </Alert>
         }
         {this.state.status && this.state.status.running &&
           <p className="m-5">

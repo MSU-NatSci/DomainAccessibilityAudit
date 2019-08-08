@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
@@ -15,12 +16,13 @@ class Domain extends Component {
     super(props);
     this.state = {
       domain: null,
+      error: null,
     };
     this.props.server.getDomain(this.props.match.params.domainId)
       .then((domain) => {
         this.setState({ domain });
       })
-      .catch((err) => console.log(err));
+      .catch((error) => this.setState({ error }));
   }
   
   render() {
@@ -49,6 +51,11 @@ class Domain extends Component {
             </>
           }
         </Breadcrumb>
+        {this.state.error &&
+          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
+            {this.state.error}
+          </Alert>
+        }
         <h2>{this.state.domain ? <span className="code">{this.state.domain.name}</span> : ''}</h2>
         {this.state.domain &&
           <>
