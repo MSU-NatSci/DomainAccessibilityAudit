@@ -24,6 +24,9 @@ class AuditList extends Component {
       password: null,
       error: null,
     };
+  }
+  
+  componentDidMount() {
     this.props.server.getAudits()
       .then((audits) => {
         this.setState({ audits });

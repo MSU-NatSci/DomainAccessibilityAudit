@@ -19,6 +19,9 @@ class Page extends Component {
       page: null,
       error: null,
     };
+  }
+  
+  componentDidMount() {
     this.props.server.getPage(this.props.match.params.pageId)
       .then((page) => {
         this.setState({ page });

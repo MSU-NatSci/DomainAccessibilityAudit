@@ -18,6 +18,9 @@ class Domain extends Component {
       domain: null,
       error: null,
     };
+  }
+  
+  componentDidMount() {
     this.props.server.getDomain(this.props.match.params.domainId)
       .then((domain) => {
         this.setState({ domain });

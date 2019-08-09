@@ -17,6 +17,9 @@ class Audit extends Component {
       audit: null,
       error: null,
     };
+  }
+  
+  componentDidMount() {
     this.props.server.getAudit(this.props.match.params.auditId)
       .then((audit) => {
         this.setState({ audit });
