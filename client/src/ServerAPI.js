@@ -1,6 +1,15 @@
 
 class ServerAPI {
   
+  constructor() {
+    this.cache = {
+      lastAuditList: null,
+      lastAudit: null,
+      lastDomain: null,
+      lastPage: null,
+    };
+  }
+  
   request(method, path, parameters) {
     return new Promise((resolve, reject) => {
       const controller = new AbortController();
@@ -55,6 +64,7 @@ class ServerAPI {
   
   startAudit(firstURL, standard, checkSubdomains, maxDepth,
       maxPagesPerDomain, sitemaps, includeMatch, browser) {
+    this.cache.lastAuditList = null;
     return this.request('POST', '/api/audits/start',
       {firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
         sitemaps, includeMatch, browser});
@@ -65,23 +75,40 @@ class ServerAPI {
   }
   
   // Results
-  getAudits() {
-    return this.request('GET', '/api/audits/');
+  async getAudits() {
+    if (this.cache.lastAuditList != null)
+      return this.cache.lastAuditList;
+    const auditList = await this.request('GET', '/api/audits/');
+    this.cache.lastAuditList = auditList;
+    return auditList;
   }
-  getAudit(auditId) {
-    return this.request('GET', `/api/audits/${auditId}`);
+  async getAudit(auditId) {
+    if (this.cache.lastAudit != null && this.cache.lastAudit._id === auditId)
+      return this.cache.lastAudit;
+    const audit = await this.request('GET', `/api/audits/${auditId}`);
+    this.cache.lastAudit = audit;
+    return audit;
   }
   removeAudit(auditId) {
+    this.cache.lastAuditList = null;
     return this.request('DELETE', `/api/audits/${auditId}`);
   }
-  getDomain(domainId) {
-    return this.request('GET', `/api/domains/${domainId}`);
+  async getDomain(domainId) {
+    if (this.cache.lastDomain != null && this.cache.lastDomain._id === domainId)
+      return this.cache.lastDomain;
+    const domain = await this.request('GET', `/api/domains/${domainId}`);
+    this.cache.lastDomain = domain;
+    return domain;
   }
   /*getDomainPages(domainId) {
     return this.request('GET', `/api/domains/${domainId}/pages`);
   }*/
-  getPage(pageId) {
-    return this.request('GET', `/api/pages/${pageId}`);
+  async getPage(pageId) {
+    if (this.cache.lastPage != null && this.cache.lastPage._id === pageId)
+      return this.cache.lastPage;
+    const page = await this.request('GET', `/api/pages/${pageId}`);
+    this.cache.lastPage = page;
+    return page;
   }
   
 }
