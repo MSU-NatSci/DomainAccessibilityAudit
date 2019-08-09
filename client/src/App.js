@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory } from "history";
+import { wrapHistory } from "oaf-react-router";
 
 import './App.scss';
 import ServerAPI from './ServerAPI';
@@ -18,6 +20,8 @@ class App extends Component {
     this.state = {
       admin: null,
     };
+    this.history = createBrowserHistory(); // or createHashHistory()
+    wrapHistory(this.history);
     this.checkIfAdmin();
   }
   
@@ -58,7 +62,7 @@ class App extends Component {
   
   render() {
     return (
-      <BrowserRouter>
+      <Router history={this.history}>
         <main>
           <h1>Domain Accessibility Audit</h1>
           <Switch>
@@ -86,7 +90,7 @@ class App extends Component {
               {...routerProps} />}/>
           </Switch>
         </main>
-      </BrowserRouter>
+      </Router>
     );
   }
   
