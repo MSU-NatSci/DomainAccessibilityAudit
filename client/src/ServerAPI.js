@@ -37,7 +37,7 @@ class ServerAPI {
         })
         .catch(error => {
           if (error.name === 'AbortError')
-            reject("Timeout when connecting to Site Checker server (" +
+            reject("Timeout when connecting to server (" +
               error.message + ")");
           else
             reject("Error retrieving data: " + error.message);
