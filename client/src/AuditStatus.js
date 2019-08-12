@@ -98,6 +98,7 @@ class AuditStatus extends React.Component {
             <li>Checked URLs: {this.state.status.nbCheckedURLs}</li>
             <li>URLs to check: {this.state.status.nbURLsToCheck} (more might be added later)</li>
             <li>Violations found: {this.state.status.nbViolations}</li>
+            <li>Scan errors: {this.state.status.nbScanErrors}</li>
           </ul>
         }
         <section>

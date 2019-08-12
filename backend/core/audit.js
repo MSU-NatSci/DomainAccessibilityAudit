@@ -571,6 +571,7 @@ export default class Audit {
       nbViolations: this.nbViolations,
       nbCheckedURLs: this.checkedURLs.length,
       nbURLsToCheck: this.pagesToCheck.length,
+      nbScanErrors: this.dbObject ? this.dbObject.nbScanErrors : 0,
     };
   }
   
