@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
 
-const app_controller = require('../controllers/app.controller');
+import app_controller from '../controllers/app.controller';
+
+const router = express.Router();
 
 router.post('/login', app_controller.login);
 router.post('/logout', app_controller.logout);

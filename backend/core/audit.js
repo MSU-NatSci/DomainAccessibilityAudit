@@ -1,7 +1,7 @@
-const WebDriver = require('selenium-webdriver');
-const AxeBuilder = require('axe-webdriverjs');
-const firefox = require('selenium-webdriver/firefox');
-const chrome = require('selenium-webdriver/chrome');
+import WebDriver from 'selenium-webdriver';
+import AxeBuilder from 'axe-webdriverjs';
+import firefox from 'selenium-webdriver/firefox';
+import chrome from 'selenium-webdriver/chrome';
 
 import fetch from 'node-fetch';
 import mongoose from 'mongoose';

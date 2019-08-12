@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
 
-const domain_controller = require('../controllers/domain.controller');
+import domain_controller from '../controllers/domain.controller';
+
+const router = express.Router();
 
 router.get('/:domainId', domain_controller.get_domain);
 //router.get('/:domainId/pages', domain_controller.get_domain_pages);

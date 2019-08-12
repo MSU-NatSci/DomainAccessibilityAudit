@@ -1,6 +1,8 @@
-import DomainModel from '../models/domain.model';
 import fetch from 'node-fetch';
-const parseString = require('xml2js').parseString;
+import { parseString } from 'xml2js';
+
+import DomainModel from '../models/domain.model';
+
 
 export default class Domain {
   

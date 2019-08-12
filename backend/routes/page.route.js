@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
 
-const page_controller = require('../controllers/page.controller');
+import page_controller from '../controllers/page.controller';
+
+const router = express.Router();
 
 router.get('/:pageId', page_controller.get_page);
 

@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
 
-const audit_controller = require('../controllers/audit.controller');
+import audit_controller from '../controllers/audit.controller';
+
+const router = express.Router();
 
 router.get('/', audit_controller.get_audits);
 router.post('/start', audit_controller.start);

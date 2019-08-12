@@ -1,4 +1,4 @@
-var AxeBuilder = require('axe-webdriverjs');
+import AxeBuilder from 'axe-webdriverjs';
 
 import PageModel from '../models/page.model';
 
