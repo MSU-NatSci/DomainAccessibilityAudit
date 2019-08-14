@@ -11,6 +11,9 @@ import Page from './page';
 import Domain from './domain';
 import AuditModel from '../models/audit.model';
 
+const pageLoadTimeout = 60000;
+const headTimeout = 4000;
+
 /**
  * The core package (this class, Domain and Page) contains the audit engine.
  * It crawls websites and uses axe-webdriverjs for accessibility tests.
@@ -190,7 +193,7 @@ export default class Audit {
     this.driver = this.driver.build();
     // about implicit: see https://stackoverflow.com/a/16079053/438970
     this.driver.manage().setTimeouts({
-      pageLoad: 60000,
+      pageLoad: pageLoadTimeout,
     });
     let tags;
     if (this.standard == 'wcag2a')
@@ -495,7 +498,7 @@ export default class Audit {
     let {originPage, url, domainName} = this.headToDo.shift();
     console.log("HEAD " + url);
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 1000);
+    const timeout = setTimeout(() => controller.abort(), headTimeout);
     fetch(url, {
       method: 'HEAD',
       redirect: 'follow',
