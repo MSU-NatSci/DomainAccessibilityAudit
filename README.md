@@ -4,10 +4,6 @@ This web application automatically crawls websites and checks for accessibility 
 It can crawl within subdomains of the initial domain it starts with.
 It reports statistics of violations for the whole audit, domains and pages.
 
-## Current status
-This is a beta version, and it does crash sometimes.
-However it already gives useful results.
-
 ## To start it
 - Install [Docker](https://docs.docker.com/install/#supported-platforms) and [docker-compose](https://docs.docker.com/compose/install/) if needed.
 - Edit a `.env` file at the root of this folder (next to the README),
@@ -80,7 +76,8 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
   (one for the static web files and one for the API), but production mode only needs 1.
 
 ## Current issues
-- Sometimes the audit will start failing after a while. It will try to restart WebDriver automatically to continue. A large number of scan errors will be reported if the audit keeps failing.
+- Browsers and drivers might crash sometimes, resulting in scan errors, but the audit will recover and continue.
+- Some redirects like meta refresh can also cause scan errors, as the page changes while axe tries to check the page.
 
 ## Current non-features that would be nice to have in the future
 - Possibility to access non-public websites.
