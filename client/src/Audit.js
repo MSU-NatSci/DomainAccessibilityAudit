@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
-import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap'
 import PropTypes from 'prop-types';
 
 import ServerAPI from './ServerAPI';
 import ViolationStats from './ViolationStats';
+import DomainTable from './DomainTable';
+import PageTable from './PageTable';
+
 
 class Audit extends Component {
   
@@ -15,6 +17,7 @@ class Audit extends Component {
     super(props);
     this.state = {
       audit: null,
+      domain: null, // used when there is only 1 domain for the audit
       error: null,
     };
   }
@@ -23,6 +26,14 @@ class Audit extends Component {
     this.props.server.getAudit(this.props.match.params.auditId)
       .then((audit) => {
         this.setState({ audit });
+        if (audit.domains && audit.domains.length === 1) {
+          // load the domain when there is only 1 for the audit
+          this.props.server.getDomain(audit.domains[0].id)
+            .then((domain) => {
+              this.setState({ domain });
+            })
+            .catch((error) => this.setState({ error }));
+        }
       })
       .catch((error) => this.setState({ error }));
   }
@@ -104,30 +115,19 @@ class Audit extends Component {
                 </tr>
               </tbody>
             </Table>
-            <ViolationStats stats={this.state.audit.violationStats}
-              items={this.state.audit.domains} itemType="domain"/>
-            <Table bordered size="sm" className="data">
-              <caption>DOMAINS</caption>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th className="text-right">Checked URLs</th>
-                  <th className="text-right">Violations</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.audit.domains
-                  .map(domain => (
-                  <tr key={domain._id}>
-                    <td className="code">
-                      <Link to={'/domains/'+domain._id}>{domain.name}</Link>
-                    </td>
-                    <td className="text-right">{domain.nbCheckedURLs}</td>
-                    <td className="text-right">{domain.nbViolations}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+            {this.state.domain ?
+              <>
+                <ViolationStats stats={this.state.domain.violationStats}
+                  items={this.state.domain.pages} itemType="page"/>
+                <PageTable domain={this.state.domain}/>
+              </>
+              :
+              <>
+                <ViolationStats stats={this.state.audit.violationStats}
+                  items={this.state.audit.domains} itemType="domain"/>
+                <DomainTable audit={this.state.audit}/>
+              </>
+            }
           </>
         }
       </section>

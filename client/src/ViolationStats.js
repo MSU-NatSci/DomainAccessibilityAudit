@@ -14,10 +14,8 @@ class ViolationStats extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: null,
       seeItemsViolationId: null,
     };
-    this.itemPlural = this.props.itemType + "s";
   }
   
   seeItems(violationId) {
@@ -92,6 +90,7 @@ class ViolationStats extends Component {
   }
   
   render() {
+    this.itemPlural = this.props.itemType + "s";
     let stats = this.props.stats;
     const impacts = new Map([
       ['minor', 0],

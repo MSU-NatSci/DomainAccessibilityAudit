@@ -3,11 +3,11 @@ import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap'
 
 import ServerAPI from './ServerAPI';
 import ViolationStats from './ViolationStats';
+import PageTable from './PageTable';
 
 
 class Domain extends Component {
@@ -29,16 +29,6 @@ class Domain extends Component {
   }
   
   render() {
-    let pagesHTML = null;
-    if (this.state.domain != null) {
-      pagesHTML = this.state.domain.pages.map(page => (
-        <tr key={page._id}><td className="code">
-            <Link to={'/pages/'+page._id}>{page.url}</Link>
-          </td>
-          <td className="text-right">{page.nbViolations}</td>
-        </tr>
-      ));
-    }
     return (
       <section className="pageContent">
         <Breadcrumb>
@@ -71,16 +61,7 @@ class Domain extends Component {
             </Table>
             <ViolationStats stats={this.state.domain.violationStats}
               items={this.state.domain.pages} itemType="page"/>
-            <Table bordered size="sm" className="data">
-              <caption>SCANNED PAGES<br/>
-              Click on a URL to get a full report for that page.</caption>
-              <thead>
-                <tr><th>URL</th><th className="text-right">Violations</th></tr>
-              </thead>
-              <tbody>
-                {pagesHTML}
-              </tbody>
-            </Table>
+            <PageTable domain={this.state.domain}/>
           </>
         }
       </section>
