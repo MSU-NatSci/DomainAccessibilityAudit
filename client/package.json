@@ -39,6 +39,7 @@
   },
   "proxy": "http://localhost:3143",
   "devDependencies": {
+    "@testing-library/react": "^9.1.3",
     "oaf-bootstrap-4": "^0.1.0"
   }
 }
