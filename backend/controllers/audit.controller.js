@@ -134,19 +134,3 @@ exports.get_audit_status = (req, res) => {
   else
     res.json({ success: true, data: audit.status() });
 };
-
-/*
-exports.get_audit_domains = (req, res) => {
-  const { auditId } = req.params;
-  if (!auditId) {
-    res.json({ success: false, error: 'No audit id provided' });
-    return;
-  }
-  DomainModel.find({auditId}).exec((err, domains) => {
-    if (err)
-      res.json({ success: false, error: err.message });
-    else
-      res.json({ success: true, data: domains });
-  });
-};
-*/
