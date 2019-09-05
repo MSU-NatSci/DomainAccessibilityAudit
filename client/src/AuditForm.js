@@ -37,7 +37,8 @@ class AuditForm extends React.Component {
   
   handleChange(event) {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = target.type === 'checkbox' ? target.checked :
+      (target.type === 'number' ? parseInt(target.value) : target.value);
     const name = target.name;
     this.setState({
       [name]: value
@@ -76,7 +77,7 @@ class AuditForm extends React.Component {
             <Form.Group as={Row} controlId="url">
               <Form.Label column sm="5">Initial URL</Form.Label>
               <Col sm="7">
-                <Form.Control name="url" size="35" value={this.state.url}
+                <Form.Control name="url" type="url" size="35" value={this.state.url}
                   onChange={e => this.handleChange(e)}/>
               </Col>
             </Form.Group>
@@ -103,14 +104,14 @@ class AuditForm extends React.Component {
             <Form.Group as={Row} controlId="maxDepth">
               <Form.Label column sm="5">Maximum crawling depth</Form.Label>
               <Col sm="7">
-                <Form.Control name="maxDepth" size="10" value={this.state.maxDepth}
+                <Form.Control name="maxDepth" type="number" size="10" value={this.state.maxDepth}
                   onChange={e => this.handleChange(e)}/>
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="maxPagesPerDomain">
               <Form.Label column sm="5">Maximum number of pages checked per domain</Form.Label>
               <Col sm="7">
-                <Form.Control name="maxPagesPerDomain" size="10" value={this.state.maxPagesPerDomain}
+                <Form.Control name="maxPagesPerDomain" type="number" size="10" value={this.state.maxPagesPerDomain}
                   onChange={e => this.handleChange(e)}/>
               </Col>
             </Form.Group>

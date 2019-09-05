@@ -30,8 +30,8 @@ exports.get_audits = (req, res) => {
 
 exports.get_audit = (req, res) => {
   const { auditId } = req.params;
-  if (!auditId) {
-    res.json({ success: false, error: "No audit id provided" });
+  if (typeof(auditId) != 'string' || !auditId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.json({ success: false, error: "Missing or wrong audit id" });
     return;
   }
   AuditModel.findById(auditId).populate({
@@ -49,20 +49,49 @@ exports.get_audit = (req, res) => {
 exports.start = (req, res) => {
   const { firstURL, standard, checkSubdomains, maxDepth,
     maxPagesPerDomain, sitemaps, includeMatch, browser } = req.body;
-  if (!firstURL) {
-    res.json({ success: false, error: "Missing parameter: firstURL" });
-    return;
-  }
-  if (!standard) {
-    res.json({ success: false, error: "Missing parameter: standard" });
-    return;
-  }
-  if (!browser) {
-    res.json({ success: false, error: "Missing parameter: browser" });
-    return;
-  }
   if (!req.session.admin) {
     res.json({ success: false, error: "Admin priviledge is needed to create audits." });
+    return;
+  }
+  if (typeof(firstURL) != 'string') {
+    res.json({ success: false, error: "Missing or wrong parameter: firstURL" });
+    return;
+  }
+  if (typeof(standard) != 'string' ||
+      ['wcag2a', 'wcag2aa', 'wcag21aa', 'section508'].indexOf(standard) == -1) {
+    res.json({ success: false, error: "Missing or wrong parameter: standard" });
+    return;
+  }
+  if (typeof(checkSubdomains) != 'boolean') {
+    res.json({ success: false, error: "Missing or wrong parameter: checkSubdomains" });
+    return;
+  }
+  if (typeof(maxDepth) != 'number') {
+    res.json({ success: false, error: "Missing or wrong parameter: maxDepth" });
+    return;
+  }
+  if (typeof(maxPagesPerDomain) != 'number') {
+    res.json({ success: false, error: "Missing or wrong parameter: maxPagesPerDomain" });
+    return;
+  }
+  if (typeof(sitemaps) != 'boolean') {
+    res.json({ success: false, error: "Missing or wrong parameter: sitemaps" });
+    return;
+  }
+  if (typeof(includeMatch) != 'string') {
+    res.json({ success: false, error: "Missing or wrong parameter: includeMatch" });
+    return;
+  }
+  if (includeMatch != '') {
+    try {
+      const includeRE = new RegExp(includeMatch);
+    } catch (e) {
+      res.json({ success: false, error: "Bad regular expression: includeMatch" });
+      return;
+    }
+  }
+  if (typeof(browser) != 'string' || ['firefox', 'chrome'].indexOf(browser) == -1) {
+    res.json({ success: false, error: "Missing or wrong parameter: browser" });
     return;
   }
   cleanupRunningAudits();
@@ -84,8 +113,8 @@ exports.stop = (req, res) => {
     res.json({ success: false, error: "Admin priviledge is needed to stop audits." });
     return;
   }
-  if (!auditId) {
-    res.json({ success: false, error: 'No audit id provided' });
+  if (typeof(auditId) != 'string' || !auditId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.json({ success: false, error: "Missing or wrong audit id" });
     return;
   }
   let audit = getRunningAudit(auditId);
@@ -101,8 +130,8 @@ exports.stop = (req, res) => {
 
 exports.remove_audit = (req, res) => {
   const { auditId } = req.params;
-  if (!auditId) {
-    res.json({ success: false, error: "No audit id provided" });
+  if (typeof(auditId) != 'string' || !auditId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.json({ success: false, error: "Missing or wrong audit id" });
     return;
   }
   if (!req.session.admin) {
@@ -123,8 +152,8 @@ exports.remove_audit = (req, res) => {
 
 exports.get_audit_status = (req, res) => {
   const { auditId } = req.params;
-  if (!auditId) {
-    res.json({ success: false, error: 'No audit id provided' });
+  if (typeof(auditId) != 'string' || !auditId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.json({ success: false, error: "Missing or wrong audit id" });
     return;
   }
   let audit = getRunningAudit(auditId);

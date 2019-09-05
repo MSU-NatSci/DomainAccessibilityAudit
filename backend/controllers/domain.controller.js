@@ -3,8 +3,8 @@ import PageModel from '../models/page.model';
 
 exports.get_domain = (req, res) => {
   const { domainId } = req.params;
-  if (!domainId) {
-    res.json({ success: false, error: 'No domain id provided' });
+  if (typeof(domainId) != 'string' || !domainId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.json({ success: false, error: "Missing or wrong domain id" });
     return;
   }
   DomainModel.findById(domainId).populate({
