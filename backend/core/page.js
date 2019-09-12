@@ -10,7 +10,7 @@ export default class Page {
    * @param {Domain} domain
    * @param {string} url
    * @param {number} depth - the current crawl depth
-   * @param {string} status - status returned by the HEAD request
+   * @param {Number} status - status returned by the HEAD request
    */
   constructor(audit, domain, url, depth, status) {
     /** @member {Audit} */
@@ -21,7 +21,7 @@ export default class Page {
     this.url = url;
     /** @member {number} */
     this.depth = depth;
-    /** @member {string} */
+    /** @member {Number} */
     this.status = status;
     /** @member {string} */
     this.errorMessage = null;

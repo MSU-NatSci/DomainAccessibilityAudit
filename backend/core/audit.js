@@ -155,7 +155,7 @@ export default class Audit {
       this.running = false;
       throw error;
     }
-    const initialDomain = await this.findDomain(this.initialDomainName);
+    const initialDomain = await this.findDomain(this.initialDomainName, null);
     this.pagesToCheck = [
       this.newPage(null, initialDomain, firstURL, null)
     ];
@@ -221,7 +221,7 @@ export default class Audit {
    * @param {Page} originPage - the page where the new one's URL was found
    * @param {Domain} domain - the domain the new page belongs to
    * @param {string} url - the page URL
-   * @param {string} status - status returned by the HEAD request
+   * @param {Number} status - status returned by the HEAD request
    * @returns {Page}
    */
   newPage(originPage, domain, url, status) {
@@ -388,9 +388,10 @@ export default class Audit {
    * Return the matching domain object if it already exists,
    * or creates it first if necessary.
    * @param {string} domainName
+   * @param {Page} originPage
    * @returns {Promise<Domain>}
    */
-  async findDomain(domainName) {
+  async findDomain(domainName, originPage) {
     for (let domain of this.domains)
       if (domain.name == domainName)
         return domain;
@@ -401,10 +402,11 @@ export default class Audit {
       await domain.readSitemap().then((sitemap) => {
         if (!sitemap.urlset)
           return;
+        const sitemapPage = this.newPage(originPage, domain, domain.sitemapURL(), 200);
         for (let url of sitemap.urlset.url) {
           if (!url.loc || !url.loc.length)
             continue;
-          this.testToAddPage(domain.sitemapURL(), url.loc[0]);
+          this.testToAddPage(sitemapPage, url.loc[0]);
         }
       })
       .catch(err => {
@@ -496,6 +498,14 @@ export default class Audit {
     }
     this.headTestsRunning = true;
     let {originPage, url, domainName} = this.headToDo.shift();
+    // avoid doing a HEAD request for a domain when it has already
+    // reached the maximum number of pages to check
+    let domain = this.domains.find(d => d.name == domainName);
+    if (domain != null && domain.pageCount >= this.maxPagesPerDomain) {
+      this.nextHEAD();
+      return;
+    }
+    
     console.log("HEAD " + url);
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), headTimeout);
@@ -549,7 +559,7 @@ export default class Audit {
   continueWithHead(originPage, url, domainName, res, sslError) {
     // ignore bad looking URLs that result in a 404 (probably a bad link)
     if (sslError || res.status != 404 || !url.match(/.https?:\/\/|\s/)) {
-      this.findDomain(domainName).then((domain) => {
+      this.findDomain(domainName, originPage).then((domain) => {
         if (this.maxPagesPerDomain == 0 ||
             domain.pageCount < this.maxPagesPerDomain) {
           const page = this.newPage(originPage, domain, url,
