@@ -2,7 +2,7 @@ import React from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 

@@ -5,7 +5,7 @@ exports.login = (req, res) => {
     res.json({ success: false, error: "No password provided" });
     return;
   }
-  let admin = (password === process.env.ADMIN_PASSWORD);
+  const admin = (password === process.env.ADMIN_PASSWORD);
   req.session.admin = admin;
   res.json({ success: true, data: admin });
 };

@@ -26,7 +26,7 @@ class ViolationStats extends Component {
   }
   
   itemTitle(id) {
-    for (let item of this.props.items) {
+    for (const item of this.props.items) {
       if (item._id === id)
         return item.url ? item.url : item.name;
     }
@@ -47,11 +47,12 @@ class ViolationStats extends Component {
                   this.itemTitle(item2.id));
               })
               .map(item => 
-              <div key={item.id}>
-                <Link to={'/' + this.itemPlural + '/' + item.id}>{this.itemTitle(item.id)}</Link>
-                {' '}{item.count}
-              </div>
-            )}
+                <div key={item.id}>
+                  <Link to={'/' + this.itemPlural + '/' + item.id}>{this.itemTitle(item.id)}</Link>
+                  {' '}{item.count}
+                </div>
+              )
+            }
           </div>
         }
       </>
@@ -91,7 +92,7 @@ class ViolationStats extends Component {
   
   render() {
     this.itemPlural = this.props.itemType + "s";
-    let stats = this.props.stats;
+    const stats = this.props.stats;
     const impacts = new Map([
       ['minor', 0],
       ['moderate', 1],

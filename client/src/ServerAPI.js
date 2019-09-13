@@ -14,7 +14,7 @@ class ServerAPI {
     return new Promise((resolve, reject) => {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 2000);
-      let fetchParams = {
+      const fetchParams = {
         method: method,
         signal: controller.signal
       };

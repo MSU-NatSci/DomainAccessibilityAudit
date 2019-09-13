@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
 import PropTypes from 'prop-types';
 
 import ServerAPI from './ServerAPI';

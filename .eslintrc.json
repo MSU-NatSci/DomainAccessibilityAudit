@@ -20,6 +20,26 @@
         "react"
     ],
     "rules": {
-      "no-console": "off"
+      "no-console": "off",
+      "indent": [
+        "warn",
+        2,
+        {
+          "FunctionDeclaration": {"body": 1, "parameters": 2},
+          "FunctionExpression": {"body": 1, "parameters": 2}
+        }
+      ],
+      "linebreak-style": ["warn", "unix"],
+      "no-else-return": ["warn"],
+      "no-implicit-globals": ["warn"],
+      "no-loop-func": ["warn"],
+      "no-multi-spaces": ["warn"],
+      "no-unused-expressions": ["warn"],
+      "no-useless-return": ["warn"],
+      "no-var": ["warn"],
+      "prefer-const": ["warn"],
+      "require-await": ["warn"],
+      "semi": ["warn", "always"],
+      "block-spacing": ["warn"]
     }
 }

@@ -27,7 +27,7 @@ export default class Domain {
    * @returns {Promise}
    */
   saveNew() {
-    let domain = new DomainModel({
+    const domain = new DomainModel({
       auditId: this.audit.dbObject._id,
       name: this.name,
       nbCheckedURLs: 0,
@@ -67,17 +67,18 @@ export default class Domain {
    * @returns {Promise<Object>}
    */
   readSitemap() {
-    let url = this.sitemapURL();
+    const url = this.sitemapURL();
     return fetch(url, {
       method: 'GET', redirect: 'follow'
-    }).then(res => {
-      if (res.status == 404)
-        throw new Error("sitemap.xml was not found at " + url);
-      const mime = res.headers.get('content-type');
-      if (mime !== 'text/xml' && mime !== 'application/xml')
-        throw new Error("sitemap.xml has a wrong MIME type at " + url);
-      return res.text();
     })
-    .then((text) => this.parseXML(text));
+      .then(res => {
+        if (res.status == 404)
+          throw new Error("sitemap.xml was not found at " + url);
+        const mime = res.headers.get('content-type');
+        if (mime !== 'text/xml' && mime !== 'application/xml')
+          throw new Error("sitemap.xml has a wrong MIME type at " + url);
+        return res.text();
+      })
+      .then((text) => this.parseXML(text));
   }
 }

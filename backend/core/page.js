@@ -49,10 +49,9 @@ export default class Page {
   contentLoaded() {
     console.log("contentLoaded");
     this.audit.extractLinks(this)
-    .then(() => {
-      console.log("aXe analyze");
-      this.audit.aXeB
-        .analyze((err, results) => {
+      .then(() => {
+        console.log("aXe analyze");
+        this.audit.aXeB.analyze((err, results) => {
           if (err) {
             console.log("aXe analyze error for " + this.url + ":");
             console.log(err);
@@ -60,8 +59,8 @@ export default class Page {
               this.errorMessage = err;
           }
           this.aXeResults(results);
+        });
       });
-    });
   }
   
   /**
@@ -71,11 +70,11 @@ export default class Page {
    */
   aXeResults(results) {
     if (results != null) {
-      let violations = results.violations;
+      const violations = results.violations;
       this.nbViolations = 0;
-      for (let violation of violations) {
+      for (const violation of violations) {
         const nodes = [];
-        for (let node of violation.nodes) {
+        for (const node of violation.nodes) {
           nodes.push({
             target: node.target[0],
             html: node.html
@@ -114,7 +113,7 @@ export default class Page {
    * Save the page in the database and call audit.continueAudit().
    */
   saveAndContinue() {
-    let page = new PageModel({
+    const page = new PageModel({
       auditId: this.audit.dbObject._id,
       domainId: this.domain.dbObject._id,
       url: this.url,

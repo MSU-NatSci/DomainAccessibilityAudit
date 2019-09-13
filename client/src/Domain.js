@@ -3,7 +3,7 @@ import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
 
 import ServerAPI from './ServerAPI';
 import ViolationStats from './ViolationStats';

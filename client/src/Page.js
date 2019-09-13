@@ -3,7 +3,7 @@ import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
 import PropTypes from 'prop-types';
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -78,35 +78,36 @@ class Page extends Component {
             {this.state.page.violations
               .sort((v1, v2) => impacts.get(v2.impact) - impacts.get(v1.impact))
               .map(violation => (
-              <Table bordered size="sm" key={violation.id} className="data">
-                <tbody>
-                  {/*<tr><th>Id</th><td className="code">{violation.id}</td></tr>*/}
-                  <tr><th>Description</th><td>
-                    {violation.description + ' '}
-                    <Button variant="info" size="xs" title="Open rule description on Deque's website"
-                        onClick={e => window.open(violation.descLink, '_blank')}>
-                      <FontAwesomeIcon icon={faInfoCircle}/>
-                    </Button>
-                  </td></tr>
-                  <tr><th>Impact</th><td className={violation.impact}>{violation.impact}</td></tr>
-                  <tr><th>Nodes</th><td>
-                    <Table bordered size="sm" className="data">
-                      <thead>
-                        <tr><th>Target</th><th>HTHML</th></tr>
-                      </thead>
-                      <tbody>
-                        {violation.nodes.map(node => (
-                          <tr key={node._id}>
-                            <td className="code">{node.target}</td>
-                            <td className="code">{node.html}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </td></tr>
-                </tbody>
-              </Table>
-            ))}
+                <Table bordered size="sm" key={violation.id} className="data">
+                  <tbody>
+                    {/*<tr><th>Id</th><td className="code">{violation.id}</td></tr>*/}
+                    <tr><th>Description</th><td>
+                      {violation.description + ' '}
+                      <Button variant="info" size="xs" title="Open rule description on Deque's website"
+                          onClick={e => window.open(violation.descLink, '_blank')}>
+                        <FontAwesomeIcon icon={faInfoCircle}/>
+                      </Button>
+                    </td></tr>
+                    <tr><th>Impact</th><td className={violation.impact}>{violation.impact}</td></tr>
+                    <tr><th>Nodes</th><td>
+                      <Table bordered size="sm" className="data">
+                        <thead>
+                          <tr><th>Target</th><th>HTHML</th></tr>
+                        </thead>
+                        <tbody>
+                          {violation.nodes.map(node => (
+                            <tr key={node._id}>
+                              <td className="code">{node.target}</td>
+                              <td className="code">{node.html}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </td></tr>
+                  </tbody>
+                </Table>
+              ))
+            }
           </>
         }
       </section>

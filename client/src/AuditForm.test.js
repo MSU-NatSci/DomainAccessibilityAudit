@@ -9,8 +9,8 @@ import MockServerAPI from './ServerAPI';
 jest.mock('./ServerAPI');
 
 it("starts the audit and navigates to the status page", async () => {
-  let mockServer = new MockServerAPI();
-  let mockHistory = createMemoryHistory('/audits/create');
+  const mockServer = new MockServerAPI();
+  const mockHistory = createMemoryHistory('/audits/create');
   mockHistory.push = jest.fn();
   const { getByText, getByLabelText } = render(
     <MemoryRouter>

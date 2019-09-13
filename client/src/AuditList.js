@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
 
 import ServerAPI from './ServerAPI';
 
@@ -67,7 +67,7 @@ class AuditList extends Component {
           <td className="text-right">{audit.nbViolations}</td>
           {this.props.admin &&
             <td className="text-right">
-                <Button title="Remove" variant="danger" size="xs" onClick={(e) => this.removeAudit(audit._id)}><FontAwesomeIcon icon={faTrashAlt} title="Remove" /></Button>
+              <Button title="Remove" variant="danger" size="xs" onClick={(e) => this.removeAudit(audit._id)}><FontAwesomeIcon icon={faTrashAlt} title="Remove" /></Button>
             </td>
           }
         </tr>

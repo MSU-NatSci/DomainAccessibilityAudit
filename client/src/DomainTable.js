@@ -28,7 +28,7 @@ const DomainTable = ({ audit }) => {
       </tbody>
     </Table>
   );
-}
+};
 
 DomainTable.propTypes = {
   audit: PropTypes.object.isRequired,

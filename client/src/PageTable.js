@@ -14,7 +14,8 @@ const PageTable = ({ domain }) => {
       </thead>
       <tbody>
         {domain.pages.map(page => (
-          <tr key={page._id}><td className="code">
+          <tr key={page._id}>
+            <td className="code">
               <Link to={'/pages/'+page._id}>{page.url}</Link>
             </td>
             <td className="text-right">{page.nbViolations}</td>
@@ -23,7 +24,7 @@ const PageTable = ({ domain }) => {
       </tbody>
     </Table>
   );
-}
+};
 
 PageTable.propTypes = {
   domain: PropTypes.object.isRequired,

@@ -179,10 +179,10 @@ export default class Audit {
     this.driver = new WebDriver.Builder()
       .forBrowser(this.browser);
     if (this.browser == 'firefox') {
-      let profile = new firefox.Profile();
-      for (let key of Object.keys(this.firefoxPreferences))
+      const profile = new firefox.Profile();
+      for (const key of Object.keys(this.firefoxPreferences))
         profile.setPreference(key, this.firefoxPreferences[key]);
-      let options = new firefox.Options().setProfile(profile).headless();
+      const options = new firefox.Options().setProfile(profile).headless();
       this.driver = this.driver.setFirefoxOptions(options);
     } else {
       this.driver = this.driver.setChromeOptions(
@@ -210,8 +210,8 @@ export default class Audit {
         resultTypes: ["violations"],
       })
       .withTags(tags);
-      // NOTE: resultTypes is used for performance, it reduces
-      // processing related to non-violations
+    // NOTE: resultTypes is used for performance, it reduces
+    // processing related to non-violations
   }
   
   /**
@@ -258,9 +258,9 @@ export default class Audit {
   continueAudit(page) {
     console.log("continueAudit");
     // update domain and audit stats
-    let domainObject = page.domain.dbObject;
+    const domainObject = page.domain.dbObject;
     domainObject.nbCheckedURLs++;
-    for (let violation of page.violations) {
+    for (const violation of page.violations) {
       this.nbViolations += violation.nodes.length;
       this.updateStats('domain', domainObject, page, violation);
       this.updateStats('audit', this.dbObject, page, violation);
@@ -296,7 +296,7 @@ export default class Audit {
    * @param {Object} violation - the violation to add to stats
    */
   updateStats(objectType, object, page, violation) {
-    let violationCount = violation.nodes.length;
+    const violationCount = violation.nodes.length;
     let subs, subObj;
     if (objectType == 'domain') {
       subs = 'pages';
@@ -322,7 +322,7 @@ export default class Audit {
       vs.total += violationCount;
       if (subObj != null) {
         let found = false;
-        for (let p of vs[subs]) {
+        for (const p of vs[subs]) {
           if (p.id == subObj._id) {
             p.count += violationCount;
             found = true;
@@ -390,27 +390,28 @@ export default class Audit {
    * @returns {Promise<Domain>}
    */
   async findDomain(domainName, originPage) {
-    for (let domain of this.domains)
+    for (const domain of this.domains)
       if (domain.name == domainName)
         return domain;
     const domain = new Domain(this, domainName);
     this.domains.push(domain);
     await domain.saveNew();
     if (this.sitemaps) {
-      await domain.readSitemap().then((sitemap) => {
-        if (!sitemap.urlset)
-          return;
-        const sitemapPage = this.newPage(originPage, domain, domain.sitemapURL(), 200);
-        for (let url of sitemap.urlset.url) {
-          if (!url.loc || !url.loc.length)
-            continue;
-          this.testToAddPage(sitemapPage, url.loc[0]);
-        }
-      })
-      .catch(err => {
-        console.log("Error reading the site map:");
-        console.log(err);
-      });
+      await domain.readSitemap()
+        .then((sitemap) => {
+          if (!sitemap.urlset)
+            return;
+          const sitemapPage = this.newPage(originPage, domain, domain.sitemapURL(), 200);
+          for (const url of sitemap.urlset.url) {
+            if (!url.loc || !url.loc.length)
+              continue;
+            this.testToAddPage(sitemapPage, url.loc[0]);
+          }
+        })
+        .catch(err => {
+          console.log("Error reading the site map:");
+          console.log(err);
+        });
     }
     return domain;
   }
@@ -431,16 +432,16 @@ export default class Audit {
         .filter(a => a.getAttribute('rel') != 'nofollow')
         .map(a => a.href);
     `)
-    .then(hrefs => {
-      for (let href of hrefs) {
-        if (href != null && href != '')
-          this.testToAddPage(page, href);
-      }
-    })
-    .catch((error) => {
-      console.log("Error in extractLinks:");
-      console.log(error);
-    });
+      .then(hrefs => {
+        for (const href of hrefs) {
+          if (href != null && href != '')
+            this.testToAddPage(page, href);
+        }
+      })
+      .catch((error) => {
+        console.log("Error in extractLinks:");
+        console.log(error);
+      });
   }
   
   /**
@@ -454,11 +455,11 @@ export default class Audit {
     if (!/^https?:\/\//i.test(url))
       return;
     if (this.includeMatch != null && this.includeMatch != '') {
-      let path = url.replace(/^https?:\/\/[^/]+/i, '');
+      const path = url.replace(/^https?:\/\/[^/]+/i, '');
       if (!path.match(this.includeMatch))
         return;
     }
-    let ind = url.indexOf('#');
+    const ind = url.indexOf('#');
     if (ind > -1)
       url = url.substring(0, ind);
     if (this.testedURLs.indexOf(url) > -1)
@@ -495,10 +496,10 @@ export default class Audit {
       return;
     }
     this.headTestsRunning = true;
-    let {originPage, url, domainName} = this.headToDo.shift();
+    const {originPage, url, domainName} = this.headToDo.shift();
     // avoid doing a HEAD request for a domain when it has already
     // reached the maximum number of pages to check
-    let domain = this.domains.find(d => d.name == domainName);
+    const domain = this.domains.find(d => d.name == domainName);
     if (domain != null && domain.pageCount >= this.maxPagesPerDomain) {
       setTimeout(() => this.nextHEAD(), 0);
       return;
@@ -511,39 +512,41 @@ export default class Audit {
       method: 'HEAD',
       redirect: 'follow',
       signal: controller.signal,
-    }).then((res) => {
-      const mime = res.headers.get('content-type');
-      if (mime != null && mime.indexOf('text/html') == 0) {
-        if (res.redirected) {
-          // NOTE: if we don't follow redirects, we don't have a way
-          // to get the redirected URL
-          // see: https://github.com/whatwg/fetch/issues/763
-          if (res.url != url)
-            this.testToAddPage(originPage, res.url)
-          else
-            console.log("redirected to the same URL ?!? " + url);
-        } else {
-          this.continueWithHead(originPage, url, domainName, res, false);
-        }
-      } else {
-        console.log("ignored MIME: " + mime);
-      }
-      if (this.running && !this.stopRequested)
-        setTimeout(() => this.nextHEAD(), 0);
-    }).catch(error => {
-      if (error.name === 'AbortError') {
-        console.log("timeout for HEAD " + url);
-      } else if (error.message != null &&
-          error.message.indexOf('ssl_choose_client_version:unsupported protocol') > 0) {
-        // Debian does not support TLS<1.2, but some sites are still using it...
-        this.continueWithHead(originPage, url, domainName, null, true);
-      } else {
-        console.error('error HEAD ' + url + ': ', error);
-      }
-      if (this.running && !this.stopRequested)
-        setTimeout(() => this.nextHEAD(), 0);
     })
-    .finally(() => clearTimeout(timeout));
+      .then((res) => {
+        const mime = res.headers.get('content-type');
+        if (mime != null && mime.indexOf('text/html') == 0) {
+          if (res.redirected) {
+            // NOTE: if we don't follow redirects, we don't have a way
+            // to get the redirected URL
+            // see: https://github.com/whatwg/fetch/issues/763
+            if (res.url != url)
+              this.testToAddPage(originPage, res.url);
+            else
+              console.log("redirected to the same URL ?!? " + url);
+          } else {
+            this.continueWithHead(originPage, url, domainName, res, false);
+          }
+        } else {
+          console.log("ignored MIME: " + mime);
+        }
+        if (this.running && !this.stopRequested)
+          setTimeout(() => this.nextHEAD(), 0);
+      })
+      .catch(error => {
+        if (error.name === 'AbortError') {
+          console.log("timeout for HEAD " + url);
+        } else if (error.message != null &&
+            error.message.indexOf('ssl_choose_client_version:unsupported protocol') > 0) {
+          // Debian does not support TLS<1.2, but some sites are still using it...
+          this.continueWithHead(originPage, url, domainName, null, true);
+        } else {
+          console.error('error HEAD ' + url + ': ', error);
+        }
+        if (this.running && !this.stopRequested)
+          setTimeout(() => this.nextHEAD(), 0);
+      })
+      .finally(() => clearTimeout(timeout));
   }
   
   /**

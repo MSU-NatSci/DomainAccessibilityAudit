@@ -5,16 +5,16 @@ import PageModel from '../models/page.model';
 
 let runningAudits = [];
 
-let getRunningAudit = (auditId) => {
-  for (let audit of runningAudits)
+const getRunningAudit = (auditId) => {
+  for (const audit of runningAudits)
     if (audit.dbObject != null && audit.dbObject.id === auditId)
       return audit;
   return null;
-}
-let cleanupRunningAudits = () => {
+};
+const cleanupRunningAudits = () => {
   // release references to audits that are not running anymore
   runningAudits = runningAudits.filter((a) => a.running);
-}
+};
 
 exports.get_audits = (req, res) => {
   AuditModel.find().collation({locale:'en', strength: 2})
@@ -34,10 +34,10 @@ exports.get_audit = (req, res) => {
     return;
   }
   AuditModel.findById(auditId).populate({
-        path: 'domains',
-        select: '-violationStats',
-        options: { sort: { name: 1 } },
-      }).exec((err, audit) => {
+    path: 'domains',
+    select: '-violationStats',
+    options: { sort: { name: 1 } },
+  }).exec((err, audit) => {
     if (err)
       res.json({ success: false, error: err.message });
     else
@@ -94,10 +94,10 @@ exports.start = (req, res) => {
     return;
   }
   cleanupRunningAudits();
-  let newAudit = new Audit();
+  const newAudit = new Audit();
   runningAudits.push(newAudit);
   newAudit.start(firstURL, standard, checkSubdomains, maxDepth,
-      maxPagesPerDomain, sitemaps, includeMatch, browser)
+    maxPagesPerDomain, sitemaps, includeMatch, browser)
     .then((audit) => res.json({ success: true, data: audit }))
     .catch((err) => {
       console.log(err);
@@ -116,7 +116,7 @@ exports.stop = (req, res) => {
     res.json({ success: false, error: "Missing or wrong audit id" });
     return;
   }
-  let audit = getRunningAudit(auditId);
+  const audit = getRunningAudit(auditId);
   if (audit == null) {
     res.json({ success: false, error:
       "Could not find the audit, maybe it's not running anymore." });
@@ -137,7 +137,7 @@ exports.remove_audit = (req, res) => {
     res.json({ success: false, error: "Admin priviledge is needed to remove audits." });
     return;
   }
-  let audit = getRunningAudit(auditId);
+  const audit = getRunningAudit(auditId);
   if (audit != null && audit.running) {
     res.json({ success: false, error: "Can't remove a running audit." });
     return;
@@ -155,7 +155,7 @@ exports.get_audit_status = (req, res) => {
     res.json({ success: false, error: "Missing or wrong audit id" });
     return;
   }
-  let audit = getRunningAudit(auditId);
+  const audit = getRunningAudit(auditId);
   if (audit == null)
     res.json({ success: false, error:
       "Could not find the audit, maybe it's not running anymore." });

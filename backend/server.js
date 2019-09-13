@@ -63,5 +63,5 @@ mongoose.connect(process.env.DB_URL, {
   useCreateIndex: true,
   useNewUrlParser: true,
 });
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

@@ -17,8 +17,8 @@ const initialMockAudit = {
 };
 
 it("renders with audit information", async () => {
-  let mockAudit = JSON.parse(JSON.stringify(initialMockAudit));
-  let mockServer = new MockServerAPI();
+  const mockAudit = JSON.parse(JSON.stringify(initialMockAudit));
+  const mockServer = new MockServerAPI();
   mockServer.getAuditStatus = jest.fn().mockImplementation(() => Promise.resolve(mockAudit));
 
   const { container } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
@@ -31,8 +31,8 @@ it("renders with audit information", async () => {
 });
 
 it("can stop an audit", async () => {
-  let mockAudit = JSON.parse(JSON.stringify(initialMockAudit));
-  let mockServer = new MockServerAPI();
+  const mockAudit = JSON.parse(JSON.stringify(initialMockAudit));
+  const mockServer = new MockServerAPI();
   mockServer.getAuditStatus = jest.fn().mockImplementation(() => Promise.resolve(mockAudit));
   mockServer.stopAudit = jest.fn().mockImplementation(() => Promise.resolve());
 
