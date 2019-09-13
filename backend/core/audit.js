@@ -500,7 +500,7 @@ export default class Audit {
     // reached the maximum number of pages to check
     let domain = this.domains.find(d => d.name == domainName);
     if (domain != null && domain.pageCount >= this.maxPagesPerDomain) {
-      this.nextHEAD();
+      setTimeout(() => this.nextHEAD(), 0);
       return;
     }
     
@@ -529,7 +529,7 @@ export default class Audit {
         console.log("ignored MIME: " + mime);
       }
       if (this.running && !this.stopRequested)
-        this.nextHEAD();
+        setTimeout(() => this.nextHEAD(), 0);
     }).catch(error => {
       if (error.name === 'AbortError') {
         console.log("timeout for HEAD " + url);
@@ -541,7 +541,7 @@ export default class Audit {
         console.error('error HEAD ' + url + ': ', error);
       }
       if (this.running && !this.stopRequested)
-        this.nextHEAD();
+        setTimeout(() => this.nextHEAD(), 0);
     })
     .finally(() => clearTimeout(timeout));
   }
