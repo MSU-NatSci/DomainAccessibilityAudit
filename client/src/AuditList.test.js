@@ -14,7 +14,7 @@ let getByTagAndContent = (container, tag, expr) => {
 let getTableByCaption = (container, captionExpr) => {
   let caption = getByTagAndContent(container, 'caption', captionExpr);
   if (caption == null)
-    throw "caption " + captionExpr + " not found";
+    throw new Error("caption " + captionExpr + " not found");
   return caption.parentNode;
 }
 let init = async (admin) => {

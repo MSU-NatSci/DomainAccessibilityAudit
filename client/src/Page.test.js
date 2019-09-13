@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, wait } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Page from './Page';
@@ -15,7 +15,7 @@ let init = async (pageId) => {
 }
 
 it("renders with violation information", async () => {
-  const { container, getByText } = await init('pid1');
+  const { container } = await init('pid1');
   // breadcrumbs
   expect(container.querySelector('nav').textContent).toBe('AuditsAuditDomainPage');
   // title

@@ -223,7 +223,7 @@ class ServerAPI {
   }
   removeAudit(auditId) {
     if (this.audits[auditId] === undefined)
-      throw "removeAudit: " + auditId + " does not exist";
+      throw new Error("removeAudit: " + auditId + " does not exist");
     delete this.audits[auditId];
     return Promise.resolve();
   }

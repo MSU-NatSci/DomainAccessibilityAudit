@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Audit from '../core/audit';
 import AuditModel from '../models/audit.model';
 import DomainModel from '../models/domain.model';
@@ -84,7 +83,7 @@ exports.start = (req, res) => {
   }
   if (includeMatch != '') {
     try {
-      const includeRE = new RegExp(includeMatch);
+      new RegExp(includeMatch);
     } catch (e) {
       res.json({ success: false, error: "Bad regular expression: includeMatch" });
       return;

@@ -2,7 +2,6 @@ import React from 'react';
 import { render, wait } from '@testing-library/react';
 
 import App from './App';
-import MockServerAPI from './ServerAPI';
 
 jest.mock('./ServerAPI');
 

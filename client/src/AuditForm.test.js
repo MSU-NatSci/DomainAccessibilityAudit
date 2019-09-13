@@ -12,7 +12,7 @@ it("starts the audit and navigates to the status page", async () => {
   let mockServer = new MockServerAPI();
   let mockHistory = createMemoryHistory('/audits/create');
   mockHistory.push = jest.fn();
-  const { container, getByText, getByLabelText } = render(
+  const { getByText, getByLabelText } = render(
     <MemoryRouter>
       <AuditForm admin={true} server={mockServer} history={mockHistory}/>
     </MemoryRouter>);

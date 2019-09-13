@@ -4,7 +4,6 @@ import firefox from 'selenium-webdriver/firefox';
 import chrome from 'selenium-webdriver/chrome';
 
 import fetch from 'node-fetch';
-import mongoose from 'mongoose';
 import AbortController from 'abort-controller';
 
 import Page from './page';
@@ -110,7 +109,6 @@ export default class Audit {
    */
   async start(firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
       sitemaps, includeMatch, browser) {
-    //mongoose.connection.db.dropDatabase(); // DROP THE DB !!!
     this.standard = standard;
     this.checkSubdomains = checkSubdomains;
     this.maxDepth = maxDepth;

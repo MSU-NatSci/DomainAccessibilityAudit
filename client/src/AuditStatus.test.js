@@ -21,7 +21,7 @@ it("renders with audit information", async () => {
   let mockServer = new MockServerAPI();
   mockServer.getAuditStatus = jest.fn().mockImplementation(() => Promise.resolve(mockAudit));
 
-  const { container, getByText } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
+  const { container } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
   // wait for getAuditStatus to be called
   await waitForElement(
     () => container.querySelector('ul'),

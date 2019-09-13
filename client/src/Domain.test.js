@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, wait } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Domain from './Domain';
@@ -14,7 +14,7 @@ let getByTagAndContent = (container, tag, expr) => {
 let getTableByCaption = (container, captionExpr) => {
   let caption = getByTagAndContent(container, 'caption', captionExpr);
   if (caption == null)
-    throw "caption " + captionExpr + " not found";
+    throw new Error("caption " + captionExpr + " not found");
   return caption.parentNode;
 }
 let init = async (domainId) => {
@@ -25,7 +25,7 @@ let init = async (domainId) => {
 }
 
 it("renders with domain information", async () => {
-  const { container, getByText } = await init('did1');
+  const { container } = await init('did1');
   // title
   expect(container.querySelector('h2').textContent).toBe('domain1');
   // statistics table

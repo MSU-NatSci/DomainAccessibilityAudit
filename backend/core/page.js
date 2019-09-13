@@ -1,5 +1,3 @@
-import AxeBuilder from 'axe-webdriverjs';
-
 import PageModel from '../models/page.model';
 
 export default class Page {

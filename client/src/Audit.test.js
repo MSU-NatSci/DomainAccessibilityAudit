@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, wait } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Audit from './Audit';
@@ -14,7 +14,7 @@ let getByTagAndContent = (container, tag, expr) => {
 let getTableByCaption = (container, captionExpr) => {
   let caption = getByTagAndContent(container, 'caption', captionExpr);
   if (caption == null)
-    throw "caption " + captionExpr + " not found";
+    throw new Error("caption " + captionExpr + " not found");
   return caption.parentNode;
 }
 let init = async (auditId) => {
@@ -25,7 +25,7 @@ let init = async (auditId) => {
 }
 
 it("renders with audit information (2 domains)", async () => {
-  const { container, getByText } = await init('aid1');
+  const { container } = await init('aid1');
   // title
   expect(container.querySelector('h2').textContent).toBe('initialDomainName1');
   // audit parameters table
@@ -46,7 +46,7 @@ it("renders with audit information (2 domains)", async () => {
 
 it("renders correctly when the audit contains only 1 domain", async () => {
   // in this case, violations and pages come from the domain, not the audit
-  const { container, getByText } = await init('aid2');
+  const { container } = await init('aid2');
   // title
   expect(container.querySelector('h2 span').textContent).toBe('initialDomainName2');
   // audit parameters table

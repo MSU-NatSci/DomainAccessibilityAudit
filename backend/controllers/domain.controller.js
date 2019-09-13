@@ -1,5 +1,4 @@
 import DomainModel from '../models/domain.model';
-import PageModel from '../models/page.model';
 
 exports.get_domain = (req, res) => {
   const { domainId } = req.params;
