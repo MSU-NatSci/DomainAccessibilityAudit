@@ -13,7 +13,8 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       NODE_ENV: ${MODE-production}
     volumes:
-      - ./backend:/app/backend
+      - ./backend/src:/app/backend/src
+      - ./backend/.eslintrc.json:/app/backend/.eslintrc.json
       - ./client/public:/app/client/public
       - ./client/src:/app/client/src
       - ./client/.env:/app/client/.env

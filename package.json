@@ -1,45 +1,22 @@
 {
   "name": "domain-accessibility-audit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Scan a domain and subdomains for accessibility violations and report them with a web interface.",
-  "main": "index.js",
   "scripts": {
-    "start:server:dev": "cd backend && nodemon server.js --exec babel-node --presets @babel/preset-env",
-    "start:client:dev": "cd client && npm start",
+    "start:server:dev": "cd backend && npm run start:dev",
+    "start:client:dev": "cd client && npm run start:dev",
     "start:development": "concurrently \"npm run start:server:dev\" \"npm run start:client:dev\"",
-    "clean:server": "rm -rf build",
-    "build:server": "babel --presets @babel/preset-env -d build backend",
-    "start:server:prod": "npm run clean:server && npm run build:server && node build/server.js",
-    "build:client": "cd client && rm -rf build && npm run build",
-    "start:production": "concurrently \"npm run start:server:prod\" \"npm run build:client\"",
-    "start": "npm run start:$NODE_ENV"
+    "start:server:prod": "cd backend && npm run start:prod",
+    "start:client:prod": "cd client && npm run start:prod",
+    "start:production": "concurrently \"npm run start:server:prod\" \"npm run start:client:prod\"",
+    "start": "npm run start:$NODE_ENV",
+    "postinstall": "cd backend && npm install && cd ../client && npm install",
+    "eslint": "cd backend && ./node_modules/.bin/eslint . && cd ../client && ./node_modules/.bin/eslint ."
   },
   "author": "Damien Guillaume",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.4",
-    "@babel/node": "^7.5.0",
-    "@babel/preset-env": "^7.5.4",
-    "concurrently": "^4.1.0",
-    "eslint": "^6.3.0",
-    "eslint-plugin-flowtype": "^4.3.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.3",
-    "eslint-plugin-react-hooks": "^2.0.1",
-    "nodemon": "^1.19.0"
+    "concurrently": "^4.1.0"
   },
-  "dependencies": {
-    "abort-controller": "^3.0.0",
-    "axe-webdriverjs": "^2.2.0",
-    "body-parser": "^1.19.0",
-    "express": "^4.17.0",
-    "express-session": "^1.16.2",
-    "mongoose": "5.5.10",
-    "morgan": "^1.9.1",
-    "node-fetch": "^2.6.0",
-    "selenium-webdriver": "^3.6.0",
-    "xml2js": "^0.4.19"
-  }
+  "dependencies": {}
 }

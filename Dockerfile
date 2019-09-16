@@ -21,12 +21,10 @@ RUN ln -s /usr/bin/geckodriver /usr/bin/chromium-browser \
   && chmod 777 /usr/bin/geckodriver \
   && chmod 777 /usr/bin/chromium-browser
 
-COPY package.json ./
-RUN npm install
+COPY package.json package-lock.json ./
+COPY client/package.json client/package-lock.json ./client/
+COPY backend/package.json backend/package-lock.json ./backend/
 
-COPY client/package.json ./client/
-WORKDIR /app/client
-RUN npm install
-WORKDIR /app
+RUN npm install --unsafe-perm
 
 CMD ["npm", "run", "start"]

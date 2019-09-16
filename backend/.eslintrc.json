@@ -1,6 +1,6 @@
 {
     "env": {
-        "browser": true,
+        "browser": false,
         "es6": true,
         "node": true
     },
@@ -10,24 +10,18 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
         "ecmaVersion": 2018,
         "sourceType": "module"
     },
-    "plugins": [
-        "react"
-    ],
     "rules": {
       "no-console": "off",
       "indent": [
-        "warn",
-        2,
-        {
-          "FunctionDeclaration": {"body": 1, "parameters": 2},
-          "FunctionExpression": {"body": 1, "parameters": 2}
-        }
+          "warn",
+          2,
+          {
+              "FunctionDeclaration": {"body": 1, "parameters": 2},
+              "FunctionExpression": {"body": 1, "parameters": 2}
+          }
       ],
       "linebreak-style": ["warn", "unix"],
       "no-else-return": ["warn"],
