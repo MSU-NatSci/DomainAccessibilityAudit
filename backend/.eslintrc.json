@@ -14,13 +14,12 @@
         "sourceType": "module"
     },
     "rules": {
-      "no-console": "off",
       "indent": [
           "warn",
           2,
           {
-              "FunctionDeclaration": {"body": 1, "parameters": 2},
-              "FunctionExpression": {"body": 1, "parameters": 2}
+              "FunctionDeclaration": { "body": 1, "parameters": 2 },
+              "FunctionExpression": { "body": 1, "parameters": 2 }
           }
       ],
       "linebreak-style": ["warn", "unix"],
