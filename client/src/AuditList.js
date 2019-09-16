@@ -89,7 +89,7 @@ class AuditList extends Component {
               <Button>Start a new audit</Button>
             </LinkContainer>
           </>
-        :
+          :
           <Form inline onSubmit={(e) => {
             e.preventDefault();
             this.props.login(this.state.password);

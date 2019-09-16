@@ -1,0 +1,46 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "react-app"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+      "indent": [
+          "warn",
+          2,
+          {
+              "FunctionDeclaration": { "body": 1, "parameters": 2 },
+              "FunctionExpression": { "body": 1, "parameters": 2 },
+              "ignoredNodes": [ "JSXAttribute", "JSXSpreadAttribute" ]
+          }
+      ],
+      "linebreak-style": ["warn", "unix"],
+      "no-else-return": ["warn"],
+      "no-implicit-globals": ["warn"],
+      "no-loop-func": ["warn"],
+      "no-multi-spaces": ["warn"],
+      "no-unused-expressions": ["warn"],
+      "no-useless-return": ["warn"],
+      "no-var": ["warn"],
+      "prefer-const": ["warn"],
+      "require-await": ["warn"],
+      "semi": ["warn", "always"],
+      "block-spacing": ["warn"]
+    }
+}

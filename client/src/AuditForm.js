@@ -45,15 +45,17 @@ class AuditForm extends React.Component {
     });
   }
   
-  startAudit() {
+  async startAudit() {
     this.setState({ error: null });
-    this.props.server.startAudit(this.state.url, this.state.standard,
-        this.state.checkSubdomains, this.state.maxDepth, this.state.maxPagesPerDomain,
-        this.state.sitemaps, this.state.includeMatch, this.state.browser)
-      .then((audit) => {
-        this.props.history.push('/audits/' + audit.id + '/status');
-      },
-      error => this.setState({ error }));
+    try {
+      const audit = await this.props.server.startAudit(this.state.url,
+        this.state.standard, this.state.checkSubdomains, this.state.maxDepth,
+        this.state.maxPagesPerDomain, this.state.sitemaps, this.state.includeMatch,
+        this.state.browser);
+      this.props.history.push('/audits/' + audit.id + '/status');
+    } catch (error) {
+      this.setState({ error });
+    }
   }
   
   render() {
@@ -73,7 +75,7 @@ class AuditForm extends React.Component {
               {this.state.error}
             </Alert>
           }
-          <Form onSubmit={e => {e.preventDefault(); this.startAudit();}} className="form mt-3">
+          <Form onSubmit={e => { e.preventDefault(); this.startAudit(); } } className="form mt-3">
             <Form.Group as={Row} controlId="url">
               <Form.Label column sm="5">Initial URL</Form.Label>
               <Col sm="7">
@@ -148,7 +150,7 @@ class AuditForm extends React.Component {
             </div>
           </Form>
           </>
-        :
+          :
           <p>You need admin priviledges to create a new audit.</p>
         }
       </section>
@@ -160,6 +162,9 @@ class AuditForm extends React.Component {
 AuditForm.propTypes = {
   admin: PropTypes.bool,
   server: PropTypes.instanceOf(ServerAPI).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired,
 };
 
 export default AuditForm;
