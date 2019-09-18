@@ -133,12 +133,13 @@ class ViolationStats extends Component {
 }
 
 ViolationStats.propTypes = {
-  stats: PropTypes.object,
+  stats: PropTypes.object.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    count: PropTypes.number,
-  })),
-  itemType: PropTypes.string,
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    url: PropTypes.string,
+  })).isRequired,
+  itemType: PropTypes.string.isRequired,
 };
 
 export default ViolationStats;
