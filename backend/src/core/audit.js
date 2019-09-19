@@ -500,7 +500,8 @@ export default class Audit {
     // avoid doing a HEAD request for a domain when it has already
     // reached the maximum number of pages to check
     const domain = this.domains.find(d => d.name == domainName);
-    if (domain != null && domain.pageCount >= this.maxPagesPerDomain) {
+    if (domain != null && this.maxPagesPerDomain > 0 &&
+        domain.pageCount >= this.maxPagesPerDomain) {
       setTimeout(() => this.nextHEAD(), 0);
       return;
     }
