@@ -11,7 +11,7 @@ RUN apt-get install -yq \
 
 # geckodriver
 # see latest at https://github.com/mozilla/geckodriver/releases/
-RUN wget -q "https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz" \
+RUN wget -q "https://github.com/mozilla/geckodriver/releases/download/v0.25.0/geckodriver-v0.25.0-linux64.tar.gz" \
   -O /tmp/geckodriver.tgz \
   && tar zxf /tmp/geckodriver.tgz -C /usr/bin/ \
   && rm /tmp/geckodriver.tgz
