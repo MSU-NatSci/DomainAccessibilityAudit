@@ -2,6 +2,10 @@
   "name": "domain-accessibility-audit",
   "version": "0.1.2",
   "description": "Scan a domain and subdomains for accessibility violations and report them with a web interface.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/MSU-NatSci/DomainAccessibilityAudit.git"
+  },
   "scripts": {
     "start:server:dev": "cd backend && npm run start:dev",
     "start:client:dev": "cd client && npm run start:dev",
@@ -11,7 +15,11 @@
     "start:production": "concurrently \"npm run start:server:prod\" \"npm run start:client:prod\"",
     "start": "npm run start:$NODE_ENV",
     "postinstall": "cd backend && npm install && cd ../client && npm install",
-    "eslint": "cd backend && ./node_modules/.bin/eslint . && cd ../client && ./node_modules/.bin/eslint ."
+    "eslint": "cd backend && ./node_modules/.bin/eslint . && cd ../client && ./node_modules/.bin/eslint .",
+    "test:server": "cd backend && npm test",
+    "test:client": "cd client && npm test",
+    "test:client:ci": "cd client && CI=true npm test",
+    "test": "concurrently \"npm run test:server\" \"npm run test:client:ci\""
   },
   "author": "Damien Guillaume",
   "license": "GPL-3.0",

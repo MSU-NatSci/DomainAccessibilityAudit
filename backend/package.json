@@ -5,15 +5,19 @@
     "start:dev": "nodemon src/server.js --exec babel-node --presets @babel/preset-env",
     "start:prod": "npm run clean && npm run build && node build/server.js",
     "clean": "rm -rf build",
-    "build": "babel --presets @babel/preset-env -d build src"
+    "build": "babel --presets @babel/preset-env -d build src",
+    "test": "cross-env NODE_ENV=test DB_URL=mongodb://mongodb:27017/accessibility_audit_test ADMIN_PASSWORD=password jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",
     "@babel/core": "^7.5.4",
     "@babel/node": "^7.5.0",
     "@babel/preset-env": "^7.5.4",
+    "cross-env": "^6.0.0",
     "eslint": "^6.3.0",
-    "nodemon": "^1.19.0"
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.0",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
@@ -26,5 +30,12 @@
     "node-fetch": "^2.6.0",
     "selenium-webdriver": "^3.6.0",
     "xml2js": "^0.4.19"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "verbose": true
   }
 }

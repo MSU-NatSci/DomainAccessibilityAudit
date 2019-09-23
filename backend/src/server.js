@@ -19,7 +19,8 @@ if (!process.env.ADMIN_PASSWORD)
 
 // Web server setup
 const app = express();
-const PORT = process.env.NODE_ENV == 'production' ? 80 : 3143;
+const PORT = process.env.NODE_ENV == 'production' ? 80 :
+  process.env.NODE_ENV == 'test' ? 3144 : 3143;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -47,21 +48,24 @@ if (process.env.NODE_ENV == 'production') {
 // setup either HTTP or HTTPS
 const sslKeyPath = '/app/certs/server.key';
 const sslCertPath = '/app/certs/server.crt';
+let server;
 if (process.env.NODE_ENV == 'production' &&
     fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
   const sslKey = fs.readFileSync(sslKeyPath);
   const sslCert = fs.readFileSync(sslCertPath);
   const credentials = { key: sslKey, cert: sslCert };
   const httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(443, () => console.log(`HTTPS Listening on port 443`));
+  server = httpsServer.listen(443, () => console.log(`HTTPS Listening on port 443`));
 } else {
-  app.listen(PORT, () => console.log(`HTTP Listening on port ${PORT}`));
+  server = app.listen(PORT, () => console.log(`HTTP Listening on port ${PORT}`));
 }
 
 // Database setup
-mongoose.connect(process.env.DB_URL, {
+const mongooseConnectPromise = mongoose.connect(process.env.DB_URL, {
   useCreateIndex: true,
   useNewUrlParser: true,
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+export { app, server, mongooseConnectPromise };

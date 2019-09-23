@@ -23,7 +23,7 @@ RUN ln -s /usr/bin/geckodriver /usr/bin/chromium-browser \
 
 COPY package.json package-lock.json ./
 COPY client/package.json client/package-lock.json ./client/
-COPY backend/package.json backend/package-lock.json ./backend/
+COPY backend/package.json backend/package-lock.json backend/babel.config.js ./backend/
 
 RUN npm install --unsafe-perm
 
