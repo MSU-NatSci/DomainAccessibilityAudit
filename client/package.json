@@ -20,7 +20,8 @@
     "start:prod": "npm run clean && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "clean": "rm -rf build"
+    "clean": "rm -rf build",
+    "lint": "./node_modules/.bin/eslint ."
   },
   "eslintConfig": {
     "extends": "react-app"

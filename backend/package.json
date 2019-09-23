@@ -6,7 +6,8 @@
     "start:prod": "npm run clean && npm run build && node build/server.js",
     "clean": "rm -rf build",
     "build": "babel --presets @babel/preset-env -d build src",
-    "test": "cross-env NODE_ENV=test DB_URL=mongodb://mongodb:27017/accessibility_audit_test ADMIN_PASSWORD=password jest"
+    "test": "cross-env NODE_ENV=test DB_URL=mongodb://mongodb:27017/accessibility_audit_test ADMIN_PASSWORD=password jest",
+    "lint": "./node_modules/.bin/eslint ."
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",

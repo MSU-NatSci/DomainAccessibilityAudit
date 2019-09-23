@@ -15,7 +15,7 @@
     "start:production": "concurrently \"npm run start:server:prod\" \"npm run start:client:prod\"",
     "start": "npm run start:$NODE_ENV",
     "postinstall": "cd backend && npm install && cd ../client && npm install",
-    "eslint": "cd backend && ./node_modules/.bin/eslint . && cd ../client && ./node_modules/.bin/eslint .",
+    "lint": "cd backend && npm run lint && cd ../client && npm run lint",
     "test:server": "cd backend && npm test",
     "test:client": "cd client && npm test",
     "test:client:ci": "cd client && CI=true npm test",
