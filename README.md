@@ -93,6 +93,17 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
 ## Licence
 GPL 3.0.
 
+## Development
+This project is using the MERN stack. Docker is used for both development and production.
+
+Tests should be run in Docker:
+- `docker-compose run --rm accessibility_audit npm run test:server`
+- `docker-compose run --rm accessibility_audit npm run test:client`
+
+ESLint should be integrated in the editor, which might require an `npm install` on the host machine.
+It can also be used to check the whole project, using Docker:
+- `docker-compose run --rm accessibility_audit npm run lint`
+
 ## Technologies used
 - [Docker](https://www.docker.com/)
 - [axe](https://github.com/dequelabs/axe-core)
