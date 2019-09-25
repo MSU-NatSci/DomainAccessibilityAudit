@@ -21,10 +21,18 @@ RUN ln -s /usr/bin/geckodriver /usr/bin/chromium-browser \
   && chmod 777 /usr/bin/geckodriver \
   && chmod 777 /usr/bin/chromium-browser
 
-COPY package.json package-lock.json ./
-COPY client/package.json client/package-lock.json ./client/
-COPY backend/package.json backend/package-lock.json backend/babel.config.js ./backend/
+# Run node as node with primary group node
+RUN groupadd --gid 1000 node \
+  && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 
-RUN npm install --unsafe-perm
+RUN chown node:node /app
+
+USER node
+
+COPY --chown=node:node package.json package-lock.json ./
+COPY --chown=node:node client/package.json client/package-lock.json ./client/
+COPY --chown=node:node backend/package.json backend/package-lock.json backend/babel.config.js ./backend/
+
+RUN npm install
 
 CMD ["npm", "run", "start"]

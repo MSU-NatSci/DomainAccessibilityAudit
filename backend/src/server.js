@@ -19,7 +19,7 @@ if (!process.env.ADMIN_PASSWORD)
 
 // Web server setup
 const app = express();
-const PORT = process.env.NODE_ENV == 'production' ? 80 :
+const PORT = process.env.NODE_ENV == 'production' ? 8080 :
   process.env.NODE_ENV == 'test' ? 3144 : 3143;
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -55,7 +55,7 @@ if (process.env.NODE_ENV == 'production' &&
   const sslCert = fs.readFileSync(sslCertPath);
   const credentials = { key: sslKey, cert: sslCert };
   const httpsServer = https.createServer(credentials, app);
-  server = httpsServer.listen(443, () => console.log(`HTTPS Listening on port 443`));
+  server = httpsServer.listen(8443, () => console.log(`HTTPS Listening on port 8443`));
 } else {
   server = app.listen(PORT, () => console.log(`HTTP Listening on port ${PORT}`));
 }
