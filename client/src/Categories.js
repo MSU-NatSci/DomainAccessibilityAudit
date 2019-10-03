@@ -39,13 +39,13 @@ class Categories extends Component {
       }
       return true;
     });
+    data = data.sort((c1, c2) => c2.count - c1.count);
     if (otherCount > 0) {
       data.push({
         name: "other",
         count: otherCount,
       });
     }
-    data = data.sort((c1, c2) => c2.count - c1.count);
     const colors = [
       '#b30000',
       '#ff6600',
