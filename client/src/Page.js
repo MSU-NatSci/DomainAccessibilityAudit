@@ -89,6 +89,7 @@ class Page extends Component {
                       </Button>
                     </td></tr>
                     <tr><th>Impact</th><td className={violation.impact}>{violation.impact}</td></tr>
+                    <tr><th>Category</th><td>{violation.category}</td></tr>
                     <tr><th>Nodes</th><td>
                       <Table bordered size="sm" className="data">
                         <thead>

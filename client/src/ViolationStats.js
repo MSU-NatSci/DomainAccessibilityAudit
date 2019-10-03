@@ -100,33 +100,35 @@ class ViolationStats extends Component {
       ['critical', 3],
     ]);
     return (
-      <Table bordered size="sm" className="data">
-        <caption>VIOLATIONS</caption>
-        <thead>
-          <tr>
-            <th>description</th>
-            <th>impact</th>
-            <th className="text-right">total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.keys(stats).length === 0 ?
-            <tr><td colSpan="3" className="text-center">None</td></tr> :
-            <>
-              {Object.keys(stats)
-                .sort((id1,id2) => {
-                  let td = impacts.get(stats[id2].impact) -
-                    impacts.get(stats[id1].impact);
-                  if (td === 0)
-                    td = stats[id2].total - stats[id1].total;
-                  return td;
-                })
-                .map(id => this.violationRow(id))
-              }
-            </>
-          }
-        </tbody>
-      </Table>
+      <section>
+        <h3>Violations</h3>
+        <Table bordered size="sm" className="data">
+          <thead>
+            <tr>
+              <th>description</th>
+              <th>impact</th>
+              <th className="text-right">total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(stats).length === 0 ?
+              <tr><td colSpan="3" className="text-center">None</td></tr> :
+              <>
+                {Object.keys(stats)
+                  .sort((id1,id2) => {
+                    let td = impacts.get(stats[id2].impact) -
+                      impacts.get(stats[id1].impact);
+                    if (td === 0)
+                      td = stats[id2].total - stats[id1].total;
+                    return td;
+                  })
+                  .map(id => this.violationRow(id))
+                }
+              </>
+            }
+          </tbody>
+        </Table>
+      </section>
     );
   }
   

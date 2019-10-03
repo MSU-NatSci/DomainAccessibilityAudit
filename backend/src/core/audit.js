@@ -338,6 +338,15 @@ export default class Audit {
       }
     }
     object.violationStats.set(violation.id, vs);
+    // update category stats
+    if (violation.category != null) {
+      let catCount = object.categories.get(violation.category);
+      if (catCount == null)
+        catCount = violationCount;
+      else
+        catCount += violationCount;
+      object.categories.set(violation.category, catCount);
+    }
   }
   
   /**

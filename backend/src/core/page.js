@@ -80,12 +80,22 @@ export default class Page {
             html: node.html
           });
         }
+        let category = null;
+        if (violation.tags instanceof Array) {
+          for (const t of violation.tags) {
+            if (t.indexOf('cat.') == 0) {
+              category = t.substring(4);
+              break;
+            }
+          }
+        }
         this.violations.push({
           id: violation.id,
           descLink: violation.helpUrl,
           description: violation.description,
           impact: violation.impact,
-          nodes: nodes
+          nodes: nodes,
+          category: category,
         });
         this.nbViolations += nodes.length;
       }

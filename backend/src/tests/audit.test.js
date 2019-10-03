@@ -202,6 +202,8 @@ describe('Audit Endpoints', () => {
     expect(violationStats).toHaveProperty('image-alt');
     expect(violationStats).toHaveProperty('label');
     expect(violationStats).toHaveProperty('listitem');
+    const categories = res.body.data.categories;
+    expect(categories).toHaveProperty('language');
     domainId = res.body.data.domains[0]._id;
   }, 5000); // 5s timeout
 });

@@ -33,6 +33,7 @@ export default class Domain {
       nbCheckedURLs: 0,
       nbViolations: 0,
       violationStats: {},
+      categories: {},
     });
     return domain.save()
       .then((domainObject) => this.dbObject = domainObject)

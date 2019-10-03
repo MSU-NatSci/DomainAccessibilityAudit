@@ -51,6 +51,10 @@ const initialAudits = {
         ],
       },
     },
+    categories: {
+      'aria': 5,
+      'color': 10,
+    },
     complete: true,
     domains: [
       {
@@ -89,6 +93,8 @@ const initialAudits = {
     initialDomainName: 'initialDomainName2',
     violationStats: {
     },
+    categories: {
+    },
     complete: true,
     domains: [
       {
@@ -126,6 +132,8 @@ const initialDomains = {
         ],
       },
     },
+    categories: {
+    },
     pages: [
       {
         _id: 'pid1',
@@ -146,6 +154,8 @@ const initialDomains = {
     nbCheckedURLs: 'nbCheckedURLs2',
     nbViolations: 'nbViolations2',
     violationStats: {
+    },
+    categories: {
     },
   },
   did3: {
@@ -169,6 +179,8 @@ const initialDomains = {
           },
         ],
       },
+    },
+    categories: {
     },
     pages: [
       {

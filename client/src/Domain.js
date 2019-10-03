@@ -7,6 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import ServerAPI from './ServerAPI';
 import ViolationStats from './ViolationStats';
+import Categories from './Categories';
 import PageTable from './PageTable';
 
 
@@ -52,13 +53,16 @@ class Domain extends Component {
         <h2>{this.state.domain ? <span className="code">{this.state.domain.name}</span> : ''}</h2>
         {this.state.domain &&
           <>
-            <Table bordered size="sm" className="data">
-              <caption>STATISTICS</caption>
-              <tbody>
-                <tr><th>Number of checked URLs</th><td>{this.state.domain.nbCheckedURLs}</td></tr>
-                <tr><th>Number of accessibility violations</th><td>{this.state.domain.nbViolations}</td></tr>
-              </tbody>
-            </Table>
+            <section>
+              <h3>Statistics</h3>
+              <Table bordered size="sm" className="data">
+                <tbody>
+                  <tr><th>Number of checked URLs</th><td>{this.state.domain.nbCheckedURLs}</td></tr>
+                  <tr><th>Number of accessibility violations</th><td>{this.state.domain.nbViolations}</td></tr>
+                </tbody>
+              </Table>
+            </section>
+            <Categories categories={this.state.domain.categories}/>
             <ViolationStats stats={this.state.domain.violationStats}
               items={this.state.domain.pages} itemType="page"/>
             <PageTable domain={this.state.domain}/>

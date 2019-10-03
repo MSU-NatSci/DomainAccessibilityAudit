@@ -19,7 +19,7 @@ describe('displays content based on paths', () => {
     route = '/';
     const { container } = render(<App/>);
     await wait();
-    expect(container.querySelector('caption').textContent).toBe("Saved Audits");
+    expect(container.querySelector('h3').textContent).toBe("Saved Audits");
   });
   it("works with an audit path", async () => {
     route = '/audits/aid1';

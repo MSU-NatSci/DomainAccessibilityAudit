@@ -20,6 +20,11 @@ const DomainsSchema = new Schema({
     },
     default: {},
   },
+  categories: { // the key is the category name, the value is the count
+    type: Map,
+    of: Number,
+    default: {},
+  },
 }, { timestamps: true });
 
 DomainsSchema.virtual('pages', {

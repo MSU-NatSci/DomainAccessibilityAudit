@@ -102,23 +102,25 @@ class AuditList extends Component {
           </Form>
         }
         {auditsHTML &&
-          <Table bordered size="sm" className="data">
-            <caption>Saved Audits</caption>
-            <thead>
-              <tr>
-                <th>Domain</th>
-                <th className="text-right">Date</th>
-                <th className="text-right">Checked URLs</th>
-                <th className="text-right">Violations</th>
-                {this.props.admin &&
-                  <th className="text-right"></th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              {auditsHTML}
-            </tbody>
-          </Table>
+          <section>
+            <h3>Saved Audits</h3>
+            <Table bordered size="sm" className="data">
+              <thead>
+                <tr>
+                  <th>Domain</th>
+                  <th className="text-right">Date</th>
+                  <th className="text-right">Checked URLs</th>
+                  <th className="text-right">Violations</th>
+                  {this.props.admin &&
+                    <th className="text-right"></th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {auditsHTML}
+              </tbody>
+            </Table>
+          </section>
         }
       </section>
     );

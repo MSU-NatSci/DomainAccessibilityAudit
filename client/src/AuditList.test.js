@@ -11,11 +11,11 @@ const getByTagAndContent = (container, tag, expr) => {
   return Array.from(container.querySelectorAll(tag))
     .find(el => expr.test(el.textContent));
 };
-const getTableByCaption = (container, captionExpr) => {
-  const caption = getByTagAndContent(container, 'caption', captionExpr);
-  if (caption == null)
-    throw new Error("caption " + captionExpr + " not found");
-  return caption.parentNode;
+const getTableBySectionTitle = (container, titleExpr) => {
+  const h3 = getByTagAndContent(container, 'h3', titleExpr);
+  if (h3 == null)
+    throw new Error("h3 " + titleExpr + " not found");
+  return h3.parentNode.querySelector('table');
 };
 const init = async (admin) => {
   const mockServer = new MockServerAPI();
@@ -28,7 +28,7 @@ const init = async (admin) => {
 
 it("renders with audit information", async () => {
   const { container } = await init(false);
-  const auditTable = getTableByCaption(container, /^Saved Audits$/i);
+  const auditTable = getTableBySectionTitle(container, /^Saved Audits$/i);
   expect(auditTable.querySelector('tr td').textContent).toBe('initialDomainName1');
   expect(auditTable.querySelector('tr td:nth-of-type(2)').textContent).toBe('8/27/2019');
 });
@@ -49,7 +49,7 @@ it("calls the logout function", async () => {
 
 it("removes an audit", async () => {
   const { container, getAllByTitle } = await init(true);
-  const auditTable = getTableByCaption(container, /^Saved Audits$/i);
+  const auditTable = getTableBySectionTitle(container, /^Saved Audits$/i);
   const nb1 = auditTable.querySelectorAll('tr').length;
   fireEvent.click(getAllByTitle("Remove")[0]);
   await wait();

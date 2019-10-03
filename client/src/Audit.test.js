@@ -11,11 +11,11 @@ const getByTagAndContent = (container, tag, expr) => {
   return Array.from(container.querySelectorAll(tag))
     .find(el => expr.test(el.textContent));
 };
-const getTableByCaption = (container, captionExpr) => {
-  const caption = getByTagAndContent(container, 'caption', captionExpr);
-  if (caption == null)
-    throw new Error("caption " + captionExpr + " not found");
-  return caption.parentNode;
+const getTableBySectionTitle = (container, titleExpr) => {
+  const h3 = getByTagAndContent(container, 'h3', titleExpr);
+  if (h3 == null)
+    throw new Error("h3 " + titleExpr + " not found");
+  return h3.parentNode.querySelector('table');
 };
 const init = async (auditId) => {
   const mockServer = new MockServerAPI();
@@ -29,16 +29,16 @@ it("renders with audit information (2 domains)", async () => {
   // title
   expect(container.querySelector('h2').textContent).toBe('initialDomainName1');
   // audit parameters table
-  const parameterTable = getTableByCaption(container, /^AUDIT PARAMETERS$/i);
+  const parameterTable = getTableBySectionTitle(container, /^AUDIT PARAMETERS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('firstURL1');
   expect(parameterTable.querySelector('tr:nth-of-type(2) td').textContent).toBe('Yes');
   // violation table
-  const violationTable = getTableByCaption(container, /^VIOLATIONS$/i);
+  const violationTable = getTableBySectionTitle(container, /^VIOLATIONS$/i);
   expect(violationTable.querySelector('tr td').textContent).toContain('description1');
   expect(violationTable.querySelector('tr td:nth-of-type(2)').textContent).toBe('impact1');
   expect(violationTable.querySelector('tr td:nth-of-type(3)').textContent).toBe('total1');
   // domain table
-  const domainTable = getTableByCaption(container, /^DOMAINS$/i);
+  const domainTable = getTableBySectionTitle(container, /^DOMAINS$/i);
   expect(domainTable.querySelector('tr td').textContent).toBe('domain1');
   expect(domainTable.querySelector('tr td:nth-of-type(2)').textContent).toBe('nbCheckedURLs1');
   expect(domainTable.querySelector('tr td:nth-of-type(3)').textContent).toBe('nbViolations1');
@@ -50,16 +50,16 @@ it("renders correctly when the audit contains only 1 domain", async () => {
   // title
   expect(container.querySelector('h2 span').textContent).toBe('initialDomainName2');
   // audit parameters table
-  const parameterTable = getTableByCaption(container, /^AUDIT PARAMETERS$/i);
+  const parameterTable = getTableBySectionTitle(container, /^AUDIT PARAMETERS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('firstURL2');
   expect(parameterTable.querySelector('tr:nth-of-type(2) td').textContent).toBe('No');
   // violation table
-  const violationTable = getTableByCaption(container, /^VIOLATIONS$/i);
+  const violationTable = getTableBySectionTitle(container, /^VIOLATIONS$/i);
   expect(violationTable.querySelector('tr td').textContent).toContain('description3');
   expect(violationTable.querySelector('tr td:nth-of-type(2)').textContent).toBe('impact3');
   expect(violationTable.querySelector('tr td:nth-of-type(3)').textContent).toBe('total3');
   // page table
-  const pageTable = getTableByCaption(container, /^SCANNED PAGES/i);
+  const pageTable = getTableBySectionTitle(container, /^SCANNED PAGES/i);
   expect(pageTable.querySelector('tr td').textContent).toBe('purl3');
   expect(pageTable.querySelector('tr td:nth-of-type(2)').textContent).toBe('nbViolations3');
 });

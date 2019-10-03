@@ -46,7 +46,8 @@
     font-size: 1.8rem;
   }
   h3 {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 0;
   }
   table td {
     vertical-align: middle;
@@ -63,12 +64,14 @@ body {
 h1, h2 {
   text-align: center;
 }
+h3 {
+  text-transform: uppercase;
+}
+section {
+  margin: 1em 0 1.5em 0;
+}
 .pageContent {
   margin: 0 1em 0 1em;
-}
-section section {
-  margin: 0.7em;
-  padding: 0.7em;
 }
 .code {
   font-family: monospace;
@@ -77,13 +80,12 @@ section section {
 table.data {
   width: auto !important;
   background-color: white;
-  margin: 0px auto;
   border-radius: 12px;
   border-collapse: separate;
   border-spacing: 0;
   overflow: hidden;
   box-shadow: 3px 3px 4px #AAA;
-  margin: 1em 0 1em 0;
+  margin: 0.5em 0 1em 0;
   
   caption {
     font-size: 120%;

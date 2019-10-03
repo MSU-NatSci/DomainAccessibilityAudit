@@ -11,11 +11,11 @@ const getByTagAndContent = (container, tag, expr) => {
   return Array.from(container.querySelectorAll(tag))
     .find(el => expr.test(el.textContent));
 };
-const getTableByCaption = (container, captionExpr) => {
-  const caption = getByTagAndContent(container, 'caption', captionExpr);
-  if (caption == null)
-    throw new Error("caption " + captionExpr + " not found");
-  return caption.parentNode;
+const getTableBySectionTitle = (container, titleExpr) => {
+  const h3 = getByTagAndContent(container, 'h3', titleExpr);
+  if (h3 == null)
+    throw new Error("h3 " + titleExpr + " not found");
+  return h3.parentNode.querySelector('table');
 };
 const init = async (domainId) => {
   const mockServer = new MockServerAPI();
@@ -29,16 +29,16 @@ it("renders with domain information", async () => {
   // title
   expect(container.querySelector('h2').textContent).toBe('domain1');
   // statistics table
-  const parameterTable = getTableByCaption(container, /^STATISTICS$/i);
+  const parameterTable = getTableBySectionTitle(container, /^STATISTICS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('nbCheckedURLs1');
   expect(parameterTable.querySelector('tr:nth-of-type(2) td').textContent).toBe('nbViolations1');
   // violation table
-  const violationTable = getTableByCaption(container, /^VIOLATIONS$/i);
+  const violationTable = getTableBySectionTitle(container, /^VIOLATIONS$/i);
   expect(violationTable.querySelector('tr td').textContent).toContain('description1');
   expect(violationTable.querySelector('tr td:nth-of-type(2)').textContent).toBe('impact1');
   expect(violationTable.querySelector('tr td:nth-of-type(3)').textContent).toBe('total1');
   // page table
-  const pageTable = getTableByCaption(container, /^SCANNED PAGES/i);
+  const pageTable = getTableBySectionTitle(container, /^SCANNED PAGES/i);
   expect(pageTable.querySelector('tr td').textContent).toBe('purl1');
   expect(pageTable.querySelector('tr td:nth-of-type(2)').textContent).toBe('nbViolations1');
 });

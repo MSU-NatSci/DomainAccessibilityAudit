@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 import ServerAPI from './ServerAPI';
 import ViolationStats from './ViolationStats';
+import Categories from './Categories';
 import DomainTable from './DomainTable';
 import PageTable from './PageTable';
 
@@ -57,64 +58,67 @@ class Audit extends Component {
           : ''}</h2>
         {this.state.audit &&
           <>
-            <Table bordered size="sm" className="data">
-              <caption>AUDIT PARAMETERS</caption>
-              <tbody>
-                <tr>
-                  <th>First URL</th>
-                  <td className="code">{this.state.audit.firstURL}</td>
-                </tr>
-                <tr>
-                  <th>Check subdomains</th>
-                  <td className="code">{this.state.audit.checkSubdomains ? "Yes" : "No"}</td>
-                </tr>
-                <tr>
-                  <th>Maximum depth</th>
-                  <td>{this.state.audit.maxDepth}</td>
-                </tr>
-                <tr>
-                  <th>Maximum number of pages checked per domain</th>
-                  <td>{this.state.audit.maxPagesPerDomain}</td>
-                </tr>
-                <tr>
-                  <th>Use site maps</th>
-                  <td className="code">{this.state.audit.sitemaps ? "Yes" : "No"}</td>
-                </tr>
-                <tr>
-                  <th>Include only paths matching the regular expression</th>
-                  <td className="code">{this.state.audit.includeMatch}</td>
-                </tr>
-                <tr>
-                  <th>Web browser</th>
-                  <td>{this.state.audit.browser}</td>
-                </tr>
-                <tr>
-                  <th>Date started</th>
-                  <td>{(new Date(this.state.audit.dateStarted)).toLocaleString()}</td>
-                </tr>
-                <tr>
-                  <th>Date ended</th>
-                  <td>{this.state.audit.dateEnded &&
-                    (new Date(this.state.audit.dateEnded)).toLocaleString()}</td>
-                </tr>
-                <tr>
-                  <th>Audit completed</th>
-                  <td>{this.state.audit.complete ? "Yes" : "No"}</td>
-                </tr>
-                <tr>
-                  <th>Number of checked URLs</th>
-                  <td>{this.state.audit.nbCheckedURLs}</td>
-                </tr>
-                <tr>
-                  <th>Number of accessibility violations</th>
-                  <td>{this.state.audit.nbViolations}</td>
-                </tr>
-                <tr>
-                  <th>Number of scan errors</th>
-                  <td>{this.state.audit.nbScanErrors}</td>
-                </tr>
-              </tbody>
-            </Table>
+            <section>
+              <h3>Audit Parameters</h3>
+              <Table bordered size="sm" className="data">
+                <tbody>
+                  <tr>
+                    <th>First URL</th>
+                    <td className="code">{this.state.audit.firstURL}</td>
+                  </tr>
+                  <tr>
+                    <th>Check subdomains</th>
+                    <td className="code">{this.state.audit.checkSubdomains ? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
+                    <th>Maximum depth</th>
+                    <td>{this.state.audit.maxDepth}</td>
+                  </tr>
+                  <tr>
+                    <th>Maximum number of pages checked per domain</th>
+                    <td>{this.state.audit.maxPagesPerDomain}</td>
+                  </tr>
+                  <tr>
+                    <th>Use site maps</th>
+                    <td className="code">{this.state.audit.sitemaps ? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
+                    <th>Include only paths matching the regular expression</th>
+                    <td className="code">{this.state.audit.includeMatch}</td>
+                  </tr>
+                  <tr>
+                    <th>Web browser</th>
+                    <td>{this.state.audit.browser}</td>
+                  </tr>
+                  <tr>
+                    <th>Date started</th>
+                    <td>{(new Date(this.state.audit.dateStarted)).toLocaleString()}</td>
+                  </tr>
+                  <tr>
+                    <th>Date ended</th>
+                    <td>{this.state.audit.dateEnded &&
+                      (new Date(this.state.audit.dateEnded)).toLocaleString()}</td>
+                  </tr>
+                  <tr>
+                    <th>Audit completed</th>
+                    <td>{this.state.audit.complete ? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
+                    <th>Number of checked URLs</th>
+                    <td>{this.state.audit.nbCheckedURLs}</td>
+                  </tr>
+                  <tr>
+                    <th>Number of accessibility violations</th>
+                    <td>{this.state.audit.nbViolations}</td>
+                  </tr>
+                  <tr>
+                    <th>Number of scan errors</th>
+                    <td>{this.state.audit.nbScanErrors}</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </section>
+            <Categories categories={this.state.audit.categories}/>
             {this.state.domain ?
               <>
                 <ViolationStats stats={this.state.domain.violationStats}
