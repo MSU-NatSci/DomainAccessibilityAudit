@@ -32,6 +32,7 @@ class AuditList extends Component {
         this.setState({ audits });
       })
       .catch((error) => this.setState({ error }));
+    document.title = "Accessibility Audits";
   }
   
   handleChange(event) {
@@ -74,7 +75,8 @@ class AuditList extends Component {
       ));
     }
     return (
-      <section className="pageContent">
+      <>
+        <h1>Accessibility Audits</h1>
         {this.state.error &&
           <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
             {this.state.error}
@@ -103,7 +105,7 @@ class AuditList extends Component {
         }
         {auditsHTML &&
           <section>
-            <h3>Saved Audits</h3>
+            <h2>Saved Audits</h2>
             <Table bordered size="sm" className="data">
               <thead>
                 <tr>
@@ -122,7 +124,7 @@ class AuditList extends Component {
             </Table>
           </section>
         }
-      </section>
+      </>
     );
   }
   

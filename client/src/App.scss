@@ -43,10 +43,7 @@
     font-size: 2.0rem;
   }
   h2 {
-    font-size: 1.8rem;
-  }
-  h3 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     margin-bottom: 0;
   }
   table td {
@@ -61,16 +58,22 @@
 body {
   background-color: #F0F0F0 !important;
 }
-h1, h2 {
+.bannerTitle {
+  text-align: right;
+  font-size: 1.5rem;
+  font-style: italic;
+  padding-right: 0.5em;
+}
+h1 {
   text-align: center;
 }
-h3 {
+h2 {
   text-transform: uppercase;
 }
 section {
   margin: 1em 0 1.5em 0;
 }
-.pageContent {
+main {
   margin: 0 1em 0 1em;
 }
 .code {

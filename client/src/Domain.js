@@ -24,6 +24,7 @@ class Domain extends Component {
   componentDidMount() {
     this.props.server.getDomain(this.props.match.params.domainId)
       .then((domain) => {
+        document.title = "Accessibility Audit: " + domain.name;
         this.setState({ domain });
       })
       .catch((error) => this.setState({ error }));
@@ -31,7 +32,7 @@ class Domain extends Component {
   
   render() {
     return (
-      <section className="pageContent">
+      <>
         <Breadcrumb>
           <LinkContainer to="/audits/">
             <Breadcrumb.Item>Audits</Breadcrumb.Item>
@@ -50,11 +51,11 @@ class Domain extends Component {
             {this.state.error}
           </Alert>
         }
-        <h2>{this.state.domain ? <span className="code">{this.state.domain.name}</span> : ''}</h2>
+        <h1>{this.state.domain ? <span className="code">{this.state.domain.name}</span> : ''}</h1>
         {this.state.domain &&
           <>
             <section>
-              <h3>Statistics</h3>
+              <h2>Statistics</h2>
               <Table bordered size="sm" className="data">
                 <tbody>
                   <tr><th>Number of checked URLs</th><td>{this.state.domain.nbCheckedURLs}</td></tr>
@@ -68,7 +69,7 @@ class Domain extends Component {
             <PageTable domain={this.state.domain}/>
           </>
         }
-      </section>
+      </>
     );
   }
   

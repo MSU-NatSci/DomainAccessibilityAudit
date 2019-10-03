@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const DomainTable = ({ audit }) => {
   return (
     <section>
-      <h3>Domains</h3>
+      <h2>Domains</h2>
       <Table bordered size="sm" className="data">
         <thead>
           <tr>

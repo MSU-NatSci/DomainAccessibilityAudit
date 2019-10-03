@@ -101,7 +101,7 @@ class ViolationStats extends Component {
     ]);
     return (
       <section>
-        <h3>Violations</h3>
+        <h2>Violations</h2>
         <Table bordered size="sm" className="data">
           <thead>
             <tr>

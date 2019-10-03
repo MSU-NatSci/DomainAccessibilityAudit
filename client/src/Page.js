@@ -24,6 +24,7 @@ class Page extends Component {
   componentDidMount() {
     this.props.server.getPage(this.props.match.params.pageId)
       .then((page) => {
+        document.title = "Accessibility Audit: " + page.url;
         this.setState({ page });
       })
       .catch((error) => this.setState({ error }));
@@ -37,7 +38,7 @@ class Page extends Component {
       ['critical', 3],
     ]);
     return (
-      <section className="pageContent">
+      <>
         <Breadcrumb>
           <LinkContainer to="/audits/">
             <Breadcrumb.Item>Audits</Breadcrumb.Item>
@@ -54,9 +55,9 @@ class Page extends Component {
             </>
           }
         </Breadcrumb>
-        <h2>
+        <h1>
           {this.state.page ? <span className="code">{this.state.page.url}</span> : ''}
-        </h2>
+        </h1>
         {this.state.error &&
           <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
             {this.state.error}
@@ -111,7 +112,7 @@ class Page extends Component {
             }
           </>
         }
-      </section>
+      </>
     );
   }
   

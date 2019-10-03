@@ -35,6 +35,10 @@ class AuditForm extends React.Component {
     this.checkInterval = null;
   }
   
+  componentDidMount() {
+    document.title = "New Accessibility Audit";
+  }
+  
   handleChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked :
@@ -60,10 +64,10 @@ class AuditForm extends React.Component {
   
   render() {
     return (
-      <section className="pageContent">
+      <>
         {this.props.admin ?
           <>
-          <h2>Start A New Audit</h2>
+          <h1>Start A New Audit</h1>
           <Breadcrumb>
             <LinkContainer to="/audits/">
               <Breadcrumb.Item>Audits</Breadcrumb.Item>
@@ -153,7 +157,7 @@ class AuditForm extends React.Component {
           :
           <p>You need admin priviledges to create a new audit.</p>
         }
-      </section>
+      </>
     );
   }
   

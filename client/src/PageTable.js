@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const PageTable = ({ domain }) => {
   return (
     <section>
-      <h3>Scanned Pages</h3>
+      <h2>Scanned Pages</h2>
       <p style={{marginBottom: 0}}>Click on a URL to get a full report for that page.</p>
       <Table bordered size="sm" className="data">
         <thead>

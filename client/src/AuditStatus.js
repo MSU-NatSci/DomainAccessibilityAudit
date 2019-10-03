@@ -41,6 +41,7 @@ class AuditStatus extends React.Component {
           clearInterval(this.checkInterval);
           this.checkInterval = null;
         }
+        document.title = "Audit Status: " + data.initialDomainName;
         this.setState({
           status: data,
           running: data.running,
@@ -69,15 +70,15 @@ class AuditStatus extends React.Component {
   
   render() {
     return (
-      <section className="pageContent">
+      <>
         <Breadcrumb>
           <LinkContainer to="/audits/">
             <Breadcrumb.Item>Audits</Breadcrumb.Item>
           </LinkContainer>
           <Breadcrumb.Item active>Audit Status</Breadcrumb.Item>
         </Breadcrumb>
-        <h2>{this.state.status && this.state.status.initialDomainName ?
-          this.state.status.initialDomainName : 'Audit Status'}</h2>
+        <h1>{this.state.status && this.state.status.initialDomainName ?
+          this.state.status.initialDomainName : 'Audit Status'}</h1>
         {this.state.error &&
           <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
             {this.state.error}
@@ -93,19 +94,22 @@ class AuditStatus extends React.Component {
           </p>
         }
         {this.state.status && this.state.status.running !== undefined &&
-          <ul>
-            <li>Running: {this.state.status.running ? "Yes" : "No"}</li>
-            <li>Checked URLs: {this.state.status.nbCheckedURLs}</li>
-            <li>URLs to check: {this.state.status.nbURLsToCheck} (more might be added later)</li>
-            <li>Violations found: {this.state.status.nbViolations}</li>
-            <li>Scan errors: {this.state.status.nbScanErrors}</li>
-          </ul>
+          <section>
+            <h2>Status</h2>
+            <ul>
+              <li>Running: {this.state.status.running ? "Yes" : "No"}</li>
+              <li>Checked URLs: {this.state.status.nbCheckedURLs}</li>
+              <li>URLs to check: {this.state.status.nbURLsToCheck} (more might be added later)</li>
+              <li>Violations found: {this.state.status.nbViolations}</li>
+              <li>Scan errors: {this.state.status.nbScanErrors}</li>
+            </ul>
+          </section>
         }
         <section>
-          <h3>Results</h3>
+          <h2>Results</h2>
           <Link to={'/audits/'+this.props.match.params.auditId}>Audit results</Link>
         </section>
-      </section>
+      </>
     );
   }
   

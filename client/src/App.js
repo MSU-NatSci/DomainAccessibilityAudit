@@ -63,8 +63,10 @@ class App extends Component {
   render() {
     return (
       <Router history={this.history}>
+        <header>
+          <p className="bannerTitle">Domain Accessibility Audit</p>
+        </header>
         <main>
-          <h1>Domain Accessibility Audit</h1>
           <Switch>
             <Route exact path='/audits/create'
               render={(routerProps) => <AuditForm admin={this.state.admin}

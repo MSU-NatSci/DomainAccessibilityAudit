@@ -64,7 +64,7 @@ class Categories extends Component {
     ];
     return (
       <section>
-        <h3>Categories</h3>
+        <h2>Categories</h2>
         <div style={{ display:'flex', flexWrap:'wrap-reverse' }}>
           <Table bordered size="sm" className="data">
             <thead>

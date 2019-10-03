@@ -26,6 +26,7 @@ class Audit extends Component {
   componentDidMount() {
     this.props.server.getAudit(this.props.match.params.auditId)
       .then((audit) => {
+        document.title = "Accessibility Audit: " + audit.initialDomainName;
         this.setState({ audit });
         if (audit.domains && audit.domains.length === 1) {
           // load the domain when there is only 1 for the audit
@@ -41,7 +42,7 @@ class Audit extends Component {
   
   render() {
     return (
-      <section className="pageContent">
+      <>
         <Breadcrumb>
           <LinkContainer to="/audits/">
             <Breadcrumb.Item>Audits</Breadcrumb.Item>
@@ -53,13 +54,13 @@ class Audit extends Component {
             {this.state.error}
           </Alert>
         }
-        <h2>{this.state.audit ?
+        <h1>{this.state.audit ?
           <span className="code">{this.state.audit.initialDomainName}</span>
-          : ''}</h2>
+          : ''}</h1>
         {this.state.audit &&
           <>
             <section>
-              <h3>Audit Parameters</h3>
+              <h2>Audit Parameters</h2>
               <Table bordered size="sm" className="data">
                 <tbody>
                   <tr>
@@ -134,7 +135,7 @@ class Audit extends Component {
             }
           </>
         }
-      </section>
+      </>
     );
   }
   
