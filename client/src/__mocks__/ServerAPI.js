@@ -11,6 +11,7 @@ const initialAudits = {
     sitemaps: true,
     includeMatch: 'includeMatch',
     browser: 'browser',
+    postLoadingDelay: 'postLoadingDelay',
     dateStarted: new Date('2019-08-27T13:00:00'),
     dateEnded: new Date('2019-08-27T13:30:00'),
     nbCheckedURLs: 'nbCheckedURLs',
@@ -85,6 +86,7 @@ const initialAudits = {
     sitemaps: true,
     includeMatch: 'includeMatch',
     browser: 'browser',
+    postLoadingDelay: 'postLoadingDelay',
     dateStarted: new Date('2019-08-27T13:00:00'),
     dateEnded: new Date('2019-08-27T13:30:00'),
     nbCheckedURLs: 'nbCheckedURLs',
@@ -223,8 +225,7 @@ class ServerAPI {
   admin() {
     return Promise.resolve(false);
   }
-  startAudit(firstURL, standard, checkSubdomains, maxDepth,
-      maxPagesPerDomain, sitemaps, includeMatch, browser) {
+  startAudit(params) {
     return Promise.resolve({});
   }
   getAudits() {

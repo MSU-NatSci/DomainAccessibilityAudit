@@ -12,10 +12,10 @@ const getByTagAndContent = (container, tag, expr) => {
     .find(el => expr.test(el.textContent));
 };
 const getTableBySectionTitle = (container, titleExpr) => {
-  const h3 = getByTagAndContent(container, 'h3', titleExpr);
-  if (h3 == null)
-    throw new Error("h3 " + titleExpr + " not found");
-  return h3.parentNode.querySelector('table');
+  const h2 = getByTagAndContent(container, 'h2', titleExpr);
+  if (h2 == null)
+    throw new Error("h2 " + titleExpr + " not found");
+  return h2.parentNode.querySelector('table');
 };
 const init = async (domainId) => {
   const mockServer = new MockServerAPI();
@@ -27,7 +27,7 @@ const init = async (domainId) => {
 it("renders with domain information", async () => {
   const { container } = await init('did1');
   // title
-  expect(container.querySelector('h2').textContent).toBe('domain1');
+  expect(container.querySelector('h1').textContent).toBe('domain1');
   // statistics table
   const parameterTable = getTableBySectionTitle(container, /^STATISTICS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('nbCheckedURLs1');

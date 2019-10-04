@@ -34,12 +34,17 @@ export default class Page {
   /**
    * Load the page, and calls contentLoaded() or handleError().
    */
-  startChecking() {
+  async startChecking() {
     console.log("** startChecking " + this.url);
-    this.audit.driver.get(this.url).then(
-      () => this.contentLoaded(),
-      (error) => this.handleError(error)
-    );
+    try {
+      await this.audit.driver.get(this.url);
+      const delay = this.audit.params.postLoadingDelay;
+      if (delay > 0)
+        await new Promise(resolve => setTimeout(resolve, delay));
+      this.contentLoaded();
+    } catch (error) {
+      this.handleError(error);
+    }
   }
   
   /**

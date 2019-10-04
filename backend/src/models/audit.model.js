@@ -10,6 +10,7 @@ const AuditsSchema = new Schema({
   sitemaps: Boolean,
   includeMatch: String,
   browser: String,
+  postLoadingDelay: Number,
   dateStarted: Date,
   dateEnded: Date,
   nbCheckedURLs: Number,

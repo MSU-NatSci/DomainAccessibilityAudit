@@ -76,60 +76,34 @@ export default class Audit {
       'toolkit.telemetry.unified': false,
       'toolkit.telemetry.updatePing.enabled': false,
     };
-    // form parameters
-    /** @member {string} - accessibility standard to use with aXe
-       (wcag2a|wcag2aa|wcag21aa|section508) */
-    this.standard = 'wcag2aa';
-    /** @member {boolean} - true if subdomains are to be checked */
-    this.checkSubdomains = false;
-    /** @member {number} - maximum crawling depth */
-    this.maxDepth = 0;
-    /** @member {number} - maximum number of pages checked per domain (0 = no max) */
-    this.maxPagesPerDomain = 0;
-    /** @member {boolean} - sitemaps - true if sitemap files should be used */
-    this.sitemaps = false;
-    /** @member {string} - regular expression to include only matching paths */
-    this.includeMatch = '';
-    /** @member {string} - web browser name (firefox|chrome) */
-    this.browser = 'firefox';
+    /** @member {Object} - form parameters */
+    this.params = {};
   }
   
   /**
    * Start the audit.
-   * @param {string} firstURL - user's initial URL
-   * @param {string} standard - accessibility standard to use with aXe
+   * @param {Object} params - audit parameters
+   * @param {string} params.firstURL - user's initial URL
+   * @param {string} params.standard - accessibility standard to use with aXe
       (wcag2a|wcag2aa|wcag21aa|section508)
-   * @param {boolean} checkSubdomains - true if subdomains are to be checked
-   * @param {number} maxDepth - maximum crawling depth
-   * @param {number} maxPagesPerDomain - maximum number of pages checked per domain (0 = no max)
-   * @param {boolean} sitemaps - true if sitemap files should be used
-   * @param {string} includeMatch - regular expression to include only matching paths
-   * @param {string} browser - web browser name (firefox|chrome)
+   * @param {boolean} params.checkSubdomains - true if subdomains are to be checked
+   * @param {number} params.maxDepth - maximum crawling depth
+   * @param {number} params.maxPagesPerDomain - maximum number of pages checked per domain (0 = no max)
+   * @param {boolean} params.sitemaps - true if sitemap files should be used
+   * @param {string} params.includeMatch - regular expression to include only matching paths
+   * @param {string} params.browser - web browser name (firefox|chrome)
+   * @param {number} params.postLoadingDelay - additional delay to let dynamic pages load (ms)
    * @returns {Promise<Object>} - this.dbObject (database object for this audit)
    */
-  async start(firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
-      sitemaps, includeMatch, browser) {
-    this.standard = standard;
-    this.checkSubdomains = checkSubdomains;
-    this.maxDepth = maxDepth;
-    this.maxPagesPerDomain = maxPagesPerDomain;
-    this.sitemaps = sitemaps;
-    this.includeMatch = includeMatch;
-    this.browser = browser;
-    this.initialDomainName = this.extractDomainNameFromURL(firstURL);
+  async start(params) {
+    this.params = params;
+    this.initialDomainName = this.extractDomainNameFromURL(params.firstURL);
     if (this.initialDomainName == null)
       throw new Error("No initial domain name");
     this.running = true;
-    this.testedURLs = [firstURL];
+    this.testedURLs = [params.firstURL];
     const audit = new AuditModel({
-      firstURL: firstURL,
-      standard: standard,
-      checkSubdomains: checkSubdomains,
-      maxDepth: maxDepth,
-      maxPagesPerDomain: maxPagesPerDomain,
-      sitemaps: sitemaps,
-      includeMatch: includeMatch,
-      browser: browser,
+      ...params,
       dateStarted: new Date(),
       nbCheckedURLs: 0,
       nbViolations: 0,
@@ -155,7 +129,7 @@ export default class Audit {
     }
     const initialDomain = await this.findDomain(this.initialDomainName, null);
     this.pagesToCheck = [
-      this.newPage(null, initialDomain, firstURL, null)
+      this.newPage(null, initialDomain, params.firstURL, null)
     ];
     initialDomain.pageCount++;
     this.nextURL();
@@ -177,8 +151,8 @@ export default class Audit {
       }
     }
     this.driver = new WebDriver.Builder()
-      .forBrowser(this.browser);
-    if (this.browser == 'firefox') {
+      .forBrowser(this.params.browser);
+    if (this.params.browser == 'firefox') {
       const profile = new firefox.Profile();
       for (const key of Object.keys(this.firefoxPreferences))
         profile.setPreference(key, this.firefoxPreferences[key]);
@@ -194,11 +168,11 @@ export default class Audit {
       pageLoad: pageLoadTimeout,
     });
     let tags;
-    if (this.standard == 'wcag2a')
+    if (this.params.standard == 'wcag2a')
       tags = ['wcag2a'];
-    else if (this.standard == 'wcag21aa')
+    else if (this.params.standard == 'wcag21aa')
       tags = ['wcag21aa', 'wcag2a'];
-    else if (this.standard == 'section508')
+    else if (this.params.standard == 'section508')
       tags = ['section508'];
     else
       tags = ['wcag2aa', 'wcag2a'];
@@ -405,7 +379,7 @@ export default class Audit {
     const domain = new Domain(this, domainName);
     this.domains.push(domain);
     await domain.saveNew();
-    if (this.sitemaps) {
+    if (this.params.sitemaps) {
       await domain.readSitemap()
         .then((sitemap) => {
           if (!sitemap.urlset)
@@ -433,7 +407,7 @@ export default class Audit {
    */
   extractLinks(page) {
     console.log("audit extractLinks");
-    if (page.depth >= this.maxDepth)
+    if (page.depth >= this.params.maxDepth)
       return Promise.resolve();
     return this.driver.executeScript(`
       let as = document.getElementsByTagName('a');
@@ -463,9 +437,9 @@ export default class Audit {
   testToAddPage(originPage, url) {
     if (!/^https?:\/\//i.test(url))
       return;
-    if (this.includeMatch != null && this.includeMatch != '') {
+    if (this.params.includeMatch != null && this.params.includeMatch != '') {
       const path = url.replace(/^https?:\/\/[^/]+/i, '');
-      if (!path.match(this.includeMatch))
+      if (!path.match(this.params.includeMatch))
         return;
     }
     const ind = url.indexOf('#');
@@ -479,7 +453,7 @@ export default class Audit {
       console.log("Domain not found for " + url);
       return;
     }
-    if (!this.checkSubdomains) {
+    if (!this.params.checkSubdomains) {
       if (domainName !== this.initialDomainName)
         return;
     } else {
@@ -509,8 +483,8 @@ export default class Audit {
     // avoid doing a HEAD request for a domain when it has already
     // reached the maximum number of pages to check
     const domain = this.domains.find(d => d.name == domainName);
-    if (domain != null && this.maxPagesPerDomain > 0 &&
-        domain.pageCount >= this.maxPagesPerDomain) {
+    if (domain != null && this.params.maxPagesPerDomain > 0 &&
+        domain.pageCount >= this.params.maxPagesPerDomain) {
       setTimeout(() => this.nextHEAD(), 0);
       return;
     }
@@ -571,8 +545,8 @@ export default class Audit {
     // ignore bad looking URLs that result in a 404 (probably a bad link)
     if (sslError || res.status != 404 || !url.match(/.https?:\/\/|\s/)) {
       this.findDomain(domainName, originPage).then((domain) => {
-        if (this.maxPagesPerDomain == 0 ||
-            domain.pageCount < this.maxPagesPerDomain) {
+        if (this.params.maxPagesPerDomain == 0 ||
+            domain.pageCount < this.params.maxPagesPerDomain) {
           const page = this.newPage(originPage, domain, url,
             sslError ? null : res.status);
           if (sslError)

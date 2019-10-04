@@ -92,6 +92,10 @@ class Audit extends Component {
                     <td>{this.state.audit.browser}</td>
                   </tr>
                   <tr>
+                    <th>Additional delay to let dynamic pages load (ms)</th>
+                    <td>{this.state.audit.postLoadingDelay}</td>
+                  </tr>
+                  <tr>
                     <th>Date started</th>
                     <td>{(new Date(this.state.audit.dateStarted)).toLocaleString()}</td>
                   </tr>

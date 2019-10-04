@@ -23,7 +23,17 @@ it("starts the audit and navigates to the status page", async () => {
   fireEvent.click(getByText("Start Audit"));
   await wait();
   // check startAudit was called
-  expect(mockServer.startAudit).toBeCalledWith('http://test/', 'wcag2aa', true, 1, 0, false, '', 'firefox');
+  expect(mockServer.startAudit).toBeCalledWith({
+    firstURL: 'http://test/',
+    standard: 'wcag2aa',
+    checkSubdomains: true,
+    maxDepth: 1,
+    maxPagesPerDomain: 0,
+    sitemaps: false,
+    includeMatch: '',
+    browser: 'firefox',
+    postLoadingDelay: 0,
+  });
   // check AuditStatus will be displayed afterwards
   expect(mockHistory.push).toBeCalledWith('/audits/aid1/status');
 });

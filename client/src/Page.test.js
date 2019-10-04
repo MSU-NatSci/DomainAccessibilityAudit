@@ -19,7 +19,7 @@ it("renders with violation information", async () => {
   // breadcrumbs
   expect(container.querySelector('nav').textContent).toBe('AuditsAuditDomainPage');
   // title
-  expect(container.querySelector('h2').textContent).toBe('purl1');
+  expect(container.querySelector('h1').textContent).toBe('purl1');
   // violation table
   const violationTable = container.querySelector('table');
   expect(violationTable.querySelector('tr td').textContent).toContain('description1');

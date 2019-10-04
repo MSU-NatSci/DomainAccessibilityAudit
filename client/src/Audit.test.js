@@ -12,10 +12,10 @@ const getByTagAndContent = (container, tag, expr) => {
     .find(el => expr.test(el.textContent));
 };
 const getTableBySectionTitle = (container, titleExpr) => {
-  const h3 = getByTagAndContent(container, 'h3', titleExpr);
-  if (h3 == null)
-    throw new Error("h3 " + titleExpr + " not found");
-  return h3.parentNode.querySelector('table');
+  const h2 = getByTagAndContent(container, 'h2', titleExpr);
+  if (h2 == null)
+    throw new Error("h2 " + titleExpr + " not found");
+  return h2.parentNode.querySelector('table');
 };
 const init = async (auditId) => {
   const mockServer = new MockServerAPI();
@@ -27,7 +27,7 @@ const init = async (auditId) => {
 it("renders with audit information (2 domains)", async () => {
   const { container } = await init('aid1');
   // title
-  expect(container.querySelector('h2').textContent).toBe('initialDomainName1');
+  expect(container.querySelector('h1').textContent).toBe('initialDomainName1');
   // audit parameters table
   const parameterTable = getTableBySectionTitle(container, /^AUDIT PARAMETERS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('firstURL1');
@@ -48,7 +48,7 @@ it("renders correctly when the audit contains only 1 domain", async () => {
   // in this case, violations and pages come from the domain, not the audit
   const { container } = await init('aid2');
   // title
-  expect(container.querySelector('h2 span').textContent).toBe('initialDomainName2');
+  expect(container.querySelector('h1 span').textContent).toBe('initialDomainName2');
   // audit parameters table
   const parameterTable = getTableBySectionTitle(container, /^AUDIT PARAMETERS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('firstURL2');

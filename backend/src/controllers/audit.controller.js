@@ -47,7 +47,7 @@ exports.get_audit = (req, res) => {
 
 exports.start = (req, res) => {
   const { firstURL, standard, checkSubdomains, maxDepth,
-    maxPagesPerDomain, sitemaps, includeMatch, browser } = req.body;
+    maxPagesPerDomain, sitemaps, includeMatch, browser, postLoadingDelay } = req.body;
   if (!req.session.admin) {
     res.json({ success: false, error: "Admin priviledge is needed to create audits." });
     return;
@@ -93,11 +93,15 @@ exports.start = (req, res) => {
     res.json({ success: false, error: "Missing or wrong parameter: browser" });
     return;
   }
+  if (typeof(postLoadingDelay) != 'number') {
+    res.json({ success: false, error: "Missing or wrong parameter: postLoadingDelay" });
+    return;
+  }
   cleanupRunningAudits();
   const newAudit = new Audit();
   runningAudits.push(newAudit);
-  newAudit.start(firstURL, standard, checkSubdomains, maxDepth,
-    maxPagesPerDomain, sitemaps, includeMatch, browser)
+  newAudit.start({ firstURL, standard, checkSubdomains, maxDepth,
+    maxPagesPerDomain, sitemaps, includeMatch, browser, postLoadingDelay })
     .then((audit) => res.json({ success: true, data: audit }))
     .catch((err) => {
       console.log(err);

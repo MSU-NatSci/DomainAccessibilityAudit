@@ -21,7 +21,7 @@ class AuditForm extends React.Component {
     super(props);
     this.state = {
       error: null,
-      url: '',
+      firstURL: '',
       standard: 'wcag2aa',
       checkSubdomains: true,
       maxDepth: 1,
@@ -29,6 +29,7 @@ class AuditForm extends React.Component {
       sitemaps: false,
       includeMatch: '',
       browser: 'firefox',
+      postLoadingDelay: 0,
       auditId: null,
     };
     this.checkDelay = 1000;
@@ -52,10 +53,18 @@ class AuditForm extends React.Component {
   async startAudit() {
     this.setState({ error: null });
     try {
-      const audit = await this.props.server.startAudit(this.state.url,
-        this.state.standard, this.state.checkSubdomains, this.state.maxDepth,
-        this.state.maxPagesPerDomain, this.state.sitemaps, this.state.includeMatch,
-        this.state.browser);
+      const params = {
+        firstURL: this.state.firstURL,
+        standard: this.state.standard,
+        checkSubdomains: this.state.checkSubdomains,
+        maxDepth: this.state.maxDepth,
+        maxPagesPerDomain: this.state.maxPagesPerDomain,
+        sitemaps: this.state.sitemaps,
+        includeMatch: this.state.includeMatch,
+        browser: this.state.browser,
+        postLoadingDelay: this.state.postLoadingDelay,
+      };
+      const audit = await this.props.server.startAudit(params);
       this.props.history.push('/audits/' + audit.id + '/status');
     } catch (error) {
       this.setState({ error });
@@ -80,10 +89,10 @@ class AuditForm extends React.Component {
             </Alert>
           }
           <Form onSubmit={e => { e.preventDefault(); this.startAudit(); } } className="form mt-3">
-            <Form.Group as={Row} controlId="url">
+            <Form.Group as={Row} controlId="firstURL">
               <Form.Label column sm="5">Initial URL</Form.Label>
               <Col sm="7">
-                <Form.Control name="url" type="url" size="35" value={this.state.url}
+                <Form.Control name="firstURL" type="url" size="35" value={this.state.firstURL}
                   onChange={e => this.handleChange(e)}/>
               </Col>
             </Form.Group>
@@ -145,6 +154,13 @@ class AuditForm extends React.Component {
                   <option value="firefox">Firefox</option>
                   <option value="chrome">Chromium</option>
                 </Form.Control>
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="postLoadingDelay">
+              <Form.Label column sm="5">Additional delay to let dynamic pages load (ms)</Form.Label>
+              <Col sm="7">
+                <Form.Control name="postLoadingDelay" type="number" size="10" value={this.state.postLoadingDelay}
+                  onChange={e => this.handleChange(e)}/>
               </Col>
             </Form.Group>
             <div className="text-center">

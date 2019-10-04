@@ -19,24 +19,24 @@ describe('displays content based on paths', () => {
     route = '/';
     const { container } = render(<App/>);
     await wait();
-    expect(container.querySelector('h3').textContent).toBe("Saved Audits");
+    expect(container.querySelector('h2').textContent).toBe("Saved Audits");
   });
   it("works with an audit path", async () => {
     route = '/audits/aid1';
     const { container } = render(<App/>);
     await wait();
-    expect(container.querySelector('h2').textContent).toBe('initialDomainName1');
+    expect(container.querySelector('h1').textContent).toBe('initialDomainName1');
   });
   it("works with a domain path", async () => {
     route = '/domains/did1';
     const { container } = render(<App/>);
     await wait();
-    expect(container.querySelector('h2').textContent).toBe('domain1');
+    expect(container.querySelector('h1').textContent).toBe('domain1');
   });
   it("works with a page path", async () => {
     route = '/pages/pid1';
     const { container } = render(<App/>);
     await wait();
-    expect(container.querySelector('h2').textContent).toBe('purl1');
+    expect(container.querySelector('h1').textContent).toBe('purl1');
   });
 });

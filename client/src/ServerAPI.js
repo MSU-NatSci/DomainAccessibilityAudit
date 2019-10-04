@@ -61,15 +61,10 @@ class ServerAPI {
   getAuditStatus(auditId) {
     return this.request('GET', `/api/audits/${auditId}/status`);
   }
-  
-  startAudit(firstURL, standard, checkSubdomains, maxDepth,
-      maxPagesPerDomain, sitemaps, includeMatch, browser) {
+  startAudit(params) {
     this.cache.lastAuditList = null;
-    return this.request('POST', '/api/audits/start',
-      {firstURL, standard, checkSubdomains, maxDepth, maxPagesPerDomain,
-        sitemaps, includeMatch, browser});
+    return this.request('POST', '/api/audits/start', params);
   }
-  
   stopAudit(auditId) {
     return this.request('POST', `/api/audits/${auditId}/stop`);
   }

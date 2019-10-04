@@ -106,7 +106,8 @@ describe('Audit Endpoints', () => {
         maxPagesPerDomain: 0,
         sitemaps: false,
         includeMatch: '',
-        browser: 'firefox'
+        browser: 'firefox',
+        postLoadingDelay: 0,
       })
       .expect('Content-Type', /json/)
       .expect(200);
@@ -163,7 +164,8 @@ describe('Audit Endpoints', () => {
         maxPagesPerDomain: 0,
         sitemaps: false,
         includeMatch: '',
-        browser: 'firefox'
+        browser: 'firefox',
+        postLoadingDelay: 0,
       })
       .expect('Content-Type', /json/)
       .expect(200);
