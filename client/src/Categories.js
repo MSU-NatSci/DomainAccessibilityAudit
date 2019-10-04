@@ -31,14 +31,30 @@ class Categories extends Component {
     const total = data.reduce((sum, cat) => sum + cat.count, 0);
     if (data.length < 2)
       return null;
+    
+    // create the "other" category
+    // we don't want a category with less than 7%,
+    // we want other to be either 0 or at least 6%,
+    // unless that would require using categories with 12% or more
     let otherCount = 0;
-    data = data.filter(cat => {
-      if (cat.count / total < 0.08) {
-        otherCount += cat.count;
-        return false;
+    let threshold = 0.07;
+    const targetOtherCount = 0.06;
+    const maxThreshold = 0.12;
+    const moveToOther = {};
+    do {
+      for (const cat of data) {
+        if (moveToOther[cat.name] === 1)
+          break;
+        if (cat.count / total < threshold) {
+          moveToOther[cat.name] = 1;
+          otherCount += cat.count;
+        }
       }
-      return true;
-    });
+      threshold += 0.01;
+    } while (otherCount > 0 && otherCount / total < targetOtherCount &&
+      threshold < maxThreshold);
+    data = data.filter(cat => moveToOther[cat.name] !== 1);
+    
     data = data.sort((c1, c2) => c2.count - c1.count);
     if (otherCount > 0) {
       data.push({
