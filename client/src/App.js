@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from "history";
 import { wrapHistory } from "oaf-react-router";
+import { faUniversalAccess } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import './App.scss';
 import ServerAPI from './ServerAPI';
@@ -64,7 +66,12 @@ class App extends Component {
     return (
       <Router history={this.history}>
         <header>
-          <p className="bannerTitle">Domain Accessibility Audit</p>
+          <p className="bannerTitle">
+            <a href="https://github.com/MSU-NatSci/DomainAccessibilityAudit">
+              Domain Accessibility Audit
+            </a>&nbsp;
+            <FontAwesomeIcon icon={faUniversalAccess} color="#3e50b4" size="lg"/>
+          </p>
         </header>
         <main>
           <Switch>
