@@ -56,7 +56,7 @@ class Categories extends Component {
     data = data.filter(cat => moveToOther[cat.name] !== 1);
     
     data = data.sort((c1, c2) => c2.count - c1.count);
-    if (otherCount > 0) {
+    if (Math.round(100 * otherCount / total) > 0) {
       data.push({
         name: "other",
         count: otherCount,
