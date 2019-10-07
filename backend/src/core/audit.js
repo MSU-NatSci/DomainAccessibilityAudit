@@ -543,19 +543,27 @@ export default class Audit {
    */
   continueWithHead(originPage, url, domainName, res, sslError) {
     // ignore bad looking URLs that result in a 404 (probably a bad link)
-    if (sslError || res.status != 404 || !url.match(/.https?:\/\/|\s/)) {
-      this.findDomain(domainName, originPage).then((domain) => {
-        if (this.params.maxPagesPerDomain == 0 ||
-            domain.pageCount < this.params.maxPagesPerDomain) {
-          const page = this.newPage(originPage, domain, url,
-            sslError ? null : res.status);
-          if (sslError)
-            page.errorMessage = "Insecure version of SSL !";
-          this.pagesToCheck.push(page);
-          domain.pageCount++;
-        }
-      });
+    if (res != null && res.status == 404 && url.match(/.https?:\/\/|\s/)) {
+      console.log("Ignored " + url + " (probably a bad link)");
+      return;
     }
+    // ignore pages with 401/407 status (we don't have a way to authenticate)
+    // see https://github.com/w3c/webdriver/issues/385
+    if (res != null && (res.status == 401 || res.status == 407)) {
+      console.log("Ignored " + url + " because of status code " + res.status);
+      return;
+    }
+    this.findDomain(domainName, originPage).then((domain) => {
+      if (this.params.maxPagesPerDomain == 0 ||
+          domain.pageCount < this.params.maxPagesPerDomain) {
+        const page = this.newPage(originPage, domain, url,
+          sslError ? null : res.status);
+        if (sslError)
+          page.errorMessage = "Insecure version of SSL !";
+        this.pagesToCheck.push(page);
+        domain.pageCount++;
+      }
+    });
   }
   
   /**
