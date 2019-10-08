@@ -24,7 +24,14 @@
   "author": "Damien Guillaume",
   "license": "GPL-3.0",
   "devDependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.0",
+    "husky": "^3.0.8"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "docker-compose run --rm accessibility_audit npm test",
+      "pre-push": "docker-compose run --rm accessibility_audit npm test"
+    }
+  }
 }
