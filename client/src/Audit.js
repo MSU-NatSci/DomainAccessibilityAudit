@@ -41,6 +41,12 @@ class Audit extends Component {
   }
   
   render() {
+    const standardTitles = {
+      wcag2a: "WCAG 2.0 Level A",
+      wcag2aa: "WCAG 2.0 Level AA",
+      wcag21aa: "WCAG 2.1 Level AA",
+      section508: "Section 508",
+    };
     return (
       <>
         <Breadcrumb>
@@ -66,6 +72,10 @@ class Audit extends Component {
                   <tr>
                     <th>First URL</th>
                     <td className="code">{this.state.audit.firstURL}</td>
+                  </tr>
+                  <tr>
+                    <th>Standard</th>
+                    <td>{standardTitles[this.state.audit.standard]}</td>
                   </tr>
                   <tr>
                     <th>Check subdomains</th>
