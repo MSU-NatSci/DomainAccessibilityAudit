@@ -31,7 +31,7 @@ it("renders with audit information (2 domains)", async () => {
   // audit parameters table
   const parameterTable = getTableBySectionTitle(container, /^AUDIT PARAMETERS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('firstURL1');
-  expect(parameterTable.querySelector('tr:nth-of-type(2) td').textContent).toBe('Yes');
+  expect(parameterTable.querySelector('tr:nth-of-type(3) td').textContent).toBe('Yes');
   // violation table
   const violationTable = getTableBySectionTitle(container, /^VIOLATIONS$/i);
   expect(violationTable.querySelector('tr td').textContent).toContain('description1');
@@ -52,7 +52,7 @@ it("renders correctly when the audit contains only 1 domain", async () => {
   // audit parameters table
   const parameterTable = getTableBySectionTitle(container, /^AUDIT PARAMETERS$/i);
   expect(parameterTable.querySelector('tr td').textContent).toBe('firstURL2');
-  expect(parameterTable.querySelector('tr:nth-of-type(2) td').textContent).toBe('No');
+  expect(parameterTable.querySelector('tr:nth-of-type(3) td').textContent).toBe('No');
   // violation table
   const violationTable = getTableBySectionTitle(container, /^VIOLATIONS$/i);
   expect(violationTable.querySelector('tr td').textContent).toContain('description3');

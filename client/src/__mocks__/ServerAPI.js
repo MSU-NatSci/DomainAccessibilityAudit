@@ -4,7 +4,7 @@ const initialAudits = {
     _id: 'aid1',
     id: 'aid1',
     firstURL: 'firstURL1',
-    standard: 'standard',
+    standard: 'wcag2aa',
     checkSubdomains: true,
     maxDepth: 'maxDepth',
     maxPagesPerDomain: 'maxPagesPerDomain',
@@ -79,7 +79,7 @@ const initialAudits = {
   aid2: { // audit with 1 domain
     _id: 'aid2',
     firstURL: 'firstURL2',
-    standard: 'standard',
+    standard: 'wcag2aa',
     checkSubdomains: false,
     maxDepth: 'maxDepth',
     maxPagesPerDomain: 'maxPagesPerDomain',
