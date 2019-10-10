@@ -21,13 +21,14 @@ class Domain extends Component {
     };
   }
   
-  componentDidMount() {
-    this.props.server.getDomain(this.props.match.params.domainId)
-      .then((domain) => {
-        document.title = "Accessibility Audit: " + domain.name;
-        this.setState({ domain });
-      })
-      .catch((error) => this.setState({ error }));
+  async componentDidMount() {
+    try {
+      const domain = await this.props.server.getDomain(this.props.match.params.domainId);
+      document.title = "Accessibility Audit: " + domain.name;
+      this.setState({ domain });
+    } catch (error) {
+      this.setState({ error });
+    }
   }
   
   render() {

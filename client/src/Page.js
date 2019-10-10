@@ -21,13 +21,14 @@ class Page extends Component {
     };
   }
   
-  componentDidMount() {
-    this.props.server.getPage(this.props.match.params.pageId)
-      .then((page) => {
-        document.title = "Accessibility Audit: " + page.url;
-        this.setState({ page });
-      })
-      .catch((error) => this.setState({ error }));
+  async componentDidMount() {
+    try {
+      const page = await this.props.server.getPage(this.props.match.params.pageId);
+      document.title = "Accessibility Audit: " + page.url;
+      this.setState({ page });
+    } catch (error) {
+      this.setState({ error });
+    }
   }
   
   render() {

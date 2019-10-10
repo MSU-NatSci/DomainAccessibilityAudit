@@ -26,12 +26,13 @@ class AuditList extends Component {
     };
   }
   
-  componentDidMount() {
-    this.props.server.getAudits()
-      .then((audits) => {
-        this.setState({ audits });
-      })
-      .catch((error) => this.setState({ error }));
+  async componentDidMount() {
+    try {
+      const audits = await this.props.server.getAudits();
+      this.setState({ audits });
+    } catch (error) {
+      this.setState({ error });
+    }
     document.title = "Accessibility Audits";
   }
   

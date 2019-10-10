@@ -23,21 +23,19 @@ class Audit extends Component {
     };
   }
   
-  componentDidMount() {
-    this.props.server.getAudit(this.props.match.params.auditId)
-      .then((audit) => {
-        document.title = "Accessibility Audit: " + audit.initialDomainName;
-        this.setState({ audit });
-        if (audit.domains && audit.domains.length === 1) {
-          // load the domain when there is only 1 for the audit
-          this.props.server.getDomain(audit.domains[0].id)
-            .then((domain) => {
-              this.setState({ domain });
-            })
-            .catch((error) => this.setState({ error }));
-        }
-      })
-      .catch((error) => this.setState({ error }));
+  async componentDidMount() {
+    try {
+      const audit = await this.props.server.getAudit(this.props.match.params.auditId);
+      document.title = "Accessibility Audit: " + audit.initialDomainName;
+      this.setState({ audit });
+      if (audit.domains && audit.domains.length === 1) {
+        // load the domain when there is only 1 for the audit
+        const domain = await this.props.server.getDomain(audit.domains[0].id);
+        this.setState({ domain });
+      }
+    } catch (error) {
+      this.setState({ error });
+    }
   }
   
   render() {
