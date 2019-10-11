@@ -2,6 +2,7 @@ import React from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -96,13 +97,30 @@ class AuditStatus extends React.Component {
         {this.state.status && this.state.status.running !== undefined &&
           <section>
             <h2>Status</h2>
-            <ul>
-              <li>Running: {this.state.status.running ? "Yes" : "No"}</li>
-              <li>Checked URLs: {this.state.status.nbCheckedURLs}</li>
-              <li>URLs to check: {this.state.status.nbURLsToCheck} (more might be added later)</li>
-              <li>Violations found: {this.state.status.nbViolations}</li>
-              <li>Scan errors: {this.state.status.nbScanErrors}</li>
-            </ul>
+            <Table bordered size="sm" className="data">
+              <tbody>
+                <tr>
+                  <th>Running</th>
+                  <td>{this.state.status.running ? "Yes" : "No"}</td>
+                </tr>
+                <tr>
+                  <th>Checked URLs</th>
+                  <td>{this.state.status.nbCheckedURLs}</td>
+                </tr>
+                <tr>
+                  <th>URLs to check</th>
+                  <td>{this.state.status.nbURLsToCheck} (more might be added later)</td>
+                </tr>
+                <tr>
+                  <th>Violations found</th>
+                  <td>{this.state.status.nbViolations}</td>
+                </tr>
+                <tr>
+                  <th>Scan errors</th>
+                  <td>{this.state.status.nbScanErrors}</td>
+                </tr>
+              </tbody>
+            </Table>
           </section>
         }
         <section>

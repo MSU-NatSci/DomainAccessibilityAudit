@@ -24,9 +24,10 @@ it("renders with audit information", async () => {
   const { container } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
   // wait for getAuditStatus to be called
   await waitForElement(
-    () => container.querySelector('ul'),
+    () => container.querySelector('table'),
     { container }
   );
+  expect(container.querySelector('td').textContent).toBe('Yes');
   expect(mockServer.getAuditStatus).toBeCalledWith('aid1');
 });
 
@@ -38,7 +39,7 @@ it("can stop an audit", async () => {
 
   const { container, getByText } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
   await waitForElement(
-    () => container.querySelector('ul'),
+    () => container.querySelector('table'),
     { container }
   );
   fireEvent.click(getByText("Stop the audit"));
