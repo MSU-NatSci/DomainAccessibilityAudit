@@ -33,6 +33,7 @@ COPY --chown=node:node package.json package-lock.json ./
 COPY --chown=node:node client/package.json client/package-lock.json ./client/
 COPY --chown=node:node backend/package.json backend/package-lock.json backend/babel.config.js ./backend/
 
+ENV HUSKY_SKIP_INSTALL 1
 RUN npm install
 
 CMD ["npm", "run", "start"]
