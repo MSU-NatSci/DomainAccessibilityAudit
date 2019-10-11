@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import PropTypes from 'prop-types';
 
@@ -20,6 +21,7 @@ class Audit extends Component {
       audit: null,
       domain: null, // used when there is only 1 domain for the audit
       error: null,
+      statusLink: false,
     };
   }
   
@@ -32,6 +34,15 @@ class Audit extends Component {
         // load the domain when there is only 1 for the audit
         const domain = await this.props.server.getDomain(audit.domains[0].id);
         this.setState({ domain });
+      }
+      if (!audit.complete) {
+        try {
+          const status = await this.props.server.getAuditStatus(this.props.match.params.auditId);
+          if (status.running)
+            this.setState({ statusLink: true });
+        } catch (error) {
+          // ignore this one (the audit is probably not in memory anymore)
+        }
       }
     } catch (error) {
       this.setState({ error });
@@ -63,6 +74,9 @@ class Audit extends Component {
           : ''}</h1>
         {this.state.audit &&
           <>
+            {this.state.statusLink &&
+              <p>The audit is still running. <Link to={'/audits/' + this.props.match.params.auditId + '/status'}>See status page</Link>.</p>
+            }
             <section>
               <h2>Audit Parameters</h2>
               <Table bordered size="sm" className="data">
