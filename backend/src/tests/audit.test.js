@@ -135,7 +135,7 @@ describe('Audit Endpoints', () => {
       expect(res.body.success).toBe(true);
       running = res.body.data.running;
     }
-  }, 5000); // 5s timeout
+  }, 10000); // 10s timeout
   it('deletes an audit', async () => {
     expect(auditId).toBeTruthy();
     await agent
@@ -207,7 +207,7 @@ describe('Audit Endpoints', () => {
     const categories = res.body.data.categories;
     expect(categories).toHaveProperty('language');
     domainId = res.body.data.domains[0]._id;
-  }, 5000); // 5s timeout
+  }, 10000); // 10s timeout
 });
 
 describe('Domain Endpoints', () => {

@@ -327,14 +327,13 @@ export default class Audit {
    * Stop the driver and saves the audit object with updated info.
    * This marks the end of the audit.
    */
-  endAudit() {
+  async endAudit() {
     console.log("endAudit");
-    this.running = false;
-    this.driver.quit();
-    this.driver = null;
     this.dbObject.complete = this.pagesToCheck.length == 0 && this.headToDo.length == 0;
     this.dbObject.dateEnded = new Date();
-    this.dbObject.save();
+    await Promise.all([this.driver.quit(), this.dbObject.save()]);
+    this.driver = null;
+    this.running = false;
   }
   
   /**
