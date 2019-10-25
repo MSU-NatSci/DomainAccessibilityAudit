@@ -1,17 +1,17 @@
-FROM debian:sid
-# We are using sid instead of stretch to use a recent version of Firefox
+FROM debian:buster
 
 WORKDIR /app
 
 # Get Chromium, Firefox and Node
-RUN apt-get update && apt-get install -y curl gnupg
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN apt-get update && apt-get install -y curl gnupg vim
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -yq \
-  chromium chromium-driver firefox xvfb xsel unzip nodejs wget
+  chromium chromium-driver firefox-esr xvfb xsel unzip nodejs wget
 
 # geckodriver
 # see latest at https://github.com/mozilla/geckodriver/releases/
-RUN wget -q "https://github.com/mozilla/geckodriver/releases/download/v0.25.0/geckodriver-v0.25.0-linux64.tar.gz" \
+RUN wget -q "https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz" \
   -O /tmp/geckodriver.tgz \
   && tar zxf /tmp/geckodriver.tgz -C /usr/bin/ \
   && rm /tmp/geckodriver.tgz
