@@ -292,6 +292,7 @@ export default class Audit {
         id: subObj._id,
         count: violationCount,
       }] : [];
+      object.violationStats.set(violation.id, vs);
     } else {
       vs.total += violationCount;
       if (subObj != null) {
@@ -311,7 +312,6 @@ export default class Audit {
         }
       }
     }
-    object.violationStats.set(violation.id, vs);
     // update category stats
     if (violation.category != null) {
       let catCount = object.categories.get(violation.category);
