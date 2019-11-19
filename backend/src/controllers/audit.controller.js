@@ -37,7 +37,7 @@ exports.get_audit = (req, res) => {
   }
   AuditModel.findById(auditId).populate({
     path: 'domains',
-    select: '-violationStats',
+    select: 'name nbCheckedURLs nbViolations',
     options: { sort: { name: 1 } },
   }).exec((err, audit) => {
     if (err)
