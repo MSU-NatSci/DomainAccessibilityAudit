@@ -17,7 +17,9 @@ const cleanupRunningAudits = () => {
 };
 
 exports.get_audits = (req, res) => {
-  AuditModel.find().collation({locale:'en', strength: 2})
+  AuditModel.find()
+    .select('initialDomainName dateStarted nbCheckedURLs nbViolations')
+    .collation({locale:'en', strength: 2})
     .sort({dateStarted: -1})
     .exec((err, audits) => {
       if (err)
