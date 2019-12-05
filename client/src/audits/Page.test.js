@@ -2,10 +2,10 @@ import React from 'react';
 import { render, wait } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import MockServerAPI from '../ServerAPI';
 import Page from './Page';
-import MockServerAPI from './ServerAPI';
 
-jest.mock('./ServerAPI');
+jest.mock('../ServerAPI');
 
 const init = async (pageId) => {
   const mockServer = new MockServerAPI();

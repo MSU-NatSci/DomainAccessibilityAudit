@@ -3,9 +3,9 @@ import { render, wait } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Audit from './Audit';
-import MockServerAPI from './ServerAPI';
+import MockServerAPI from '../ServerAPI';
 
-jest.mock('./ServerAPI');
+jest.mock('../ServerAPI');
 
 const getByTagAndContent = (container, tag, expr) => {
   return Array.from(container.querySelectorAll(tag))

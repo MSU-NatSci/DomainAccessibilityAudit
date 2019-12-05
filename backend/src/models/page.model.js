@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const PagesSchema = new Schema({
-  auditId: { type: mongoose.Schema.Types.ObjectId, ref: 'Audit', index: true },
-  domainId: { type: mongoose.Schema.Types.ObjectId, ref: 'Domain', index: true },
+  auditId: { type: Schema.Types.ObjectId, ref: 'Audit', index: true },
+  domainId: { type: Schema.Types.ObjectId, ref: 'Domain', index: true },
   url: String,
   status: String,
   errorMessage: String,

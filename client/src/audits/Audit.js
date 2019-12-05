@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import PropTypes from 'prop-types';
 
-import ServerAPI from './ServerAPI';
-import ViolationStats from './ViolationStats';
+import ServerAPI from '../ServerAPI';
 import Categories from './Categories';
 import DomainTable from './DomainTable';
 import PageTable from './PageTable';
+import ViolationStats from './ViolationStats';
 
 
 class Audit extends Component {
@@ -49,6 +49,11 @@ class Audit extends Component {
     }
   }
   
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.error && !prevState.error)
+      document.querySelector('.alert').focus();
+  }
+  
   render() {
     const standardTitles = {
       wcag2a: "WCAG 2.0 Level A",
@@ -64,11 +69,10 @@ class Audit extends Component {
           </LinkContainer>
           <Breadcrumb.Item active>Audit</Breadcrumb.Item>
         </Breadcrumb>
-        {this.state.error &&
-          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
-            {this.state.error}
-          </Alert>
-        }
+        <Alert show={this.state.error != null} variant="danger" dismissible
+            onClose={() => this.setState({ error: null })} tabIndex="0">
+          {this.state.error}
+        </Alert>
         <h1>{this.state.audit ?
           <span className="code">{this.state.audit.initialDomainName}</span>
           : ''}</h1>

@@ -7,13 +7,15 @@ It reports statistics of violations for the whole audit, domains and pages.
 ## To start it
 - Install [Docker](https://docs.docker.com/install/#supported-platforms) and [docker-compose](https://docs.docker.com/compose/install/) if needed.
 - Edit a `.env` file at the root of this folder (next to the README),
-  with the following line ending with your admin password:
+  with the following parameters:
   ```
+  ADMIN_USERNAME=
   ADMIN_PASSWORD=
   ```
   (this password is needed to create and remove audits)
 - `docker-compose up -d`
 - Direct a browser to `http://localhost/`.
+- Use the username and the password you entered to create audits.
 
 ## To stop it
 - A running audit can be stopped with the Stop button in the form to start a new audit.
@@ -42,6 +44,8 @@ It reports statistics of violations for the whole audit, domains and pages.
 - Results can be browsed on a dynamic website. Access to create new audits or remove them is protected by password.
 - Results include violation statistics with links to Deque documentation given for the whole audit (including subdomains), for each domain and for each page.
 - Easy way to see which domains or pages are most affected by specific violations.
+- User and group management, with authorizations based on domains.
+- 2 methods of authentication: local and SAML (experimental).
 
 ## Other environment variables
 Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `.env`:
@@ -52,6 +56,21 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
 - `DEVELOPMENT_PORT`: the port used for development (3142 by default)
 - `DEVELOPMENT_API_PORT`: the port used for API calls in development (3143 by default)
 - `PRODUCTION_PORT`: the port used for production, except with SSL (80 by default)
+- `SAML_ENTRYPOINT`: SAML authentication: identity provider entrypoint
+- `SAML_ISSUER`: SAML authentication: issuer string to supply to identity provider
+- `SAML_CERT_FILENAME`: SAML authentication: name of the IdP's public signing certificate used to validate the signatures of the incoming SAML Responses (should be placed in `/certs`)
+- `SAML_PRIVATE_CERT_FILENAME`: SAML authentication: name of the certificate used to sign requests sent to the IdP
+
+## Permissions
+Permissions are always applied to groups. Two groups are automatically created:
+- `Superusers`: for application administrators, with all permissions enabled. The administrator given in the `.env` file is automatically added to this group.
+- `Guests`: for users who are not logged in. By default, they are only able to read created audits, but this permission can be removed.
+
+Another group can be created with SAML authentication:
+- `Authenticated`: users who passed SAML authentication but do not have a matching user. They can have different permissions from guests.
+More groups can be created and assigned users.
+
+There are separate permissions to read audits, create audits, remove audits, and edit users and groups. The audit permissions can also be given for specific domains (which include subdomains).
 
 ## FAQ
 - How to set up SSL ?  
@@ -97,11 +116,10 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
 - Option to only start subdomain audits at the root.
 - Reporting more than accessibility violations.
 - Ability to pause an audit.
-- User management beyond a simple admin password.
 - Option to ignore pages returning a 404 status code.
 - Regular expression to ignore some URLs.
 - Easy way to export data.
-- Easy way to add branding to the UI.
+- Easy way to add branding to the UI (header and footer).
 
 ## Licence
 GPL 3.0.
@@ -118,10 +136,12 @@ It can also be used to check the whole project, using Docker:
 - `docker-compose run --rm accessibility_audit npm run lint`
 
 ## Technologies used
-- [Docker](https://www.docker.com/)
 - [axe](https://github.com/dequelabs/axe-core)
 - [Selenium WebDriver](https://www.seleniumhq.org/projects/webdriver/)
 - [axe-webdriverjs](https://github.com/dequelabs/axe-webdriverjs)
+- [Passport](http://www.passportjs.org/)
+- [Passport-SAML](https://github.com/bergie/passport-saml)
+- [Docker](https://www.docker.com/)
 - [Node](https://nodejs.org/)
 - [Express](https://expressjs.com/)
 - [React](https://reactjs.org/)

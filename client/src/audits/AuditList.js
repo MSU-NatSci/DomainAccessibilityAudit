@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +11,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import ServerAPI from './ServerAPI';
+import ServerAPI from '../ServerAPI';
+import Login from '../access/Login';
+import Permissions from '../access/Permissions';
 
 
 class AuditList extends Component {
@@ -21,28 +22,39 @@ class AuditList extends Component {
     super(props);
     this.state = {
       audits: null,
+      username: null,
       password: null,
       error: null,
     };
   }
   
   async componentDidMount() {
+    await this.getAudits();
+    document.title = "Accessibility Audits";
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.error && !prevState.error)
+      document.querySelector('.alert').focus();
+  }
+  
+  async getAudits() {
     try {
       const audits = await this.props.server.getAudits();
       this.setState({ audits });
     } catch (error) {
       this.setState({ error });
     }
-    document.title = "Accessibility Audits";
   }
   
-  handleChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-    this.setState({
-      [name]: value
-    });
+  async localLogin(username, password) {
+    await this.props.localLogin(username, password);
+    this.getAudits();
+  }
+  
+  async logout() {
+    await this.props.logout();
+    this.getAudits();
   }
   
   removeAudit(auditId) {
@@ -57,17 +69,20 @@ class AuditList extends Component {
   }
   
   render() {
+    if (!this.props.permissions)
+      return null;
     let auditsHTML = null;
     if (this.state.audits != null) {
       const sortedAudits = [...this.state.audits]
         .sort((a,b) => b.dateStarted - a.dateStarted);
       auditsHTML = sortedAudits.map(audit => (
+        this.props.permissions.domainReadAllowed(audit.initialDomainName) &&
         <tr key={audit._id}>
           <td className="code"><Link to={'/audits/'+audit._id}>{audit.initialDomainName}</Link></td>
           <td className="text-right">{(new Date(audit.dateStarted)).toLocaleDateString()}</td>
           <td className="text-right">{audit.nbCheckedURLs}</td>
           <td className="text-right">{audit.nbViolations}</td>
-          {this.props.admin &&
+          {this.props.permissions.domainDeleteAllowed(audit.initialDomainName) &&
             <td className="text-right">
               <Button title="Remove" variant="danger" size="xs" onClick={(e) => this.removeAudit(audit._id)}><FontAwesomeIcon icon={faTrashAlt} title="Remove" /></Button>
             </td>
@@ -78,31 +93,30 @@ class AuditList extends Component {
     return (
       <>
         <h1>Accessibility Audits</h1>
-        {this.state.error &&
-          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
-            {this.state.error}
-          </Alert>
-        }
-        {this.props.admin ?
+        <Alert show={this.state.error != null} variant="danger" dismissible
+            onClose={() => this.setState({ error: null })} tabIndex="0">
+          {this.state.error}
+        </Alert>
+        <Login server={this.props.server} permissions={this.props.permissions}
+          localLogin={(u,p) => this.localLogin(u,p)} logout={() => this.logout()}/>
+        {this.props.permissions.anyAuditCreateAllowed() &&
           <>
-            <Button variant="secondary" onClick={e => this.props.logout()} className="float-right">
-              Log out
-            </Button>
             <LinkContainer to="/audits/create">
               <Button>Start a new audit</Button>
             </LinkContainer>
           </>
-          :
-          <Form inline onSubmit={(e) => {
-            e.preventDefault();
-            this.props.login(this.state.password);
-          }}>
-            <Form.Group controlId="password">
-              <Form.Label className="mx-2">Admin login</Form.Label>
-              <Form.Control className="mx-2" name="password" type="password" onChange={e => this.handleChange(e)}/>
-            </Form.Group>
-            <Button className="mx-2" size="sm" type="submit">Log in</Button>
-          </Form>
+        }
+        {this.props.permissions.userAndGroupEditAllowed() &&
+          <>
+            {' '}
+            <LinkContainer to="/users/">
+              <Button>Users</Button>
+            </LinkContainer>
+            {' '}
+            <LinkContainer to="/groups/">
+              <Button>Groups</Button>
+            </LinkContainer>
+          </>
         }
         {auditsHTML &&
           <section>
@@ -114,9 +128,8 @@ class AuditList extends Component {
                   <th className="text-right">Date</th>
                   <th className="text-right">Checked URLs</th>
                   <th className="text-right">Violations</th>
-                  {this.props.admin &&
-                    <th className="text-right"></th>
-                  }
+                  {this.props.permissions.anyAuditCreateAllowed() &&
+                    <th className="text-right"></th>}
                 </tr>
               </thead>
               <tbody>
@@ -132,8 +145,8 @@ class AuditList extends Component {
 }
 
 AuditList.propTypes = {
-  admin: PropTypes.bool,
-  login: PropTypes.func.isRequired,
+  permissions: PropTypes.instanceOf(Permissions),
+  localLogin: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   server: PropTypes.instanceOf(ServerAPI).isRequired,
 };

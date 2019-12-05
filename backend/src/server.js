@@ -8,11 +8,15 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import fs from 'fs';
 import https from 'https';
+import passport from 'passport';
 
 import appRoute from './routes/app.route';
 import auditRoute from './routes/audit.route';
 import domainRoute from './routes/domain.route';
 import pageRoute from './routes/page.route';
+import userRoute from './routes/user.route';
+import groupRoute from './routes/group.route';
+import { initPassport, createGuestGroup, createSuperuserGroup } from './core/permissions';
 
 if (!process.env.ADMIN_PASSWORD)
   console.log('WARNING: You need to define a password in .env and restart docker-compose.');
@@ -31,10 +35,16 @@ app.use(session({
   saveUninitialized: false,
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+initPassport();
+
 app.use('/api/app', appRoute);
 app.use('/api/audits', auditRoute);
 app.use('/api/domains', domainRoute);
 app.use('/api/pages', pageRoute);
+app.use('/api/users', userRoute);
+app.use('/api/groups', groupRoute);
 
 // in prod, send non-matched requests to React
 // (React's proxy only works in dev)
@@ -64,8 +74,18 @@ if (process.env.NODE_ENV == 'production' &&
 const mongooseConnectPromise = mongoose.connect(process.env.DB_URL, {
   useCreateIndex: true,
   useNewUrlParser: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-export { app, server, mongooseConnectPromise };
+// create basic groups and the admin user if they don't exist
+const dbReady = async () => {
+  await mongooseConnectPromise;
+  await Promise.all([createGuestGroup(), createSuperuserGroup()]);
+};
+if (process.env.NODE_ENV != 'test')
+  dbReady();
+
+export { app, server, dbReady };

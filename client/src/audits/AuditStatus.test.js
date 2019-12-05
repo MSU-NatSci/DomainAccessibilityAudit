@@ -2,10 +2,10 @@ import React from 'react';
 import { render, fireEvent, wait, waitForElement } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import MockServerAPI from '../ServerAPI';
 import AuditStatus from './AuditStatus';
-import MockServerAPI from './ServerAPI';
 
-jest.mock('./ServerAPI');
+jest.mock('../ServerAPI');
 
 const initialMockAudit = {
   initialDomainName: 'initialDomainName',

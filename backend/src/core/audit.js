@@ -97,7 +97,7 @@ export default class Audit {
    */
   async start(params) {
     this.params = params;
-    this.initialDomainName = this.extractDomainNameFromURL(params.firstURL);
+    this.initialDomainName = Audit.extractDomainNameFromURL(params.firstURL);
     if (this.initialDomainName == null)
       throw new Error("No initial domain name");
     this.running = true;
@@ -342,7 +342,7 @@ export default class Audit {
    * @param {string} url
    * @returns {string}
    */
-  extractDomainNameFromURL(url) {
+  static extractDomainNameFromURL(url) {
     // the URL must be absolute
     if (url.indexOf('//') == -1)
       return null;
@@ -352,6 +352,9 @@ export default class Audit {
     // we can't create an element at this point
     let ind = url.indexOf('//');
     let domainName = url.substring(ind + 2);
+    ind = domainName.indexOf(':');
+    if (ind > -1)
+      domainName = domainName.substring(0, ind);
     ind = domainName.indexOf('/');
     if (ind > -1)
       domainName = domainName.substring(0, ind);
@@ -447,7 +450,7 @@ export default class Audit {
     if (this.testedURLs.indexOf(url) > -1)
       return;
     this.testedURLs.push(url);
-    const domainName = this.extractDomainNameFromURL(url);
+    const domainName = Audit.extractDomainNameFromURL(url);
     if (domainName == null) {
       console.log("Domain not found for " + url);
       return;

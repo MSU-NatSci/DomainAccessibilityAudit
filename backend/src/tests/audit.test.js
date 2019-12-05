@@ -2,80 +2,29 @@ import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
 import request from 'supertest';
-import { app, server, mongooseConnectPromise } from '../server';
+import { app, server, dbReady } from '../server';
 
 afterAll(async () => {
   await mongoose.connection.db.dropDatabase();
   await server.close();
   await mongoose.connection.close();
 });
-beforeAll(() => mongooseConnectPromise);
+beforeAll(dbReady);
 
 let auditId, domainId, pageId;
+const testURL = 'http://localhost:' + server.address().port + '/';
 
-describe('App Endpoints', () => {
-  const agent = request.agent(app); // to pass session cookies
-  
-  it('verifies admin is not logged in initially', async () => {
-    await agent
-      .get('/api/app/admin')
-      .expect('Content-Type', /json/)
-      .expect(200, {
-        success: true,
-        data: false,
-      });
-  });
-  it('logs in', async () => {
-    await agent
-      .post('/api/app/login')
-      .send({password: 'password'})
-      .expect('Content-Type', /json/)
-      .expect(200, {
-        success: true,
-        data: true,
-      });
-  });
-  it('verifies admin is logged in', async () => {
-    await agent
-      .get('/api/app/admin')
-      .expect('Content-Type', /json/)
-      .expect(200, {
-        success: true,
-        data: true,
-      });
-  });
-  it('logs out', async () => {
-    await agent
-      .post('/api/app/logout')
-      .expect('Content-Type', /json/)
-      .expect(200, {
-        success: true,
-        data: {},
-      });
-  });
-  it('verifies admin is not logged in anymore', async () => {
-    await agent
-      .get('/api/app/admin')
-      .expect('Content-Type', /json/)
-      .expect(200, {
-        success: true,
-        data: false,
-      });
-  });
-});
-
-describe('Audit Endpoints', () => {
+describe("Audit Endpoints", () => {
   // test website
   app.use(express.static(path.resolve(__dirname + '/www')));
-  const testURL = 'http://localhost:' + server.address().port + '/';
   
-  it('gets a test site file', async () => {
+  it("gets a test site file", async () => {
     await request(app)
       .get('/index.html')
       .expect('Content-Type', /^text\/html/)
       .expect(200);
   });
-  it('lists the audits (no login required)', async () => {
+  it("lists the audits (no login required)", async () => {
     await request(app)
       .get('/api/audits/')
       .expect('Content-Type', /json/)
@@ -85,17 +34,23 @@ describe('Audit Endpoints', () => {
       });
   });
   const agent = request.agent(app); // to pass session cookies
-  it('logs in', async () => {
-    await agent
+  it("logs in", async () => {
+    const res = await agent
       .post('/api/app/login')
-      .send({password: 'password'})
+      .send({
+        username: 'admin',
+        password: 'password',
+      })
       .expect('Content-Type', /json/)
-      .expect(200, {
-        success: true,
-        data: true,
-      });
+      .expect(200);
+    expect(res.body).toMatchObject({
+      success: true,
+      data: {
+        username: 'admin',
+      }
+    });
   });
-  it('starts an audit', async () => {
+  it("starts an audit", async () => {
     const res = await agent
       .post('/api/audits/start')
       .send({
@@ -115,7 +70,7 @@ describe('Audit Endpoints', () => {
     expect(res.body.data).toHaveProperty('_id');
     auditId = res.body.data._id;
   });
-  it('stops an audit', async () => {
+  it("stops an audit", async () => {
     expect(auditId).toBeTruthy();
     await agent
       .post('/api/audits/' + auditId + '/stop')
@@ -136,7 +91,7 @@ describe('Audit Endpoints', () => {
       running = res.body.data.running;
     }
   }, 10000); // 10s timeout
-  it('deletes an audit', async () => {
+  it("deletes an audit", async () => {
     expect(auditId).toBeTruthy();
     await agent
       .delete('/api/audits/' + auditId)
@@ -153,7 +108,7 @@ describe('Audit Endpoints', () => {
         data: [],
       });
   }, 5000); // 5s timeout
-  it('starts another audit', async () => {
+  it("starts another audit", async () => {
     const res = await agent
       .post('/api/audits/start')
       .send({
@@ -173,7 +128,7 @@ describe('Audit Endpoints', () => {
     expect(res.body.data).toHaveProperty('_id');
     auditId = res.body.data._id;
   });
-  it('completes the audit, with correct results', async () => {
+  it("completes the audit, with correct results", async () => {
     expect(auditId).toBeTruthy();
     let running = true;
     let res;
@@ -210,8 +165,8 @@ describe('Audit Endpoints', () => {
   }, 10000); // 10s timeout
 });
 
-describe('Domain Endpoints', () => {
-  it('gets the domain data', async () => {
+describe("Domain Endpoints", () => {
+  it("gets the domain data", async () => {
     expect(domainId).toBeTruthy();
     const res = await request(app)
       .get('/api/domains/' + domainId)
@@ -226,8 +181,8 @@ describe('Domain Endpoints', () => {
   });
 });
 
-describe('Page Endpoints', () => {
-  it('gets the page data', async () => {
+describe("Page Endpoints", () => {
+  it("gets the page data", async () => {
     expect(pageId).toBeTruthy();
     const res = await request(app)
       .get('/api/pages/' + pageId)

@@ -35,6 +35,7 @@
       "require-await": ["warn"],
       "semi": ["warn", "always"],
       "block-spacing": ["warn"],
-      "no-console": "off"
+      "no-console": "off",
+      "require-atomic-updates": "off"
     }
 }

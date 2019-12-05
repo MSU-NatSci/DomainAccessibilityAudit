@@ -7,7 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import ServerAPI from './ServerAPI';
+import ServerAPI from '../ServerAPI';
 
 
 class AuditStatus extends React.Component {
@@ -33,6 +33,11 @@ class AuditStatus extends React.Component {
       clearInterval(this.checkInterval);
       this.checkInterval = null;
     }
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.error && !prevState.error)
+      document.querySelector('.alert').focus();
   }
   
   checkStatus() {
@@ -80,11 +85,10 @@ class AuditStatus extends React.Component {
         </Breadcrumb>
         <h1>{this.state.status && this.state.status.initialDomainName ?
           this.state.status.initialDomainName : 'Audit Status'}</h1>
-        {this.state.error &&
-          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
-            {this.state.error}
-          </Alert>
-        }
+        <Alert show={this.state.error != null} variant="danger" dismissible
+            onClose={() => this.setState({ error: null })} tabIndex="0">
+          {this.state.error}
+        </Alert>
         {this.state.status && this.state.status.running &&
           <p className="m-5">
             <Button variant="danger" size="sm"

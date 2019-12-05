@@ -2,10 +2,10 @@ import React from 'react';
 import { render, wait } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import MockServerAPI from '../ServerAPI';
 import Domain from './Domain';
-import MockServerAPI from './ServerAPI';
 
-jest.mock('./ServerAPI');
+jest.mock('../ServerAPI');
 
 const getByTagAndContent = (container, tag, expr) => {
   return Array.from(container.querySelectorAll(tag))
@@ -19,6 +19,7 @@ const getTableBySectionTitle = (container, titleExpr) => {
 };
 const init = async (domainId) => {
   const mockServer = new MockServerAPI();
+  await mockServer.localLogin('user2', 'pass2');
   const { container, getByText, getAllByTitle } = render(<MemoryRouter><Domain server={mockServer} match={{params:{domainId:domainId}}}/></MemoryRouter>);
   await wait();
   return { container, getByText, getAllByTitle };

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import ServerAPI from './ServerAPI';
+import ServerAPI from '../ServerAPI';
 
 
 class Page extends Component {
@@ -29,6 +29,11 @@ class Page extends Component {
     } catch (error) {
       this.setState({ error });
     }
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.error && !prevState.error)
+      document.querySelector('.alert').focus();
   }
   
   render() {
@@ -59,11 +64,10 @@ class Page extends Component {
         <h1>
           {this.state.page ? <span className="code">{this.state.page.url}</span> : ''}
         </h1>
-        {this.state.error &&
-          <Alert variant="danger" onClose={() => this.setState({ error: null })} dismissible>
-            {this.state.error}
-          </Alert>
-        }
+        <Alert show={this.state.error != null} variant="danger" dismissible
+            onClose={() => this.setState({ error: null })} tabIndex="0">
+          {this.state.error}
+        </Alert>
         {this.state.page &&
           <>
             <p className="text-center"><a href={this.state.page.url} target="_blank"

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const DomainsSchema = new Schema({
-  auditId: { type: mongoose.Schema.Types.ObjectId, ref: 'Audit', index: true },
+  auditId: { type: Schema.Types.ObjectId, ref: 'Audit', index: true },
   name: String,
   nbCheckedURLs: Number,
   nbViolations: Number,
@@ -14,7 +14,7 @@ const DomainsSchema = new Schema({
       impact: String,
       total: Number,
       pages: [{
-        id: { type: mongoose.Schema.Types.ObjectId, ref: 'Page' },
+        id: { type: Schema.Types.ObjectId, ref: 'Page' },
         count: Number,
       }],
     },

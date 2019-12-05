@@ -6,7 +6,7 @@
     "start:prod": "npm run clean && npm run build && node build/server.js",
     "clean": "rm -rf build",
     "build": "babel --presets @babel/preset-env -d build src",
-    "test": "cross-env NODE_ENV=test DB_URL=mongodb://mongodb:27017/accessibility_audit_test ADMIN_PASSWORD=password jest",
+    "test": "cross-env NODE_ENV=test DB_URL=mongodb://mongodb:27017/accessibility_audit_test ADMIN_USERNAME=admin ADMIN_PASSWORD=password SAML_ENTRYPOINT= SAML_ISSUER= jest --runInBand",
     "lint": "./node_modules/.bin/eslint ."
   },
   "devDependencies": {
@@ -29,6 +29,9 @@
     "mongoose": "~5.7.5",
     "morgan": "^1.9.1",
     "node-fetch": "^2.6.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-saml": "^1.2.0",
     "selenium-webdriver": "^3.6.0",
     "xml2js": "^0.4.19"
   },

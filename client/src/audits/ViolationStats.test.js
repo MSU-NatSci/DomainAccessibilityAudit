@@ -2,13 +2,14 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import MockServerAPI from '../ServerAPI';
 import ViolationStats from './ViolationStats';
-import MockServerAPI from './ServerAPI';
 
-jest.mock('./ServerAPI');
+jest.mock('../ServerAPI');
 
 it("renders with stats (audit)", async () => {
   const mockServer = new MockServerAPI();
+  await mockServer.localLogin('user2', 'pass2');
   const audit = await mockServer.getAudit('aid1');
   const { container } = render(<MemoryRouter>
     <ViolationStats stats={audit.violationStats}

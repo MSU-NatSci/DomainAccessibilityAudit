@@ -1,5 +1,5 @@
 /* this is to fix some of bootstrap color accessibility issues */
-#root {
+body {
   a:not(.btn) {
     color: #15D;
   }
@@ -45,6 +45,9 @@
   h2 {
     font-size: 1.2rem;
     margin-bottom: 0;
+  }
+  h3 {
+    font-size: 1.1rem;
   }
   table td {
     vertical-align: middle;
@@ -115,4 +118,10 @@ table.data {
   >tbody>tr:hover {
     background-color: #F0FFFA;
   }
+}
+
+#root .border {
+  padding: 1em;
+  border-color: #888 !important;
+  border-radius: 0.5em;
 }

@@ -2,13 +2,15 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import MockServerAPI from '../ServerAPI';
 import DomainTable from './DomainTable';
-import MockServerAPI from './ServerAPI';
 
-jest.mock('./ServerAPI');
+jest.mock('../ServerAPI');
 
 it("renders with domain information", async () => {
-  const audit = await (new MockServerAPI()).getAudit('aid1');
+  const mockServer = new MockServerAPI();
+  await mockServer.localLogin('user2', 'pass2');
+  const audit = await mockServer.getAudit('aid1');
   const { container } = render(<MemoryRouter><DomainTable audit={audit}/></MemoryRouter>);
   const tr2 = container.querySelector('tr:nth-of-type(2)');
   const td1 = tr2.querySelector('td:nth-of-type(1)');

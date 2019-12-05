@@ -8,6 +8,13 @@ class ServerAPI {
       lastDomain: null,
       lastPage: null,
     };
+    let port;
+    if (process.env.REACT_APP_NODE_ENV === 'production')
+      port = process.env.REACT_APP_PRODUCTION_PORT;
+    else
+      port = process.env.REACT_APP_DEVELOPMENT_API_PORT;
+    this.hostURL = window.location.protocol + '//' +
+      window.location.hostname + ':' + port;
   }
   
   request(method, path, parameters) {
@@ -47,14 +54,27 @@ class ServerAPI {
   }
   
   // App
-  login(password) {
-    return this.request('POST', '/api/app/login', {password});
+  async localLogin(username, password) {
+    const user = await this.request('POST', '/api/app/login', { username, password });
+    this.cache = {
+      lastAuditList: null,
+      lastAudit: null,
+      lastDomain: null,
+      lastPage: null,
+    };
+    return user;
   }
-  logout() {
-    return this.request('POST', '/api/app/logout');
+  samlLogin() {
+    window.location.href = this.hostURL + '/api/app/login/saml';
   }
-  admin() {
-    return this.request('GET', '/api/app/admin');
+  async logout() {
+    await this.request('POST', '/api/app/logout');
+    this.cache = {
+      lastAuditList: null,
+      lastAudit: null,
+      lastDomain: null,
+      lastPage: null,
+    };
   }
   
   // Audit
@@ -104,6 +124,53 @@ class ServerAPI {
     const page = await this.request('GET', `/api/pages/${pageId}`);
     this.cache.lastPage = page;
     return page;
+  }
+  
+  getUsers() {
+    return this.request('GET', '/api/users/');
+  }
+  createUser(user) {
+    return this.request('POST', `/api/users/`, user);
+  }
+  getUser(userId) {
+    return this.request('GET', `/api/users/${userId}`);
+  }
+  removeUser(userId) {
+    return this.request('DELETE', `/api/users/${userId}`);
+  }
+  updateUser(user) {
+    return this.request('POST', `/api/users/${user._id}`, user);
+  }
+  addUserGroup(userId, groupId) {
+    return this.request('PUT', `/api/users/${userId}/groups/${groupId}`);
+  }
+  removeUserGroup(userId, groupId) {
+    return this.request('DELETE', `/api/users/${userId}/groups/${groupId}`);
+  }
+  getCurrentUser() {
+    return this.request('GET', '/api/users/current');
+  }
+  
+  getGroups() {
+    return this.request('GET', '/api/groups/');
+  }
+  createGroup(group) {
+    return this.request('POST', `/api/groups/`, group);
+  }
+  getGroup(groupId) {
+    return this.request('GET', `/api/groups/${groupId}`);
+  }
+  removeGroup(groupId) {
+    return this.request('DELETE', `/api/groups/${groupId}`);
+  }
+  updateGroup(group) {
+    return this.request('POST', `/api/groups/${group._id}`, group);
+  }
+  addGroupUser(groupId, userId) {
+    return this.request('PUT', `/api/groups/${groupId}/users/${userId}`);
+  }
+  removeGroupUser(groupId, userId) {
+    return this.request('DELETE', `/api/groups/${groupId}/users/${userId}`);
   }
   
 }

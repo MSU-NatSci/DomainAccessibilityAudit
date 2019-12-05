@@ -25,7 +25,7 @@ const AuditsSchema = new Schema({
       impact: String,
       total: Number,
       domains: [{
-        id: { type: mongoose.Schema.Types.ObjectId, ref: 'Domain' },
+        id: { type: Schema.Types.ObjectId, ref: 'Domain' },
         count: Number,
       }],
     },

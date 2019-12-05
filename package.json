@@ -1,6 +1,6 @@
 {
   "name": "domain-accessibility-audit",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Scan a domain and subdomains for accessibility violations and report them with a web interface.",
   "repository": {
     "type": "git",

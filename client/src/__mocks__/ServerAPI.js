@@ -216,14 +216,96 @@ const initialPages = {
   }
 };
 
+const initialUsers = {
+  'uid1': {
+    _id: 'uid1',
+    username: 'user1',
+    firstname: 'first1',
+    lastname: 'last1',
+  },
+  'uid2': {
+    _id: 'uid2',
+    username: 'user2',
+    firstname: 'first2',
+    lastname: 'last2',
+  },
+  'guest': {
+    _id: 'guest',
+    username: 'guest',
+    firstname: '',
+    lastname: '',
+  }
+};
+
+const initialGroups = {
+  'gid1': {
+    _id: 'gid1',
+    name: 'group1',
+    permissions: {
+      createAllAudits: true,
+      readAllAudits: true,
+      deleteAllAudits: true,
+      editUsersAndGroups: true,
+      domains: [],
+    },
+    users: [initialUsers.uid1],
+  },
+  'gid2': {
+    _id: 'gid2',
+    name: 'group2',
+    permissions: {
+      createAllAudits: false,
+      readAllAudits: true,
+      deleteAllAudits: false,
+      editUsersAndGroups: false,
+      domains: [{
+        name: 'natsci.msu.edu',
+        read: true,
+        delete: true,
+        create: true,
+      }],
+    },
+    users: [initialUsers.uid2],
+  },
+  'guests': {
+    _id: 'guests',
+    name: 'Guests',
+    permissions: {
+      createAllAudits: false,
+      readAllAudits: false,
+      deleteAllAudits: false,
+      editUsersAndGroups: false,
+      domains: [],
+    },
+    users: [],
+  }
+};
+
+initialUsers.uid1.groups = [initialGroups.gid1];
+initialUsers.uid2.groups = [initialGroups.gid2];
+initialUsers.guest.groups = [initialGroups.guests];
+
+
 class ServerAPI {
   constructor() {
     this.audits = initialAudits;
     this.domains = initialDomains;
     this.pages = initialPages;
+    this.users = initialUsers;
+    this.groups = initialGroups;
+    this.currentUser = initialUsers.guest;
   }
-  admin() {
-    return Promise.resolve(false);
+  localLogin(username, password) {
+    for (const u of Object.values(this.users)) {
+      if (u.username === username) {
+        this.currentUser = u;
+        return Promise.resolve(u);
+      }
+    }
+    return Promise.reject(new Error("Unknown user"));
+  }
+  logout() {
+    this.currentUser = initialUsers.guest;
   }
   startAudit(params) {
     return Promise.resolve({});
@@ -240,11 +322,81 @@ class ServerAPI {
     delete this.audits[auditId];
     return Promise.resolve();
   }
+  
   getDomain(domainId) {
     return Promise.resolve(this.domains[domainId]);
   }
   getPage(pageId) {
     return Promise.resolve(this.pages[pageId]);
+  }
+  
+  getUsers() {
+    return Promise.resolve(Object.values(this.users));
+  }
+  createUser(user) {
+    user = Object.assign({}, user);
+    user._id = Math.floor(Math.random() * 10000);
+    this.users[user._id] = user;
+    return Promise.resolve();
+  }
+  getUser(userId) {
+    return Promise.resolve(this.users[userId]);
+  }
+  removeUser(userId) {
+    if (this.users[userId] === undefined)
+      throw new Error("removeUser: " + userId + " does not exist");
+    delete this.users[userId];
+    return Promise.resolve();
+  }
+  updateUser(user) {
+    this.users[user._id] = Object.assign({}, user);
+    return Promise.resolve();
+  }
+  addUserGroup(userId, groupId) {
+    this.users[userId].groups.push(this.groups[groupId]);
+    return Promise.resolve();
+  }
+  removeUserGroup(userId, groupId) {
+    this.users[userId].groups = this.users[userId].groups.filter((g) => g._id !== groupId);
+    return Promise.resolve();
+  }
+  getCurrentUser() {
+    return Promise.resolve({
+      authenticationMethod: 'local',
+      user: this.currentUser,
+    });
+  }
+  
+  getGroups() {
+    return Promise.resolve(Object.values(this.groups));
+  }
+  createGroup(group) {
+    group = Object.assign({}, group);
+    group._id = Math.floor(Math.random() * 10000);
+    this.groups[group._id] = group;
+    return Promise.resolve();
+  }
+  getGroup(groupId) {
+    return Promise.resolve(this.groups[groupId]);
+  }
+  removeGroup(groupId) {
+    if (this.groups[groupId] === undefined)
+      throw new Error("removeGroup: " + groupId + " does not exist");
+    delete this.groups[groupId];
+    return Promise.resolve();
+  }
+  updateGroup(group) {
+    this.groups[group._id] = Object.assign({}, group);
+    return Promise.resolve();
+  }
+  addGroupUser(groupId, userId) {
+    this.groups[groupId].users.push(this.users[userId]);
+    return Promise.resolve();
+  }
+  removeGroupUser(groupId, userId) {
+    delete this.groups[groupId].users[userId];
+    this.groups[groupId].users = this.groups[groupId].users.filter((u) => u._id !== userId);
+    return Promise.resolve();
   }
 }
 

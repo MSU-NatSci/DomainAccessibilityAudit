@@ -39,4 +39,17 @@ describe('displays content based on paths', () => {
     await wait();
     expect(container.querySelector('h1').textContent).toBe('purl1');
   });
+  it("works with a user path", async () => {
+    route = '/users/uid1';
+    const { container } = render(<App/>);
+    await wait();
+    // NOTE: there will be an error message in the page because we are not logged in.
+    expect(container.querySelector('h1').textContent).toBe('User');
+  });
+  it("works with a group path", async () => {
+    route = '/groups/gid1';
+    const { container } = render(<App/>);
+    await wait();
+    expect(container.querySelector('h1').textContent).toBe('Group');
+  });
 });
