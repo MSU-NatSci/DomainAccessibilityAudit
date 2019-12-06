@@ -73,6 +73,17 @@ More groups can be created and assigned users.
 There are separate permissions to read audits, create audits, remove audits, and edit users and groups. The audit permissions can also be given for specific domains (which include subdomains).
 
 ## FAQ
+- Does this tool accurately reflect a website's state of accessibility ?  
+  No. Because it is not reporting potential false positives, it will miss a number
+  of real web accessibility issues. Even if it was reporting potential false positives,
+  it might still miss some other issues that are hard to identify automatically.
+  It is meant as a tool to help identify and fix the most common issues, but
+  does not replace a full manual audit.  
+  That being said, it is a good and economic first step to fix reported issues
+  before doing a more thorough manual audit, and there is often a lot to fix.
+  Also, results over a large number of websites are more likely to be consistent,
+  objective and uniform than with manual audits, so it is a useful tool to
+  compare standard compliance and measure progress.
 - How to set up SSL ?  
   This could be done with a proxy, but if you want to set up SSL directly in node,
   this is possible in production mode on port 443:
