@@ -116,6 +116,11 @@ There are separate permissions to read audits, create audits, remove audits, and
   slow down the audit. A short one (100 ms) might be sufficient for very fast websites,
   but might not be enough for slow ones. Experimenting might be the best way
   to choose a value.
+- How could I customize the application's header and footer ?  
+  `client/src/Header.js` and `client/src/Footer.js` can be customized.
+  They are using the React JSX syntax.
+  When git is used, these files can be added to `.git/info/exclude` to avoid
+  warnings when the application is updated.
 
 ## Current issues
 - Browsers and drivers might crash sometimes, resulting in scan errors, but the audit will recover and continue.
@@ -130,7 +135,6 @@ There are separate permissions to read audits, create audits, remove audits, and
 - Option to ignore pages returning a 404 status code.
 - Regular expression to ignore some URLs.
 - Easy way to export data.
-- Easy way to add branding to the UI (header and footer).
 
 ## Licence
 GPL 3.0.
