@@ -99,6 +99,7 @@ class Categories extends Component {
             </tbody>
           </Table>
           <PieChart
+            viewBoxSize={[580, 270]}
             style={{ 'width':'580px', 'height':'270px' }}
             data={data.map(
               (cat, index) => ({
@@ -111,11 +112,11 @@ class Categories extends Component {
             label={({ data, dataIndex }) =>
               data[dataIndex].title + ": " + data[dataIndex].value + "%"}
             labelStyle={{
-              fontSize: '5px',
+              fontSize: '13px',
               fontFamily: 'sans-serif',
               fill: 'black',
             }}
-            radius={35}
+            radius={17}
             labelPosition={110}
             aria-hidden="true"
             injectSvg={() =>

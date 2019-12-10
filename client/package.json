@@ -11,7 +11,7 @@
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.10",
     "react-dom": "^16.8.6",
-    "react-minimal-pie-chart": "^5.0.1",
+    "react-minimal-pie-chart": "^6.0.1",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.1.0",
     "react-scripts": "3.1.2"
