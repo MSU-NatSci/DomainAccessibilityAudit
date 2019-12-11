@@ -118,9 +118,11 @@ There are separate permissions to read audits, create audits, remove audits, and
   to choose a value.
 - How could I customize the application's header and footer ?  
   `client/src/Header.js` and `client/src/Footer.js` can be customized.
-  They are using the React JSX syntax.
+  They are using the [React JSX](https://reactjs.org/docs/introducing-jsx.html) syntax.
+  Images can be added to `client/public`.
   When git is used, these files can be added to `.git/info/exclude` to avoid
   warnings when the application is updated.
+  The container will have to be restarted in production.
 
 ## Current issues
 - Browsers and drivers might crash sometimes, resulting in scan errors, but the audit will recover and continue.
