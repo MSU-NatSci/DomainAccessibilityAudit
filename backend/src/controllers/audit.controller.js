@@ -23,6 +23,7 @@ exports.get_audits = async (req, res) => {
       .select('initialDomainName dateStarted nbCheckedURLs nbViolations')
       .collation({locale:'en', strength: 2})
       .sort({dateStarted: -1})
+      .lean()
       .exec();
     audits = await filterAudits(req.user, audits);
     res.json({ success: true, data: audits });
@@ -42,7 +43,7 @@ exports.get_audit = async (req, res) => {
       path: 'domains',
       select: 'name nbCheckedURLs nbViolations',
       options: { sort: { name: 1 } },
-    }).exec();
+    }).lean().exec();
     if (audit == null) {
       res.json({ success: false, error: "Audit not found !" });
       return;

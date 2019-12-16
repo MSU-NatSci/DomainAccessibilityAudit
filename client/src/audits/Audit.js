@@ -32,7 +32,7 @@ class Audit extends Component {
       this.setState({ audit });
       if (audit.domains && audit.domains.length === 1) {
         // load the domain when there is only 1 for the audit
-        const domain = await this.props.server.getDomain(audit.domains[0].id);
+        const domain = await this.props.server.getDomain(audit.domains[0]._id);
         this.setState({ domain });
       }
       if (!audit.complete) {
@@ -149,7 +149,9 @@ class Audit extends Component {
                 </tbody>
               </Table>
             </section>
-            <Categories categories={this.state.audit.categories}/>
+            { this.state.audit.categories &&
+              <Categories categories={this.state.audit.categories}/>
+            }
             {this.state.domain ?
               <>
                 <ViolationStats stats={this.state.domain.violationStats}

@@ -68,7 +68,9 @@ class Domain extends Component {
                 </tbody>
               </Table>
             </section>
-            <Categories categories={this.state.domain.categories}/>
+            { this.state.domain.categories &&
+              <Categories categories={this.state.domain.categories}/>
+            }
             <ViolationStats stats={this.state.domain.violationStats}
               items={this.state.domain.pages} itemType="page"/>
             <PageTable domain={this.state.domain}/>

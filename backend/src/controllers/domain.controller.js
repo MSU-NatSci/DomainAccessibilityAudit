@@ -12,7 +12,7 @@ exports.get_domain = async (req, res) => {
       path: 'pages',
       select: '-violations',
       options: { sort: { nbViolations: -1, url: 1 } },
-    }).exec();
+    }).lean().exec();
     if (domain == null) {
       res.json({ success: false, error: "Domain not found !" });
       return;
