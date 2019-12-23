@@ -57,7 +57,7 @@ class Group extends Component {
       if (this.state.group.users != null)
         this.updateUsersToAdd();
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
     if (this.state.group._id == null)
       document.title = "New Group";
@@ -144,7 +144,7 @@ class Group extends Component {
       await this.props.server.removeGroup(this.state.group._id);
       this.props.history.push('/groups/');
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   
@@ -162,7 +162,7 @@ class Group extends Component {
       document.title = this.state.group.name ?
         "Group: " + this.state.group.name: "Group";
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   
@@ -173,7 +173,7 @@ class Group extends Component {
       this.setState({ group });
       this.updateUsersToAdd();
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   
@@ -216,7 +216,7 @@ class Group extends Component {
       this.setState({ group });
       this.updateUsersToAdd();
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   

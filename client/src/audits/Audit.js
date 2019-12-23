@@ -45,7 +45,7 @@ class Audit extends Component {
         }
       }
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   

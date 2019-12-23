@@ -27,7 +27,7 @@ class Domain extends Component {
       document.title = "Accessibility Audit: " + domain.name;
       this.setState({ domain });
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   

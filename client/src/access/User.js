@@ -100,7 +100,7 @@ class User extends Component {
       await this.props.server.removeUser(this.state.user._id);
       this.props.history.push('/users/');
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   
@@ -119,7 +119,7 @@ class User extends Component {
       document.title = this.state.user.username ?
         "User: " + this.state.user.username: "User";
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   
@@ -131,7 +131,7 @@ class User extends Component {
       this.setState({ user });
       this.updateGroupsToAdd();
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   
@@ -174,7 +174,7 @@ class User extends Component {
       this.setState({ user });
       this.updateGroupsToAdd();
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   

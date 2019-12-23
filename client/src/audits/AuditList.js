@@ -43,7 +43,7 @@ class AuditList extends Component {
       const audits = await this.props.server.getAudits();
       this.setState({ audits });
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   

@@ -32,22 +32,22 @@ class ServerAPI {
       fetch(path, fetchParams)
         .then((response) => {
           if (!response.ok)
-            reject(response.statusText);
+            reject(new Error(response.statusText));
           return response;
         })
         .then(data => data.json())
         .then((res) => {
           if (!res.success)
-            reject(res.error);
+            reject(new Error(res.error));
           else
             resolve(res.data);
         })
         .catch(error => {
           if (error.name === 'AbortError')
-            reject("Timeout when connecting to server (" +
-              error.message + ")");
+            reject(new Error("Timeout when connecting to server (" +
+              error.message + ")"));
           else
-            reject("Error retrieving data: " + error.message);
+            reject(new Error("Error retrieving data: " + error.message));
         })
         .finally(() => clearTimeout(timeout));
     });

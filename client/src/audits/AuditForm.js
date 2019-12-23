@@ -73,7 +73,7 @@ class AuditForm extends React.Component {
       const audit = await this.props.server.startAudit(params);
       this.props.history.push('/audits/' + audit.id + '/status');
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   

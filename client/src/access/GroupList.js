@@ -31,7 +31,7 @@ class GroupList extends Component {
       const groups = await this.props.server.getGroups();
       this.setState({ groups });
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
     document.title = "Groups";
   }

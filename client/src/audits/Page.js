@@ -27,7 +27,7 @@ class Page extends Component {
       document.title = "Accessibility Audit: " + page.url;
       this.setState({ page });
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
   }
   

@@ -31,7 +31,7 @@ class UserList extends Component {
       const users = await this.props.server.getUsers();
       this.setState({ users });
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error: error.message });
     }
     document.title = "Users";
   }
