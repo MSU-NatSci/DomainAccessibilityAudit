@@ -243,8 +243,7 @@ class User extends Component {
               </Col>
             </Form.Group>
             <div className="text-center">
-              <Button variant="primary" type="submit"
-                disabled={this.props.match.params.userId != null && this.state.user._id == null}>
+              <Button variant="primary" type="submit">
                 Save
               </Button>
             </div>

@@ -359,8 +359,7 @@ class Group extends Component {
             </Button>
           </section>
           <div className="text-center">
-            <Button variant="primary" type="submit"
-              disabled={this.state.group._id != null && this.state.group._id == null}>
+            <Button variant="primary" type="submit">
               Save
             </Button>
           </div>
