@@ -10,7 +10,7 @@ router.get('/current', controller.get_current_user);
 router.get('/:userId', controller.get_user);
 router.post('/', controller.new_user);
 router.delete('/:userId', controller.remove_user);
-router.post('/:userId', controller.update_user);
+router.put('/:userId', controller.update_user);
 router.put('/:userId/groups/:groupId', controller.add_group);
 router.delete('/:userId/groups/:groupId', controller.remove_group);
 

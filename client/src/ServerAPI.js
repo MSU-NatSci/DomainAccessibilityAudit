@@ -139,7 +139,7 @@ class ServerAPI {
     return this.request('DELETE', `/api/users/${userId}`);
   }
   updateUser(user) {
-    return this.request('POST', `/api/users/${user._id}`, user);
+    return this.request('PUT', `/api/users/${user._id}`, user);
   }
   addUserGroup(userId, groupId) {
     return this.request('PUT', `/api/users/${userId}/groups/${groupId}`);
@@ -164,7 +164,7 @@ class ServerAPI {
     return this.request('DELETE', `/api/groups/${groupId}`);
   }
   updateGroup(group) {
-    return this.request('POST', `/api/groups/${group._id}`, group);
+    return this.request('PUT', `/api/groups/${group._id}`, group);
   }
   addGroupUser(groupId, userId) {
     return this.request('PUT', `/api/groups/${groupId}/users/${userId}`);

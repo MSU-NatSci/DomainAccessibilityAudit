@@ -159,7 +159,7 @@ describe("Users and groups endpoints", () => {
       }
     ];
     const res = await agent
-      .post('/api/groups/' + groupId)
+      .put('/api/groups/' + groupId)
       .send(tg)
       .expect('Content-Type', /json/)
       .expect(200);
@@ -198,7 +198,7 @@ describe("Users and groups endpoints", () => {
   it("modifies the user", async () => {
     tu.lastname = 'User';
     const res = await agent
-      .post('/api/users/' + userId)
+      .put('/api/users/' + userId)
       .send(tu)
       .expect('Content-Type', /json/)
       .expect(200);
