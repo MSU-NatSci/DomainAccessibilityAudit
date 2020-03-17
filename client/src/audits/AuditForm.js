@@ -97,7 +97,7 @@ class AuditForm extends React.Component {
           <Form.Group as={Row} controlId="firstURL">
             <Form.Label column sm="5">Initial URL</Form.Label>
             <Col sm="7">
-              <Form.Control name="firstURL" type="url" size="35" value={this.state.firstURL}
+              <Form.Control name="firstURL" type="url" value={this.state.firstURL}
                 onChange={e => this.handleChange(e)}/>
             </Col>
           </Form.Group>
@@ -124,14 +124,14 @@ class AuditForm extends React.Component {
           <Form.Group as={Row} controlId="maxDepth">
             <Form.Label column sm="5">Maximum crawling depth</Form.Label>
             <Col sm="7">
-              <Form.Control name="maxDepth" type="number" size="10" value={this.state.maxDepth}
+              <Form.Control name="maxDepth" type="number" value={this.state.maxDepth}
                 onChange={e => this.handleChange(e)}/>
             </Col>
           </Form.Group>
           <Form.Group as={Row} controlId="maxPagesPerDomain">
             <Form.Label column sm="5">Maximum number of pages checked per domain (0 for no limit)</Form.Label>
             <Col sm="7">
-              <Form.Control name="maxPagesPerDomain" type="number" size="10" value={this.state.maxPagesPerDomain}
+              <Form.Control name="maxPagesPerDomain" type="number" value={this.state.maxPagesPerDomain}
                 onChange={e => this.handleChange(e)}/>
             </Col>
           </Form.Group>
@@ -147,7 +147,7 @@ class AuditForm extends React.Component {
             <Form.Label column sm="5">Include only paths matching the regular
               expression</Form.Label>
             <Col sm="7">
-              <Form.Control name="includeMatch" size="20" value={this.state.includeMatch}
+              <Form.Control name="includeMatch" value={this.state.includeMatch}
                 onChange={e => this.handleChange(e)}/>
             </Col>
           </Form.Group>
@@ -164,7 +164,7 @@ class AuditForm extends React.Component {
           <Form.Group as={Row} controlId="postLoadingDelay">
             <Form.Label column sm="5">Additional delay to let dynamic pages load (ms)</Form.Label>
             <Col sm="7">
-              <Form.Control name="postLoadingDelay" type="number" size="10" value={this.state.postLoadingDelay}
+              <Form.Control name="postLoadingDelay" type="number" value={this.state.postLoadingDelay}
                 onChange={e => this.handleChange(e)}/>
             </Col>
           </Form.Group>
