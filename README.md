@@ -123,6 +123,12 @@ There are separate permissions to read audits, create audits, remove audits, and
   When git is used, these files can be added to `.git/info/exclude` to avoid
   warnings when the application is updated.
   The container will have to be restarted in production.
+- I set an admin password in the `.env` file but I can't log in. What is going on ?  
+  The variables passed to the Docker container with the `.env` file on the host are used only when the container is created, and the container is not updated when the file is modified afterwards. If you have modified the `.env` file after launching the application for the first time, you can simply delete the containers and recreate them. Since they don't contain any data (which is saved in a Docker volume), you will not lose any saved audit data.  
+  `docker-compose down`  
+  `docker-compose up -d`  
+  The administrator user is only created the first time the application is launched with an administrator password. If you have started it once with a password but without `ADMIN_USERNAME`, it will have been created with the default `admin` username. You can use that name to log in and modify the user name.  
+  Also make sure the `.env` file is created in the same directory as the `README.md` file, and that `ADMIN_USERNAME` and `ADMIN_PASSWORD` are uppercase.
 
 ## Current issues
 - Browsers and drivers might crash sometimes, resulting in scan errors, but the audit will recover and continue.

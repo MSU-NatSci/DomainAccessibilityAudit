@@ -262,35 +262,39 @@ export const createSuperuserGroup = async () => {
     return;
   }
   if (sg == null) {
-    try {
-      // create the Superusers group
-      sg = await GroupModel.create({
-        name: 'Superusers',
-        permissions: {
-          createAllAudits: true,
-          readAllAudits: true,
-          deleteAllAudits: true,
-          editUsersAndGroups: true,
-          domains: [],
-        }
-      });
-    } catch (err) {
-      console.log("Error creating the superuser group: " + err.message);
-      return;
-    }
-    try {
-      // create an admin
-      let user = {
-        username: process.env.ADMIN_USERNAME ? process.env.ADMIN_USERNAME : 'admin',
-        firstname: '',
-        lastname: '',
-        password: process.env.ADMIN_PASSWORD,
-      };
-      await hashUserPassword(user);
-      user = await UserModel.create(user);
-      await UserGroupModel.create({ groupId: sg._id, userId: user._id });
-    } catch (err) {
-      console.log("Error creating the admin: " + err.message);
+    if (!process.env.ADMIN_PASSWORD) {
+      console.log("The ADMIN_PASSWORD variable is missing - not creating the admin user and group.");
+    } else {
+      try {
+        // create the Superusers group
+        sg = await GroupModel.create({
+          name: 'Superusers',
+          permissions: {
+            createAllAudits: true,
+            readAllAudits: true,
+            deleteAllAudits: true,
+            editUsersAndGroups: true,
+            domains: [],
+          }
+        });
+      } catch (err) {
+        console.log("Error creating the superuser group: " + err.message);
+        return;
+      }
+      try {
+        // create an admin
+        let user = {
+          username: process.env.ADMIN_USERNAME ? process.env.ADMIN_USERNAME : 'admin',
+          firstname: '',
+          lastname: '',
+          password: process.env.ADMIN_PASSWORD,
+        };
+        await hashUserPassword(user);
+        user = await UserModel.create(user);
+        await UserGroupModel.create({ groupId: sg._id, userId: user._id });
+      } catch (err) {
+        console.log("Error creating the admin: " + err.message);
+      }
     }
   }
 };

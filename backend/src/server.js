@@ -19,7 +19,7 @@ import groupRoute from './routes/group.route';
 import { initPassport, createGuestGroup, createSuperuserGroup } from './core/permissions';
 
 if (!process.env.ADMIN_PASSWORD)
-  console.log('WARNING: You need to define a password in .env and restart docker-compose.');
+  console.log('WARNING: You need to define a password in .env and recreate the containers with "docker-compose down" and "docker-compose up -d".');
 
 // Web server setup
 const app = express();
