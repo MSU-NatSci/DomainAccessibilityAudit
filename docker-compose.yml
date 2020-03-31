@@ -45,7 +45,9 @@ services:
       LANG: C.UTF-8
     volumes:
       - vol_accessibility_audit_db:/data/db
+      - vol_accessibility_audit_configdb:/data/configdb
     restart: unless-stopped
 
 volumes:
   vol_accessibility_audit_db:
+  vol_accessibility_audit_configdb:
