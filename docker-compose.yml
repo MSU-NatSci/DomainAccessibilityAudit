@@ -9,7 +9,7 @@ services:
       TZ: America/Detroit
       CHOKIDAR_USEPOLLING: 'true'
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
-      NODE_OPTIONS: '--http-parser=legacy'
+      NODE_OPTIONS: '--http-parser=legacy --insecure-http-parser'
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       NODE_ENV: ${MODE-production}
       SAML_ENTRYPOINT: ${SAML_ENTRYPOINT}
