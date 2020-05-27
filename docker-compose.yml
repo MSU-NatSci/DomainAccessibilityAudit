@@ -22,12 +22,12 @@ services:
       REACT_APP_DEVELOPMENT_API_PORT: ${DEVELOPMENT_API_PORT-3143}
       REACT_APP_PRODUCTION_PORT: ${PRODUCTION_PORT-80}
     volumes:
-      - ./backend/src:/app/backend/src
-      - ./backend/.eslintrc.json:/app/backend/.eslintrc.json
-      - ./client/public:/app/client/public
-      - ./client/src:/app/client/src
-      - ./client/.env:/app/client/.env
-      - ./certs:/app/certs
+      - ./backend/src:/app/backend/src:Z
+      - ./backend/.eslintrc.json:/app/backend/.eslintrc.json:Z
+      - ./client/public:/app/client/public:Z
+      - ./client/src:/app/client/src:Z
+      - ./client/.env:/app/client/.env:Z
+      - ./certs:/app/certs:Z
       - /dev/shm:/dev/shm
     depends_on:
       - mongodb
