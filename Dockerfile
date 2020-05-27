@@ -25,13 +25,13 @@ RUN ln -s /usr/bin/geckodriver /usr/bin/chromium-browser \
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 
-RUN chown node:node /app
+COPY package.json package-lock.json ./
+COPY client/package.json client/package-lock.json ./client/
+COPY backend/package.json backend/package-lock.json backend/babel.config.js ./backend/
+
+RUN chown -R node:node /app
 
 USER node
-
-COPY --chown=node:node package.json package-lock.json ./
-COPY --chown=node:node client/package.json client/package-lock.json ./client/
-COPY --chown=node:node backend/package.json backend/package-lock.json backend/babel.config.js ./backend/
 
 ENV HUSKY_SKIP_INSTALL 1
 RUN npm install
