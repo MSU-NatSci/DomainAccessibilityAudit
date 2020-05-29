@@ -8,13 +8,14 @@ class ServerAPI {
       lastDomain: null,
       lastPage: null,
     };
+    const protocol = window.location.protocol;
     let port;
     if (process.env.REACT_APP_NODE_ENV === 'production')
       port = process.env.REACT_APP_PRODUCTION_PORT;
     else
       port = process.env.REACT_APP_DEVELOPMENT_API_PORT;
-    this.hostURL = window.location.protocol + '//' +
-      window.location.hostname + ':' + port;
+    const portString = (protocol === 'https:' || port === '80') ? '' : ':' + port;
+    this.hostURL = protocol + '//' + window.location.hostname + portString;
   }
   
   request(method, path, parameters) {
