@@ -35,7 +35,8 @@ exports.login_saml = (req, res) => {
 exports.login_callback = (req, res, next) => {
   const port = process.env.NODE_ENV == 'production' ? process.env.PRODUCTION_PORT :
     process.env.DEVELOPMENT_PORT;
-  const redirectURL = req.protocol + '://' + req.hostname + ':' + port;
+  const portString = (req.protocol === 'https' || port === '80') ? '' : ':' + port;
+  const redirectURL = req.protocol + '://' + req.hostname + portString;
   passport.authenticate('saml', (err, user) => {
     if (err) {
       req.session.authenticationError = "Authentication error: " + err.message;
