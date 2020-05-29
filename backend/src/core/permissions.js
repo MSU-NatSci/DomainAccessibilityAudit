@@ -26,10 +26,11 @@ export const initPassport = () => {
       issuer,
     };
     if (process.env.SAML_CERT_FILENAME)
-      params.cert = fs.readFileSync('/app/certs/' + process.env.SAML_CERT_FILENAME);
+      params.cert = fs.readFileSync(
+        '/app/certs/' + process.env.SAML_CERT_FILENAME, 'utf8');
     if (process.env.SAML_PRIVATE_CERT_FILENAME)
-      params.privateCert = fs.readFileSync('/app/certs/' +
-        process.env.SAML_PRIVATE_CERT_FILENAME);
+      params.privateCert = fs.readFileSync(
+        '/app/certs/' + process.env.SAML_PRIVATE_CERT_FILENAME, 'utf8');
     passport.use(new SAMLStrategy(params, async (profile, cb) => {
       if (profile == null) {
         cb(new Error("Could not get user profile."));

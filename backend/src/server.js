@@ -61,8 +61,8 @@ const sslCertPath = '/app/certs/server.crt';
 let server;
 if (process.env.NODE_ENV == 'production' &&
     fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
-  const sslKey = fs.readFileSync(sslKeyPath);
-  const sslCert = fs.readFileSync(sslCertPath);
+  const sslKey = fs.readFileSync(sslKeyPath, 'utf8');
+  const sslCert = fs.readFileSync(sslCertPath, 'utf8');
   const credentials = { key: sslKey, cert: sslCert };
   const httpsServer = https.createServer(credentials, app);
   server = httpsServer.listen(8443, () => console.log(`HTTPS Listening on port 8443`));
