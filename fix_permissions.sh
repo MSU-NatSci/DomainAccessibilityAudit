@@ -12,5 +12,8 @@ find . -type d -not -path './.git*' -exec chmod 755 {} \;
 # change all the files to 644 (-rw-r--r--), except for .env and files inside certs or .git
 find . -type f -not -path './.env' -not -path './certs*' -not -path './.git*' -exec chmod 644 {} \;
 
+# change script permissions to 755 (drwxr-xr-x)
+find . -type f -path './*.sh' -exec chmod 755 {} \;
+
 # change .env to 600 (-rw-------)
 chmod 600 .env
