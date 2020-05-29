@@ -39,6 +39,8 @@ export const initPassport = () => {
       let username = profile.uid;
       if (!username)
         username = profile['urn:oid:0.9.2342.19200300.100.1.1'];
+      if (!username)
+        username = profile.nameID;
       if (!username) {
         cb(new Error("No uid in the user profile."));
         return;
