@@ -6,8 +6,8 @@ services:
     build:
       context: .
       args:
-        HOST_USER_UID: ${HOST_USER_UID-1000}
-        HOST_USER_GID: ${HOST_USER_GID-1000}
+        NODE_USER_UID: ${NODE_USER_UID-1000}
+        NODE_USER_GID: ${NODE_USER_GID-1000}
     environment:
       DB_URL: mongodb://mongodb:27017/accessibility_audit
       TZ: America/Detroit
