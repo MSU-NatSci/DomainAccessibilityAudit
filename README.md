@@ -60,6 +60,8 @@ Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `
 - `SAML_ISSUER`: SAML authentication: issuer string to supply to identity provider
 - `SAML_CERT_FILENAME`: SAML authentication: name of the IdP's public signing certificate used to validate the signatures of the incoming SAML Responses (should be placed in `/certs`)
 - `SAML_PRIVATE_CERT_FILENAME`: SAML authentication: name of the certificate used to sign requests sent to the IdP
+- `HOST_USER_UID`: optional user id to use for the node user (this should be set before the image is built); default is 1000, which could conflict with host users.
+- `HOST_USER_GID`: optional group id to use for the node group (this should be set before the image is built); default is 1000, which could conflict with host groups.
 
 ## Permissions
 Permissions are always applied to groups. Two groups are automatically created:

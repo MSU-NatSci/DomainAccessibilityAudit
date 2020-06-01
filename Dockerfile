@@ -1,4 +1,6 @@
 FROM debian:buster
+ARG HOST_USER_UID=1000
+ARG HOST_USER_GID=1000
 
 WORKDIR /app
 
@@ -22,8 +24,8 @@ RUN ln -s /usr/bin/geckodriver /usr/bin/chromium-browser \
   && chmod 777 /usr/bin/chromium-browser
 
 # Run node as node with primary group node
-RUN groupadd --gid 1000 node \
-  && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
+RUN groupadd --gid $HOST_USER_GID node \
+  && useradd --uid $HOST_USER_UID --gid node --shell /bin/bash --create-home node
 
 COPY package.json package-lock.json ./
 COPY client/package.json client/package-lock.json ./client/
