@@ -160,6 +160,16 @@ ESLint should be integrated in the editor, which might require an `npm install` 
 It can also be used to check the whole project, using Docker:
 - `docker-compose run --rm accessibility_audit npm run lint`
 
+## Database backup and restore
+Backup:
+```
+docker exec domainaccessibilityaudit_mongodb_1 sh -c 'exec mongodump -d accessibility_audit --archive --gzip' > db_dump.gz
+```
+Restore will remove all existing data in the database:
+```
+docker exec -i domainaccessibilityaudit_mongodb_1 sh -c 'exec mongorestore --nsInclude 'accessibility_audit.*' --drop --archive --gzip' < db_dump.gz
+```
+
 ## Technologies used
 - [axe](https://github.com/dequelabs/axe-core)
 - [Selenium WebDriver](https://www.seleniumhq.org/projects/webdriver/)
