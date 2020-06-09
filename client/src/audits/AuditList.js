@@ -77,7 +77,8 @@ class AuditList extends Component {
     if (!this.props.permissions)
       return null;
     let auditsHTML = null;
-    if (this.state.audits != null) {
+    const anyPermission = this.props.permissions.anyPermission();
+    if (anyPermission && this.state.audits != null) {
       const sortedAudits = [...this.state.audits]
         .sort((a,b) => b.dateStarted - a.dateStarted);
       auditsHTML = sortedAudits.map(audit => (
@@ -107,6 +108,14 @@ class AuditList extends Component {
         </Alert>
         <Login server={this.props.server} permissions={this.props.permissions}
           localLogin={(u,p) => this.localLogin(u,p)} logout={() => this.logout()}/>
+        {!anyPermission &&
+          <>
+            <p>You do not currently have any permission.</p>
+            {!this.props.permissions.loggedIn() &&
+              <p>You might want to log in.</p>
+            }
+          </>
+        }
         {this.props.permissions.anyAuditCreateAllowed() &&
           <>
             <LinkContainer to="/audits/create">

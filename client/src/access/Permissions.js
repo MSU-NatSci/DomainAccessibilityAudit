@@ -88,4 +88,19 @@ export default class Permissions {
     return false;
   }
   
+  anyPermission() {
+    if (!this.user)
+      return false;
+    for (const g of this.user.groups) {
+      const perms = g.permissions;
+      if (perms.readAllAudits || perms.createAllAudits ||
+          perms.deleteAllAudits || perms.editUsersAndGroups)
+        return true;
+      for (const d of perms.domains) {
+        if (d.read || d.delete || d.create)
+          return true;
+      }
+    }
+    return false;
+  }
 }

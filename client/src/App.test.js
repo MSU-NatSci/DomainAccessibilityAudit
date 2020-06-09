@@ -17,9 +17,9 @@ it("renders without crashing", () => {
 describe('displays content based on paths', () => {
   it("works with no path", async () => {
     route = '/';
-    const { container } = render(<App/>);
+    const { getByText } = render(<App/>);
     await wait();
-    expect(container.querySelector('h2').textContent).toBe("Saved Audits");
+    expect(getByText("You do not currently have any permission.")).toBeTruthy();
   });
   it("works with an audit path", async () => {
     route = '/audits/aid1';
