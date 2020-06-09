@@ -4,16 +4,17 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import ServerAPI from '../ServerAPI';
+import ImportButton from './ImportButton';
 import Login from '../access/Login';
 import Permissions from '../access/Permissions';
+import ServerAPI from '../ServerAPI';
 
 
 class AuditList extends Component {
@@ -68,6 +69,10 @@ class AuditList extends Component {
       });
   }
   
+  exportAudit(auditId) {
+    this.props.server.exportAudit(auditId);
+  }
+  
   render() {
     if (!this.props.permissions)
       return null;
@@ -85,6 +90,9 @@ class AuditList extends Component {
           {this.props.permissions.domainDeleteAllowed(audit.initialDomainName) &&
             <td className="text-right">
               <Button title="Remove" variant="danger" size="xs" onClick={(e) => this.removeAudit(audit._id)}><FontAwesomeIcon icon={faTrashAlt} title="Remove" /></Button>
+              {this.props.permissions.anyAuditCreateAllowed() &&
+                <Button title="Export Results" variant="info" size="xs" onClick={(e) => this.exportAudit(audit._id)}><FontAwesomeIcon icon={faDownload} title="Export Results" /></Button>
+              }
             </td>
           }
         </tr>
@@ -104,6 +112,9 @@ class AuditList extends Component {
             <LinkContainer to="/audits/create">
               <Button>Start a new audit</Button>
             </LinkContainer>
+            {' '}
+            <ImportButton server={this.props.server} getAudits={
+              () => this.getAudits()}/>
           </>
         }
         {this.props.permissions.userAndGroupEditAllowed() &&

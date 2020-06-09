@@ -21,14 +21,15 @@ class ServerAPI {
   request(method, path, parameters) {
     return new Promise((resolve, reject) => {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 2000);
+      const timeout = setTimeout(() => controller.abort(), 3000);
       const fetchParams = {
         method: method,
         signal: controller.signal
       };
       if (parameters != null) {
         fetchParams.headers = { 'Content-Type': 'application/json' };
-        fetchParams.body = JSON.stringify(parameters);
+        fetchParams.body = (typeof parameters === 'string') ? parameters :
+          JSON.stringify(parameters);
       }
       fetch(path, fetchParams)
         .then((response) => {
@@ -108,6 +109,13 @@ class ServerAPI {
   removeAudit(auditId) {
     this.cache.lastAuditList = null;
     return this.request('DELETE', `/api/audits/${auditId}`);
+  }
+  exportAudit(auditId) {
+    window.location.href = this.hostURL + `/api/audits/${auditId}/export`;
+  }
+  async importAudit(data) {
+    this.cache.lastAuditList = null;
+    await this.request('POST', `/api/audits/import`, data);
   }
   async getDomain(domainId) {
     if (this.cache.lastDomain != null && this.cache.lastDomain._id === domainId)

@@ -144,7 +144,6 @@ There are separate permissions to read audits, create audits, remove audits, and
 - Ability to pause an audit.
 - Option to ignore pages returning a 404 status code.
 - Regular expression to ignore some URLs.
-- Easy way to export data.
 
 ## Licence
 GPL 3.0.

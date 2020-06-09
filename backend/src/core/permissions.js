@@ -165,7 +165,7 @@ export const domainReadAllowed = (user, domainName) => {
       if (d.read) {
         if (d.name == domainName)
           return true;
-        if (domainName.endsWith('.' + d.name))
+        if (domainName && domainName.endsWith('.' + d.name))
           return true;
       }
     }
@@ -181,7 +181,7 @@ export const domainDeleteAllowed = (user, domainName) => {
       if (d.delete) {
         if (d.name == domainName)
           return true;
-        if (domainName.endsWith('.' + d.name))
+        if (domainName && domainName.endsWith('.' + d.name))
           return true;
       }
     }
@@ -197,7 +197,7 @@ export const domainCreateAllowed = (user, domainName) => {
       if (d.create) {
         if (d.name == domainName)
           return true;
-        if (domainName.endsWith('.' + d.name))
+        if (domainName && domainName.endsWith('.' + d.name))
           return true;
       }
     }

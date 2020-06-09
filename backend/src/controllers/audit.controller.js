@@ -198,3 +198,122 @@ exports.get_audit_status = (req, res) => {
   }
   res.json({ success: true, data: rAudit.status() });
 };
+
+exports.export_audit = async (req, res) => {
+  const { auditId } = req.params;
+  if (typeof(auditId) != 'string' || !auditId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.json({ success: false, error: "Missing or wrong audit id" });
+    return;
+  }
+  try {
+    const audit = await AuditModel.findById(auditId).select('-_id').lean().exec();
+    if (audit == null) {
+      res.json({ success: false, error: "Audit not found !" });
+      return;
+    }
+    if (!domainReadAllowed(req.user, audit.initialDomainName)) {
+      res.json({ success: false, error: "You are not allowed to read this audit." });
+      return;
+    }
+    // remove useless _id in audit violationStats
+    for (const violation of Object.values(audit.violationStats)) {
+      delete violation._id;
+      for (const domain of violation.domains)
+        delete domain._id;
+    }
+    const [domains, pages] = await Promise.all([
+      DomainModel.find({ auditId }).select('-auditId -__v').lean().exec(),
+      PageModel.find({ auditId }).select('-auditId -__v').lean().exec()
+    ]);
+    // remove useless _id in domains violationStats
+    for (const domain of domains) {
+      for (const violation of Object.values(domain.violationStats)) {
+        delete violation._id;
+        for (const page of violation.pages)
+          delete page._id;
+      }
+    }
+    const exportData = { audit, domains, pages };
+    const dateStr = (new Date(audit.dateStarted)).toLocaleDateString()
+      .replace(/\//g, '_');
+    const fileName = audit.initialDomainName + '_' + dateStr + '.json';
+    res.attachment(fileName);
+    res.json(exportData);
+  } catch (err) {
+    res.set('Content-Type', 'text/plain');
+    res.send(err.message);
+  }
+};
+
+exports.import_audit = async (req, res) => {
+  const { audit, domains, pages } = req.body;
+  try {
+    if (typeof(audit) != 'object') {
+      res.json({ success: false, error: "Missing or wrong audit" });
+      return;
+    }
+    if (!Array.isArray(domains)) {
+      res.json({ success: false, error: "Missing or wrong domains" });
+      return;
+    }
+    if (!Array.isArray(pages)) {
+      res.json({ success: false, error: "Missing or wrong pages" });
+      return;
+    }
+    if (!domainCreateAllowed(req.user, audit.initialDomainName)) {
+      res.json({ success: false, error: "You are not allowed to import this audit." });
+      return;
+    }
+    const savedAudit = await AuditModel.create(audit);
+    const auditId = savedAudit._id;
+    // save domains with new audit id
+    for (const domain of domains)
+      domain.auditId = auditId;
+    const domainIds = domains.map(d => d._id);
+    for (const domain of domains)
+      delete domain._id;
+    const savedDomains = await DomainModel.insertMany(domains);
+    const newDomainId = {};
+    for (let i=0; i<domains.length; i++)
+      newDomainId[domainIds[i]] = savedDomains[i]._id;
+    // fix links to domains from audit violationStats
+    for (const violation of savedAudit.violationStats.values()) {
+      for (const domain of violation.domains)
+        domain.id = newDomainId[domain.id];
+    }
+    await savedAudit.save();
+    // save pages with new audit id and domain id
+    for (const page of pages) {
+      page.auditId = auditId;
+      page.domainId = newDomainId[page.domainId];
+    }
+    const pageIds = pages.map(p => p._id);
+    for (const page of pages)
+      delete page._id;
+    const savedPages = await PageModel.insertMany(pages);
+    const newPageId = {};
+    for (let i=0; i<pages.length; i++)
+      newPageId[pageIds[i]] = savedPages[i]._id;
+    // fix links to pages from domain violationStats
+    const ops = [];
+    for (const domain of savedDomains) {
+      for (const violation of domain.violationStats.values()) {
+        for (const page of violation.pages) {
+          page.id = newPageId[page.id];
+        }
+      }
+      ops.push({
+        updateOne: {
+          filter: { _id: domain._id },
+          update: {
+            violationStats: domain.violationStats,
+          },
+        }
+      });
+    }
+    await DomainModel.bulkWrite(ops);
+    res.json({ success: true, data: {} });
+  } catch (err) {
+    res.json({ success: false, error: err.message });
+  }
+};

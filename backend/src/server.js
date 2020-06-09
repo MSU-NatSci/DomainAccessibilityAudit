@@ -27,12 +27,13 @@ const PORT = process.env.NODE_ENV == 'production' ? 8080 :
   process.env.NODE_ENV == 'test' ? 3144 : 3143;
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '100mb' }));
 app.use(logger('dev'));
 app.use(session({
   secret: crypto.randomBytes(20).toString('hex'),
   resave: false,
   saveUninitialized: false,
+  cookie: { sameSite: 'lax' },
 }));
 
 app.use(passport.initialize());
