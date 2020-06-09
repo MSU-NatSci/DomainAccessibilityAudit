@@ -4,6 +4,7 @@ import express from 'express';
 import session from 'express-session';
 import crypto from 'crypto';
 import bodyParser from 'body-parser';
+import compression from 'compression';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import fs from 'fs';
@@ -26,6 +27,7 @@ const app = express();
 const PORT = process.env.NODE_ENV == 'production' ? 8080 :
   process.env.NODE_ENV == 'test' ? 3144 : 3143;
 
+app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(logger('dev'));
