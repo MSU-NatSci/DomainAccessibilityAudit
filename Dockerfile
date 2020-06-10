@@ -6,10 +6,15 @@ WORKDIR /app
 
 # Get Chromium, Firefox and Node
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get update && apt-get install -y curl gnupg vim
+RUN apt-get update && apt-get install -y curl gnupg vim wget libdbus-glib-1-2
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+# firefox-esr no longer seems to work well, installing latest instead
+# (libdbus-glib-1-2 is a dependency)
+RUN wget -nv -O /tmp/FirefoxSetup.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" \
+  && tar xjf /tmp/FirefoxSetup.tar.bz2 -C /opt/ \
+  && ln -s /opt/firefox/firefox /usr/bin/firefox
 RUN apt-get install -yq \
-  chromium chromium-driver firefox-esr xvfb xsel unzip nodejs wget
+  chromium chromium-driver xvfb xsel unzip nodejs
 
 # geckodriver
 # see latest at https://github.com/mozilla/geckodriver/releases/
