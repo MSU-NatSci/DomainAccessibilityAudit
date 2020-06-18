@@ -364,6 +364,9 @@ export default class Audit {
     ind = domainName.indexOf('#');
     if (ind > -1)
       domainName = domainName.substring(0, ind);
+    ind = domainName.indexOf('@');
+    if (ind > -1 && ind < domainName.length - 1)
+      domainName = domainName.substring(ind + 1);
     return domainName;
   }
   
