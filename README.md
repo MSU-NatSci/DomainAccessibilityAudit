@@ -45,7 +45,7 @@ It reports statistics of violations for the whole audit, domains and pages.
 - Results include violation statistics with links to Deque documentation given for the whole audit (including subdomains), for each domain and for each page.
 - Easy way to see which domains or pages are most affected by specific violations.
 - User and group management, with authorizations based on domains.
-- 2 methods of authentication: local and SAML (experimental).
+- 2 methods of authentication: local and SAML.
 
 ## Other environment variables
 Besides the required `ADMIN_PASSWORD` variable, other variables can be used in `.env`:
