@@ -24,8 +24,8 @@
   "author": "Damien Guillaume",
   "license": "GPL-3.0",
   "devDependencies": {
-    "concurrently": "^4.1.0",
-    "husky": "^3.1.0"
+    "concurrently": "^5.2.0",
+    "husky": "^4.2.5"
   },
   "dependencies": {},
   "husky": {
