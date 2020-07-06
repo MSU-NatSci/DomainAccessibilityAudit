@@ -31,6 +31,7 @@ services:
       - ./client/public:/app/client/public:Z
       - ./client/src:/app/client/src:Z
       - ./client/.env:/app/client/.env:Z
+      - ./client/.eslintrc.json:/app/client/.eslintrc.json:Z
       - ./certs:/app/certs:Z
       - /dev/shm:/dev/shm
     depends_on:
