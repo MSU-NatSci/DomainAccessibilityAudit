@@ -269,7 +269,7 @@ class User extends Component {
                     <Form.Control name="selectedGroup" as="select" value={this.state.selectedGroup}
                         onChange={e => this.handleChange(e)}>
                       {this.state.groupsToAdd
-                        .map((g) => 
+                        .map((g) =>
                           <option key={g._id} value={g._id}>{g.name}</option>
                         )}
                     </Form.Control>

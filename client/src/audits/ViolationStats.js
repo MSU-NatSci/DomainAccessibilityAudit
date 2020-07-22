@@ -46,7 +46,7 @@ class ViolationStats extends Component {
                 return this.itemTitle(item1.id).localeCompare(
                   this.itemTitle(item2.id));
               })
-              .map(item => 
+              .map(item =>
                 <div key={item.id}>
                   <Link to={'/' + this.itemPlural + '/' + item.id}>{this.itemTitle(item.id)}</Link>
                   {' '}{item.count}

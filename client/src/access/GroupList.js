@@ -66,7 +66,7 @@ class GroupList extends Component {
   groupList() {
     if (this.state.groups == null)
       return null;
-    const yesNoIcon = (b) => 
+    const yesNoIcon = (b) =>
       (b ?
         <FontAwesomeIcon icon={faCheck} title="Yes"/>
         : <FontAwesomeIcon icon={faTimes} title="No"/>

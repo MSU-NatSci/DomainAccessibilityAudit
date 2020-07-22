@@ -385,7 +385,7 @@ class Group extends Component {
                   <Form.Control name="selectedUser" as="select" value={this.state.selectedUser}
                       onChange={e => this.handleChange(e)}>
                     {this.state.usersToAdd
-                      .map((u) => 
+                      .map((u) =>
                         <option key={u._id} value={u._id}>{u.username}</option>
                       )}
                   </Form.Control>

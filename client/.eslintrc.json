@@ -44,6 +44,7 @@
       "prefer-const": ["warn"],
       "require-await": ["warn"],
       "semi": ["warn", "always"],
-      "block-spacing": ["warn"]
+      "block-spacing": ["warn"],
+      "no-trailing-spaces": ["warn", { "skipBlankLines": true }]
     }
 }
