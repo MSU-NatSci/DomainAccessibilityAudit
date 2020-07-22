@@ -45,6 +45,7 @@
       "require-await": ["warn"],
       "semi": ["warn", "always"],
       "block-spacing": ["warn"],
-      "no-trailing-spaces": ["warn", { "skipBlankLines": true }]
+      "no-trailing-spaces": ["warn", { "skipBlankLines": true }],
+      "jsx-quotes": ["warn", "prefer-double"]
     }
 }

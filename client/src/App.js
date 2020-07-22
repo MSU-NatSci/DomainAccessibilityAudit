@@ -88,39 +88,39 @@ class App extends Component {
             this.state.displayLoading && <p>Loading permissions...</p>
             :
             <Switch>
-              <Route exact path='/audits/create'
+              <Route exact path="/audits/create"
                 render={(routerProps) => <AuditForm permissions={this.state.permissions}
                   server={this.server} {...routerProps} />} />
-              <Route path='/audits/:auditId/status'
+              <Route path="/audits/:auditId/status"
                 render={(routerProps) => <AuditStatus server={this.server} {...routerProps} />} />
-              <Route path='/audits/:auditId'
+              <Route path="/audits/:auditId"
                 render={(routerProps) => <Audit server={this.server} {...routerProps} />} />
-              <Route path='/audits/'
+              <Route path="/audits/"
                 render={(routerProps) => <AuditList server={this.server}
                   permissions={this.state.permissions}
                   localLogin={(username, password) => this.localLogin(username, password)}
                   logout={() => this.logout()}
                   {...routerProps} />} />
-              <Route path='/domains/:domainId'
+              <Route path="/domains/:domainId"
                 render={(routerProps) => <Domain server={this.server} {...routerProps} />} />
-              <Route path='/pages/:pageId'
+              <Route path="/pages/:pageId"
                 render={(routerProps) => <Page server={this.server} {...routerProps} />} />
-              <Route path='/users/create' render={(routerProps) => <User server={this.server}
+              <Route path="/users/create" render={(routerProps) => <User server={this.server}
                 permissions={this.state.permissions}
                 {...routerProps} />} />
-              <Route path='/users/:userId' render={(routerProps) => <User server={this.server}
+              <Route path="/users/:userId" render={(routerProps) => <User server={this.server}
                 permissions={this.state.permissions}
                 {...routerProps} />} />
-              <Route path='/users/' render={(routerProps) => <UserList server={this.server}
+              <Route path="/users/" render={(routerProps) => <UserList server={this.server}
                 permissions={this.state.permissions}
                 {...routerProps} />} />
-              <Route path='/groups/create' render={(routerProps) => <Group server={this.server}
+              <Route path="/groups/create" render={(routerProps) => <Group server={this.server}
                 permissions={this.state.permissions}
                 {...routerProps} />} />
-              <Route path='/groups/:groupId' render={(routerProps) => <Group server={this.server}
+              <Route path="/groups/:groupId" render={(routerProps) => <Group server={this.server}
                 permissions={this.state.permissions}
                 {...routerProps} />} />
-              <Route path='/groups/' render={(routerProps) => <GroupList server={this.server}
+              <Route path="/groups/" render={(routerProps) => <GroupList server={this.server}
                 permissions={this.state.permissions}
                 {...routerProps} />} />
               <Route render={(routerProps) => <AuditList server={this.server}
