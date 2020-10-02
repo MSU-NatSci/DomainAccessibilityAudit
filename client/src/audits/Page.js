@@ -99,7 +99,7 @@ class Page extends Component {
                     <tr><th>Nodes</th><td>
                       <Table bordered size="sm" className="data">
                         <thead>
-                          <tr><th>Target</th><th>HTHML</th></tr>
+                          <tr><th>Target</th><th>HTML</th></tr>
                         </thead>
                         <tbody>
                           {violation.nodes.map(node => (
