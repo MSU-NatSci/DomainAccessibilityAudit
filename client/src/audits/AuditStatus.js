@@ -55,7 +55,7 @@ class AuditStatus extends React.Component {
       },
       error => {
         this.setState({
-          error: error,
+          error: error.message,
           status: null,
         });
       });
@@ -70,7 +70,7 @@ class AuditStatus extends React.Component {
         });
       },
       error => {
-        this.setState({ error, requestedStop: false });
+        this.setState({ error: error.message, requestedStop: false });
       });
   }
   
