@@ -153,6 +153,8 @@ export default class Audit {
     this.driver = new WebDriver.Builder()
       .forBrowser(this.params.browser);
     if (this.params.browser == 'firefox') {
+      this.driver = this.driver.withCapabilities(
+        WebDriver.Capabilities.firefox().set('acceptInsecureCerts', true));
       const profile = new firefox.Profile();
       for (const key of Object.keys(this.firefoxPreferences))
         profile.setPreference(key, this.firefoxPreferences[key]);
