@@ -1,0 +1,13 @@
+image: docker:stable
+services:
+  - docker:dind
+
+stages:
+  - test
+
+test:
+  stage: test
+  tags:
+    - msul
+  script:
+    - echo "running cicd!"
