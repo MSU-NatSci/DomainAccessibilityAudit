@@ -46,5 +46,5 @@ deploy:
     - ssh $CONNECT sudo /bin/systemctl status daa
     - ssh $CONNECT docker container prune -f
     - ssh $CONNECT docker image prune -f -a
-    - ssh $CONNECT "[[ $( curl -s -o /dev/null -I -w \"%{http_code}\" $CI_ENVIRONMENT_URL ) -eq 200 ]]"
+    - ssh $CONNECT "[[ $( curl -s -o /dev/null -k -I -w \"%{http_code}\" $CI_ENVIRONMENT_URL ) -eq 200 ]]"
 
