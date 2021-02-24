@@ -42,7 +42,7 @@ deploy:
     - ssh $CONNECT "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml config)"
     - ssh $CONNECT "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml pull)"
     - ssh $CONNECT sudo /bin/systemctl restart daa
-    - sleep 10
+    - sleep 30
     - ssh $CONNECT sudo /bin/systemctl status daa
     - ssh $CONNECT docker container prune -f
     - ssh $CONNECT docker image prune -f -a
