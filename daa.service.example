@@ -1,0 +1,19 @@
+Unit]
+Description=Domain Accessibility Audit docker application stack
+After=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=[FULL_PATH]/DomainAccessibilityAudit
+EnvironmentFile=/etc/environment
+ExecStart=/usr/local/bin/docker-compose -f [FULL_PATH]/DomainAccessibilityAudit/docker-compose.yml up
+ExecStop=/usr/local/bin/docker-compose -f [FULL_PATH]/DomainAccessibilityAudit/docker-compose.yml down
+ExecReload=/usr/local/bin/docker-compose -f [FULL_PATH]/DomainAccessibilityAudit/docker-compose.yml up
+Restart=always
+RestartSec=180
+StartLimitInterval=550
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target
+
