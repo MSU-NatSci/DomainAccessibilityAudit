@@ -37,7 +37,7 @@ deploy:
     - ssh $CONNECT git -C $REPO_PATH reset HEAD --hard
     - ssh $CONNECT git -C $REPO_PATH fetch gitlab
     - ssh $CONNECT git -C $REPO_PATH checkout $CI_COMMIT_SHORT_SHA
-    - ssh $CONNECT "sed -i 's|^\( *\)accessibility_audit:$|&\n\1  image:\ registry.gitlab.msu.edu\/msu-libraries\/devops\/domainaccessibilityaudit:$|$CI_COMMIT_SHORT_SHA' $REPO_PATH/docker-compose.yml"
+    - ssh $CONNECT "sed -i 's|^\( *\)accessibility_audit:$|&\n\1  image:\ registry.gitlab.msu.edu\/msu-libraries\/devops\/domainaccessibilityaudit:$CI_COMMIT_SHORT_SHA|' $REPO_PATH/docker-compose.yml"
     - ssh $CONNECT docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - ssh $CONNECT "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml config)"
     - ssh $CONNECT "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml pull)"
