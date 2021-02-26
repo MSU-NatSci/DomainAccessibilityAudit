@@ -29,7 +29,7 @@ const PORT = process.env.NODE_ENV == 'production' ? 8080 :
 
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.json({ limit: '150mb' }));
 app.use(logger('dev'));
 app.use(session({
   secret: crypto.randomBytes(20).toString('hex'),
