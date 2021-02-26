@@ -28,8 +28,19 @@ class ServerAPI {
       };
       if (parameters != null) {
         fetchParams.headers = { 'Content-Type': 'application/json' };
-        fetchParams.body = (typeof parameters === 'string') ? parameters :
-          JSON.stringify(parameters);
+        if (parameters instanceof ArrayBuffer) {
+          let isCompressed = false;
+          const ar = new Uint8Array(parameters);
+          if (ar[0] === 0x1F && ar[1] === 0x8B && ar[2] === 0x08)
+            isCompressed = true;
+          if (isCompressed)
+            fetchParams.headers['Content-Encoding'] = 'gzip';
+          fetchParams.body = parameters;
+        } else if (typeof parameters === 'string') {
+          fetchParams.body = parameters;
+        } else {
+          fetchParams.body = JSON.stringify(parameters);
+        }
       }
       fetch(path, fetchParams)
         .then((response) => {

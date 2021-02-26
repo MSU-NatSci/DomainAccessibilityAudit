@@ -59,7 +59,10 @@ class ImportButton extends Component {
       this.props.getAudits();
       this.setState({ displayForm: false, status: null });
     }, false);
-    reader.readAsText(f);
+    if (f.name.endsWith('.gz'))
+      reader.readAsArrayBuffer(f);
+    else
+      reader.readAsText(f);
   }
   
   render() {

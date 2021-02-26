@@ -1,3 +1,8 @@
+import { pipeline, PassThrough } from 'stream';
+import { promisify } from 'util';
+import zlib from 'zlib';
+const ppipe = promisify(pipeline);
+
 import { filterAudits, domainCreateAllowed, domainReadAllowed, domainDeleteAllowed } from '../core/permissions';
 import Audit from '../core/audit';
 import AuditModel from '../models/audit.model';
@@ -236,10 +241,15 @@ exports.export_audit = async (req, res) => {
     const exportData = { audit, domains, pages };
     const dateStr = (new Date(audit.dateStarted)).toLocaleDateString()
       .replace(/\//g, '_');
-    const fileName = audit.initialDomainName + '_' + dateStr + '.json';
+    const fileName = audit.initialDomainName + '_' + dateStr + '.json.gz';
     res.attachment(fileName);
-    res.json(exportData);
+    const buffer = new Buffer.from(JSON.stringify(exportData));
+    const bufferStream = new PassThrough();
+    bufferStream.end(buffer);
+    res.set('Content-Type', 'application/x-gzip');
+    await ppipe(bufferStream, zlib.createGzip(), res);
   } catch (err) {
+    console.error(err);
     res.set('Content-Type', 'text/plain');
     res.send(err.message);
   }
