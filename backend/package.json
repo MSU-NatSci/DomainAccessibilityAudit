@@ -15,6 +15,7 @@
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.10.0",
     "cross-env": "^6.0.3",
+    "@axe-core/webdriverjs": "^4.1.1",
     "eslint": "^6.8.0",
     "jest": "^24.9.0",
     "nodemon": "^2.0.4",
@@ -22,7 +23,6 @@
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
-    "axe-webdriverjs": "^2.2.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "express": "^4.17.0",
