@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
-import PieChart from 'react-minimal-pie-chart';
+import { PieChart } from 'react-minimal-pie-chart';
 
 
 class Categories extends Component {
@@ -109,14 +109,15 @@ class Categories extends Component {
               })
             )}
             startAngle={270}
-            label={({ data, dataIndex }) =>
-              data[dataIndex].title + ": " + data[dataIndex].value + "%"}
+            label={({ dataEntry }) =>
+              dataEntry.title + ": " + dataEntry.value + "%"}
             labelStyle={{
               fontSize: '13px',
               fontFamily: 'sans-serif',
               fill: 'black',
             }}
-            radius={17}
+            radius={100}
+            center={[290,135]}
             labelPosition={110}
             aria-hidden="true"
             injectSvg={() =>
