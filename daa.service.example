@@ -1,4 +1,4 @@
-Unit]
+[Unit]
 Description=Domain Accessibility Audit docker application stack
 After=docker.service
 

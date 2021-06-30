@@ -9,8 +9,8 @@ It reports statistics of violations for the whole audit, domains and pages.
 - Edit a `.env` file at the root of this folder (next to the README),
   with the following parameters:
   ```
-  ADMIN_USERNAME=
-  ADMIN_PASSWORD=
+  ADMIN_USERNAME='username'
+  ADMIN_PASSWORD='password'
   ```
   (this password is needed to create and remove audits)
 - `docker-compose up -d`
@@ -73,6 +73,25 @@ Another group can be created with SAML authentication:
 More groups can be created and assigned users.
 
 There are separate permissions to read audits, create audits, remove audits, and edit users and groups. The audit permissions can also be given for specific domains (which include subdomains).
+
+## Service Installation (systemd)
+A template service example is provided in the root directory of this project (daa.service.example)
+- Copy the example to "daa.service" and edit [FULL_PATH] to be the path of the project.  Remember to check path to docker-compose, this may be `/usr/bin/docker-compose` and ensure environment variables are set (This can be done in the .env file above if you wish).
+```
+cp daa.service.example daa.service
+nano daa.service
+```
+
+- Copy or move daa.service to systemd service directory
+```
+sudo cp daa.service /etc/systemd/system/ ` or ` /lib/systemd/system
+```
+
+- Enable and start service
+```
+sudo systemd enable daa.service
+sudo systemd start daa.service 
+```
 
 ## FAQ
 - Does this tool accurately reflect a website's state of accessibility ?  
