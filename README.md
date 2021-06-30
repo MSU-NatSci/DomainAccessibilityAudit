@@ -86,7 +86,7 @@ A template service example is provided in the root directory of this project (da
 ` sudo cp daa.service /etc/systemd/system/ ` or ` /lib/systemd/system `
 
 - Enable and start service
-` sudo systemd enable daa.service `
+` sudo systemd enable daa.service `  
 ` sudo systemd start daa.service `
 
 ## FAQ
