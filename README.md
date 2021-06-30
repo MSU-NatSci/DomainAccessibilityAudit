@@ -77,17 +77,21 @@ There are separate permissions to read audits, create audits, remove audits, and
 ## Service Installation (systemd)
 A template service example is provided in the root directory of this project (daa.service.example)
 - Copy the example to "daa.service" and edit [FULL_PATH] to be the path of the project.  Remember to check path to docker-compose, this may be `/usr/bin/docker-compose` and ensure environment variables are set (This can be done in the .env file above if you wish).
-
-` cp daa.service.example daa.service `
-` nano daa.service `
+```
+cp daa.service.example daa.service
+nano daa.service
+```
 
 - Copy or move daa.service to systemd service directory
-
-` sudo cp daa.service /etc/systemd/system/ ` or ` /lib/systemd/system `
+```
+sudo cp daa.service /etc/systemd/system/ ` or ` /lib/systemd/system
+```
 
 - Enable and start service
-` sudo systemd enable daa.service `  
-` sudo systemd start daa.service `
+```
+sudo systemd enable daa.service
+sudo systemd start daa.service 
+```
 
 ## FAQ
 - Does this tool accurately reflect a website's state of accessibility ?  
