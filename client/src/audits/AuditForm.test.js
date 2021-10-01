@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
@@ -25,7 +25,7 @@ it("starts the audit and navigates to the status page", async () => {
   fireEvent.change(getByLabelText("Initial URL"), { target: { value: 'http://test/' } });
   // click the submit button
   fireEvent.click(getByText("Start Audit"));
-  await wait();
+  await waitFor(() => {});
   // check startAudit was called
   expect(mockServer.startAudit).toBeCalledWith({
     firstURL: 'http://test/',

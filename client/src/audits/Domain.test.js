@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, wait } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import MockServerAPI from '../ServerAPI';
@@ -21,7 +21,7 @@ const init = async (domainId) => {
   const mockServer = new MockServerAPI();
   await mockServer.localLogin('user2', 'pass2');
   const { container, getByText, getAllByTitle } = render(<MemoryRouter><Domain server={mockServer} match={{params:{domainId:domainId}}}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getByText, getAllByTitle };
 };
 

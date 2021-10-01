@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
@@ -30,7 +30,7 @@ const init = async (admin) => {
   mockHistory.push = jest.fn();
   const { container, getAllByTitle, getByLabelText, getByText } =
     render(<MemoryRouter><Group server={mockServer} permissions={permissions} match={{params:{groupId:'gid1'}}} history={mockHistory}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getAllByTitle, getByLabelText, getByText };
 };
 
@@ -50,7 +50,7 @@ it("saves modified group information", async () => {
   const { getByText, getByLabelText } = await init(true);
   fireEvent.change(getByLabelText("Group Name"), { target: { value: 'group1-2' } });
   fireEvent.click(getByText("Save"));
-  await wait();
+  await waitFor(() => {});
   expect(getByText("The group was successfully saved.")).toBeTruthy();
   expect(document.getElementById('name').value).toBe('group1-2');
 });
@@ -60,12 +60,12 @@ it("adds a domain", async () => {
   let table = getTableBySectionTitle(container, /^Domains$/);
   expect(table).toBe(null);
   fireEvent.click(getByText("Add a domain"));
-  await wait();
+  await waitFor(() => {});
   table = getTableBySectionTitle(container, /^Domains$/);
   expect(table.querySelector('tr td')).toBeTruthy();
   fireEvent.change(getByLabelText("Domain Name"), { target: { value: 'new-domain' } });
   fireEvent.click(getByText("Save"));
-  await wait();
+  await waitFor(() => {});
 });
 
 it("removes a domain", async () => {
@@ -73,7 +73,7 @@ it("removes a domain", async () => {
   const { container } = await init(true);
   let table = getTableBySectionTitle(container, /^Domains$/);
   fireEvent.click(table.querySelector('button[title="Remove"]'));
-  await wait();
+  await waitFor(() => {});
   table = getTableBySectionTitle(container, /^Domains$/);
   expect(table).toBe(null);
 });
@@ -85,7 +85,7 @@ it("adds a user", async () => {
   expect(document.getElementById('selectedUser').value).toBe('uid2');
   expect(table.querySelector('tr:nth-of-type(2)')).toBe(null);
   fireEvent.click(getByText("Add"));
-  await wait();
+  await waitFor(() => {});
   expect(document.getElementById('selectedUser').value).toBe('guest');
   expect(table.querySelector('tr:nth-of-type(2) td').textContent).toBe('user2');
 });
@@ -95,7 +95,7 @@ it("removes a user", async () => {
   const { container } = await init(true);
   const table = getTableBySectionTitle(container, /^Users$/);
   fireEvent.click(table.querySelectorAll('button[title="Remove"]')[1]);
-  await wait();
+  await waitFor(() => {});
   expect(table.querySelector('tr:nth-of-type(2)')).toBe(null);
   expect(document.getElementById('selectedUser').value).toBe('uid2');
 });
@@ -103,6 +103,6 @@ it("removes a user", async () => {
 it("removes a group", async () => {
   const { getByText } = await init(true);
   fireEvent.click(getByText("Remove group"));
-  await wait();
+  await waitFor(() => {});
   expect(mockHistory.push).toBeCalledWith('/groups/');
 });

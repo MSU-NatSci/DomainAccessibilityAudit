@@ -1,5 +1,5 @@
 import WebDriver from 'selenium-webdriver';
-import AxeBuilder from 'axe-webdriverjs';
+import AxeBuilder from '@axe-core/webdriverjs';
 import firefox from 'selenium-webdriver/firefox';
 import chrome from 'selenium-webdriver/chrome';
 
@@ -178,7 +178,7 @@ export default class Audit {
       tags = ['section508'];
     else
       tags = ['wcag2aa', 'wcag2a'];
-    this.aXeB = AxeBuilder(this.driver)
+    this.aXeB = new AxeBuilder(this.driver)
       .options({
         branding: {
           application: "Domain Accessibility Audit"

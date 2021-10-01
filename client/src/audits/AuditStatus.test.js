@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait, waitForElement } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import MockServerAPI from '../ServerAPI';
@@ -22,11 +22,7 @@ it("renders with audit information", async () => {
   mockServer.getAuditStatus = jest.fn().mockImplementation(() => Promise.resolve(mockAudit));
 
   const { container } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
-  // wait for getAuditStatus to be called
-  await waitForElement(
-    () => container.querySelector('table'),
-    { container }
-  );
+  await waitFor(() => expect(mockServer.getAuditStatus).toHaveBeenCalledTimes(1));
   expect(container.querySelector('td').textContent).toBe('Yes');
   expect(mockServer.getAuditStatus).toBeCalledWith('aid1');
 });
@@ -38,11 +34,8 @@ it("can stop an audit", async () => {
   mockServer.stopAudit = jest.fn().mockImplementation(() => Promise.resolve());
 
   const { container, getByText } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
-  await waitForElement(
-    () => container.querySelector('table'),
-    { container }
-  );
+  await waitFor(() => expect(mockServer.getAuditStatus).toHaveBeenCalledTimes(1));
   fireEvent.click(getByText("Stop the audit"));
-  await wait();
+  await waitFor(() => {});
   expect(mockServer.stopAudit).toBeCalledWith('aid1');
 });

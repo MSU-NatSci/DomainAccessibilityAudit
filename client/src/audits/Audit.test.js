@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, wait } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Audit from './Audit';
@@ -20,7 +20,7 @@ const getTableBySectionTitle = (container, titleExpr) => {
 const init = async (auditId) => {
   const mockServer = new MockServerAPI();
   const { container, getByText, getAllByTitle } = render(<MemoryRouter><Audit server={mockServer} match={{params:{auditId:auditId}}}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getByText, getAllByTitle };
 };
 

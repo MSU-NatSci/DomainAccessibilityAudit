@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, wait } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import MockServerAPI from '../ServerAPI';
@@ -10,7 +10,7 @@ jest.mock('../ServerAPI');
 const init = async (pageId) => {
   const mockServer = new MockServerAPI();
   const { container, getByText } = render(<MemoryRouter><Page server={mockServer} match={{params:{pageId:pageId}}}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getByText };
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import MockServerAPI from '../ServerAPI';
@@ -15,7 +15,7 @@ const init = async (admin) => {
   const userInfo = await mockServer.getCurrentUser();
   const permissions = new Permissions(userInfo);
   const { container, getByText } = render(<MemoryRouter><UserList server={mockServer} permissions={permissions}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getByText };
 };
 
@@ -37,7 +37,7 @@ it("removes a user", async () => {
   const userTable = container.querySelector('table.data');
   const nb1 = userTable.querySelectorAll('tr').length;
   fireEvent.click(container.querySelectorAll('button[title="Remove"]')[1]);
-  await wait();
+  await waitFor(() => {});
   const nb2 = userTable.querySelectorAll('tr').length;
   expect(nb2).toBe(nb1 - 1);
   expect(userTable.querySelector('tr:nth-of-type(2) td').textContent).toBe('guest');

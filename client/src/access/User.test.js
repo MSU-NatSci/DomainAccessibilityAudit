@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
@@ -19,7 +19,7 @@ const init = async (admin) => {
   mockHistory.push = jest.fn();
   const { container, getAllByTitle, getByLabelText, getByText } =
     render(<MemoryRouter><User server={mockServer} permissions={permissions} match={{params:{userId:'uid2'}}} history={mockHistory}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getAllByTitle, getByLabelText, getByText };
 };
 
@@ -39,7 +39,7 @@ it("saves modified user information", async () => {
   const { getByText, getByLabelText } = await init(true);
   fireEvent.change(getByLabelText("Firstname"), { target: { value: 'first2-2' } });
   fireEvent.click(getByText("Save"));
-  await wait();
+  await waitFor(() => {});
   expect(getByText("The user was successfully saved.")).toBeTruthy();
   expect(document.getElementById('firstname').value).toBe('first2-2');
 });
@@ -50,7 +50,7 @@ it("adds a group", async () => {
   expect(document.getElementById('selectedGroup').value).toBe('gid1');
   expect(container.querySelector('table.data tr:nth-of-type(2)')).toBe(null);
   fireEvent.click(getByText("Add"));
-  await wait();
+  await waitFor(() => {});
   expect(document.getElementById('selectedGroup')).toBe(null);
   expect(container.querySelector('table.data tr:nth-of-type(2) td').textContent).toBe('group1');
 });
@@ -59,7 +59,7 @@ it("removes a group", async () => {
   // removes the user added in the previous step
   const { container } = await init(true);
   fireEvent.click(container.querySelectorAll('table button[title="Remove"]')[1]);
-  await wait();
+  await waitFor(() => {});
   expect(container.querySelector('table.data tr:nth-of-type(2)')).toBe(null);
   expect(document.getElementById('selectedGroup').value).toBe('gid1');
 });
@@ -67,6 +67,6 @@ it("removes a group", async () => {
 it("removes a user", async () => {
   const { getByText } = await init(true);
   fireEvent.click(getByText("Remove user"));
-  await wait();
+  await waitFor(() => {});
   expect(mockHistory.push).toBeCalledWith('/users/');
 });

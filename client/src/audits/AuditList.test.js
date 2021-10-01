@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import MockServerAPI from '../ServerAPI';
@@ -29,7 +29,7 @@ const init = async (username) => {
   const { container, getByText, getAllByTitle } = render(<MemoryRouter><AuditList
     server={mockServer} localLogin={loginFct} logout={logoutFct}
     permissions={permissions}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getByText, getAllByTitle, loginFct, logoutFct };
 };
 
@@ -43,7 +43,7 @@ it("renders with audit information", async () => {
 it("calls the login function with the username and password", async () => {
   const { getByText, loginFct } = await init('guest');
   fireEvent.click(getByText("Login"));
-  await wait();
+  await waitFor(() => {});
   const usernameInput = document.querySelector('#username');
   fireEvent.change(usernameInput, { target: { value: 'user1' } });
   const passwordInput = document.querySelector('#password');
@@ -63,7 +63,7 @@ it("removes an audit", async () => {
   const auditTable = getTableBySectionTitle(container, /^Saved Audits$/i);
   const nb1 = auditTable.querySelectorAll('tr').length;
   fireEvent.click(getAllByTitle("Remove")[0]);
-  await wait();
+  await waitFor(() => {});
   const nb2 = auditTable.querySelectorAll('tr').length;
   expect(nb2).toBe(nb1 - 1);
   expect(auditTable.querySelector('tr td').textContent).toBe('initialDomainName2');

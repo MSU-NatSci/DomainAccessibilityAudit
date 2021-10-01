@@ -143,7 +143,7 @@ describe("Audit Endpoints", () => {
       running = res.body.data.running;
     }
     expect(res.body.data.nbCheckedURLs).toBe(2);
-    expect(res.body.data.nbViolations).toBe(8);
+    expect(res.body.data.nbViolations).toBe(7);
     // get the results
     res = await request(app)
       .get('/api/audits/' + auditId)
@@ -153,7 +153,6 @@ describe("Audit Endpoints", () => {
     expect(res.body.data.complete).toBe(true);
     expect(res.body.data).toHaveProperty('violationStats');
     const violationStats = res.body.data.violationStats;
-    expect(violationStats).toHaveProperty('bypass');
     expect(violationStats).toHaveProperty('document-title');
     expect(violationStats).toHaveProperty('html-has-lang');
     expect(violationStats).toHaveProperty('image-alt');
@@ -174,8 +173,8 @@ describe("Domain Endpoints", () => {
       .expect(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data.nbCheckedURLs).toBe(2);
-    expect(res.body.data.nbViolations).toBe(8);
-    expect(res.body.data.violationStats).toHaveProperty('bypass');
+    expect(res.body.data.nbViolations).toBe(7);
+    expect(res.body.data.violationStats).toHaveProperty('document-title');
     expect(res.body.data.pages.length).toBe(2);
     pageId = res.body.data.pages[0]._id;
   });

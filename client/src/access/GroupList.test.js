@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import MockServerAPI from '../ServerAPI';
@@ -15,7 +15,7 @@ const init = async (admin) => {
   const userInfo = await mockServer.getCurrentUser();
   const permissions = new Permissions(userInfo);
   const { container, getByText, getAllByTitle } = render(<MemoryRouter><GroupList server={mockServer} permissions={permissions}/></MemoryRouter>);
-  await wait();
+  await waitFor(() => {});
   return { container, getByText, getAllByTitle };
 };
 
@@ -37,7 +37,7 @@ it("removes a group", async () => {
   const groupTable = container.querySelector('table.data');
   const nb1 = groupTable.querySelectorAll('tr').length;
   fireEvent.click(getAllByTitle("Remove")[0]);
-  await wait();
+  await waitFor(() => {});
   const nb2 = groupTable.querySelectorAll('tr').length;
   expect(nb2).toBe(nb1 - 1);
   expect(groupTable.querySelector('tr td').textContent).toBe('group2');
