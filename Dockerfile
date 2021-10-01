@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 ARG NODE_USER_UID=1000
 ARG NODE_USER_GID=1000
 
@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Get Chromium, Firefox and Node
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get update && apt-get install -y curl gnupg vim wget libdbus-glib-1-2
+RUN apt-get update && apt-get install -y curl gnupg vim wget libdbus-glib-1-2 bzip2
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 # firefox-esr no longer seems to work well, installing latest instead
 # (libdbus-glib-1-2 is a dependency)
