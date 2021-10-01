@@ -33,7 +33,7 @@ it("can stop an audit", async () => {
   mockServer.getAuditStatus = jest.fn().mockImplementation(() => Promise.resolve(mockAudit));
   mockServer.stopAudit = jest.fn().mockImplementation(() => Promise.resolve());
 
-  const { container, getByText } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
+  const { getByText } = render(<MemoryRouter><AuditStatus server={mockServer} match={{params:{auditId:'aid1'}}}/></MemoryRouter>);
   await waitFor(() => expect(mockServer.getAuditStatus).toHaveBeenCalledTimes(1));
   fireEvent.click(getByText("Stop the audit"));
   await waitFor(() => {});
