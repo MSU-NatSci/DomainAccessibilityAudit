@@ -1,6 +1,9 @@
-image: docker:stable
-services:
-  - docker:dind
+# Server currently not online. If we want to re-enable this, we would need to move to
+# centralized CI repository https://gitlab.msu.edu/msu-libraries/ci-cd/ci-cd
+# and create an encoded ssh key as documented there and commented in the ENCODED_PRIVATE_KEY below
+# then this file would be deleted.
+
+image: docker:latest
 
 stages:
   - build
@@ -9,13 +12,13 @@ stages:
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
   REPO_PATH: "/home/deploy/DomainAccessibilityAudit"
-  CONNECT: "deploy@da11y.lib.msu.edu"
-
+  SERVER: "da11y.lib.msu.edu"
+  ENCODED_PRIVATE_KEY: $KEY_11369_PROD # does not exist  
 
 build:
   stage: build
   tags:
-    - msul
+    - msul-shared
   only:
     - master
   script:
@@ -25,26 +28,30 @@ build:
 
 deploy:
   stage: deploy
+  extends: .setup_ssh
   environment:
     name: prod
-    url: "https://da11y.lib.msu.edu"
-  tags:
-    - msul
+    url: "https://$SERVER"
   only:
     - master
   when: manual
   script:
-    - ssh $CONNECT git -C $REPO_PATH reset HEAD --hard
-    - ssh $CONNECT git -C $REPO_PATH fetch gitlab
-    - ssh $CONNECT git -C $REPO_PATH checkout $CI_COMMIT_SHORT_SHA
-    - ssh $CONNECT "sed -i 's|^\( *\)accessibility_audit:$|&\n\1  image:\ registry.gitlab.msu.edu\/msu-libraries\/devops\/domainaccessibilityaudit:$CI_COMMIT_SHORT_SHA|' $REPO_PATH/docker-compose.yml"
-    - ssh $CONNECT docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - ssh $CONNECT "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml config)"
-    - ssh $CONNECT "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml pull)"
-    - ssh $CONNECT sudo /bin/systemctl restart daa
+    - apk add curl
+    - ssh deploy@$SERVER git -C $REPO_PATH reset HEAD --hard
+    - ssh deploy@$SERVER git -C $REPO_PATH fetch gitlab
+    - ssh deploy@$SERVER git -C $REPO_PATH checkout $CI_COMMIT_SHORT_SHA
+    - ssh deploy@$SERVER "sed -i 's|^\( *\)accessibility_audit:$|&\n\1  image:\ registry.gitlab.msu.edu\/msu-libraries\/devops\/domainaccessibilityaudit:$CI_COMMIT_SHORT_SHA|' $REPO_PATH/docker-compose.yml"
+    - ssh deploy@$SERVER docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - ssh deploy@$SERVER "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml config)"
+    - ssh deploy@$SERVER "(cd $REPO_PATH && docker-compose -f $REPO_PATH/docker-compose.yml pull)"
+    - ssh deploy@$SERVER sudo /bin/systemctl restart daa
     - sleep 30
-    - ssh $CONNECT sudo /bin/systemctl status daa
-    - ssh $CONNECT docker container prune -f
-    - ssh $CONNECT docker image prune -f -a
-    - ssh $CONNECT "[[ $( curl -s -o /dev/null -k -I -w \"%{http_code}\" $CI_ENVIRONMENT_URL ) -eq 200 ]]"
+    - ssh deploy@$SERVER sudo /bin/systemctl status daa
+    - ssh deploy@$SERVER docker container prune -f
+    - ssh deploy@$SERVER docker image prune -f -a
+    - ssh deploy@$SERVER "[[ $( curl -s -o /dev/null -k -I -w \"%{http_code}\" $CI_ENVIRONMENT_URL ) -eq 200 ]]"
 
+include:
+  - project: 'msu-libraries/public/cicd-templates'
+    ref: main
+    file: 'SSH.gitlab-ci.yml'
