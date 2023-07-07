@@ -23,10 +23,11 @@ It reports statistics of violations for the whole audit, domains and pages.
 - `docker-compose down` will stop and remove the containers. They are recreated automatically with `docker-compose up -d`.
 
 ## To check the server logs
-- Get a list of container ids: `docker ps`.
-- Look at the logs for a container: `docker logs <container_id>`.
-- Keep looking in real time: `docker logs -f <container_id>`.  
-  (another way to do that is to use `docker-compose up` without the `-d` option)
+- Get the logs from all containers: `docker-compose logs`
+- Look at the logs from a single service: `docker-compose logs <service>`.
+  (Services from docker-compose.yml: `accessibility_audit` or `mongodb`)
+- Keep looking in real time: `docker-compose logs -f`.
+- Look at the last 20 lines of logs: `docker-compose logs --tail 20`
 
 ## To uninstall
 **Warning**: this will remove all the data !!!
